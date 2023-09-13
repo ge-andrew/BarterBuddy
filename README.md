@@ -1,1 +1,2 @@
 # BarterBuddy
+Daniel Peace
