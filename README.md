@@ -1,1 +1,2 @@
 # BarterBuddy
+Matthew Gonzalez
