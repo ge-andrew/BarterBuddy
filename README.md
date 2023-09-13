@@ -1,3 +1,4 @@
 # BarterBuddy
-Skyler A
 Matthew Gonzalez
+Daniel Peace
+Skyler A
