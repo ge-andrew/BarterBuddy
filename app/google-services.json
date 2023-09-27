@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "745502740218",
+    "project_id": "barterbuddy-fb48c",
+    "storage_bucket": "barterbuddy-fb48c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745502740218:android:1e08da9fd7593994c10343",
+        "android_client_info": {
+          "package_name": "com.example.barterbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxN-GZEYSUe418czvklB-_ll1NeX02jDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
