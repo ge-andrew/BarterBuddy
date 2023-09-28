@@ -25,4 +25,12 @@
         android:text="Go to details page"
         android:layout_margin="16dp"/>
 
+    <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 4a -->
+    <Button
+        android:id="@+id/go_to_add_item_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to add item page"
+        android:layout_margin="16dp"/>
+
 </LinearLayout>
