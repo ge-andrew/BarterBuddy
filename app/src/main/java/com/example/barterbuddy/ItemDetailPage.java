@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class ItemDetailPage extends AppCompatActivity {
   // Put the database string values into constants
@@ -24,6 +25,7 @@ public class ItemDetailPage extends AppCompatActivity {
 
   private DocumentReference itemDocReference;
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
