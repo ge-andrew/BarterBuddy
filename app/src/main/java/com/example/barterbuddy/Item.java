@@ -1,10 +1,11 @@
 package com.example.barterbuddy;
 
 /*
- * This class is responsible for storing all data related to an item
- */
+   This class stores all the data related to an Item in a structure identical to
+   a document in the Firestore Users collection.
+*/
 public class Item {
-//  // title holds the title of the item
+  //  // title holds the title of the item
   private String title;
   // description holds the description of the item
   private String description;
@@ -46,11 +47,7 @@ public class Item {
   }
 
   // constructors
-  public Item(
-      String title,
-      String description,
-      String imageUri,
-      boolean isActive) {
+  public Item(String title, String description, String imageUri, boolean isActive) {
     this.title = title;
     this.description = description;
     this.imageUri = imageUri;

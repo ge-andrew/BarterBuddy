@@ -16,8 +16,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class ItemDetailPage extends AppCompatActivity {
-  // Put the database string values into constants
-  private static final String USERNAME_KEY = "username";
   private static final String TAG = "ItemDetailPage"; // for logging from this activity
   private TextView itemTitle;
   private TextView username;
@@ -67,47 +65,52 @@ public class ItemDetailPage extends AppCompatActivity {
                 Log.d(TAG, "Item information: " + item);
 
                 // set the title and description based on information from the object
-                itemTitle.setText(item.getTitle());
-                itemDescription.setText(item.getDescription());
+                if (item != null) {
+                  itemTitle.setText(item.getTitle());
+                  itemDescription.setText(item.getDescription());
+
+                  // get the image for this item from Firebase Cloud Storage
+                  imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
+
+                  final long ONE_MEGABYTE = 1024 * 1024;
+                  imageReference
+                      .getBytes(ONE_MEGABYTE)
+                      .addOnSuccessListener(
+                          bytes -> {
+                            // convert the ByteArray of the image into a Bitmap
+                            Bitmap itemImage =
+                                BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            imageView.setImageBitmap(itemImage);
+                          })
+                      .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+                } else {
+                  Log.w(TAG, "Item is null");
+                }
 
                 // get the title of the poster by checking the parent collections and documents
-                // TODO: There may be a better way to write this
-                /*
-                  This code is created under the assumption that each item document
-                  is stored in a collection of the poster's items, which is one of the fields
-                  of that poster document, which has another field for its username.
-                  So we're traversing up the parents to get to the name of the poster.
-                  If we use a different structure for the database,
-                  this code will have to be updated.
-                */
-                // Option A: Store the username of the parent in the Item document for easier access
-                // Option B: Create a function that will do the onSuccessListener boilerplate stuff
-                // any time we need to use it
                 DocumentReference postingUserDocRef = itemDocReference.getParent().getParent();
-                postingUserDocRef
-                    .get()
-                    .addOnSuccessListener(
-                        userDocSnapshot -> {
-                          if (userDocSnapshot.exists()) {
-                            // TODO: Make a "User" class similar to the "Item" class
-                            username.setText((String) userDocSnapshot.get(USERNAME_KEY));
-                          }
-                        })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
+                if (postingUserDocRef != null) {
+                  postingUserDocRef
+                      .get()
+                      .addOnSuccessListener(
+                          userDocSnapshot -> {
+                            User user;
+                            if (userDocSnapshot.exists()) {
+                              user = userDocSnapshot.toObject(User.class);
+                              Log.d(TAG, "User information: " + user);
 
-                // get the image for this item from Firebase Cloud Storage
-                imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
-
-                final long ONE_MEGABYTE = 1024 * 1024;
-                imageReference
-                    .getBytes(ONE_MEGABYTE)
-                    .addOnSuccessListener(
-                        bytes -> {
-                          // convert the ByteArray of the image into a Bitmap
-                          Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                          imageView.setImageBitmap(itemImage);
-                        })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+                              // set the username field
+                              if (user != null) {
+                                username.setText(user.getUsername());
+                              } else {
+                                Log.w(TAG, "User object is null");
+                              }
+                            }
+                          })
+                      .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
+                } else {
+                  Log.w(TAG, "User is null");
+                }
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
