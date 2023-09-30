@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterBuddy"
         tools:targetApi="31">
+
+        <activity
+            android:name=".GetImageDialogBox"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewItem"
+            android:exported="false" />
         <activity
             android:name=".ItemDetailPage"
             android:exported="false" />
@@ -24,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
