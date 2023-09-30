@@ -10,10 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -21,13 +19,13 @@ public class ItemDetailPage extends AppCompatActivity {
   // Put the database string values into constants
   private static final String USERNAME_KEY = "username";
   private static final String TAG = "ItemDetailPage"; // for logging from this activity
-  private TextView item_title;
+  private TextView itemTitle;
   private TextView username;
-  private TextView item_description;
-  private ImageView image_view;
-  private Button offer_trade_button;
-  private String item_id;
-  private String poster_id;
+  private TextView itemDescription;
+  private ImageView imageView;
+  private Button offerTradeButton;
+  private String itemId;
+  private String posterId;
 
   private DocumentReference itemDocReference;
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -40,22 +38,22 @@ public class ItemDetailPage extends AppCompatActivity {
     setContentView(R.layout.activity_item_detail_page);
 
     // get item id and poster id from recycler view
-    item_id = getIntent().getStringExtra("item_id");
-    poster_id = getIntent().getStringExtra("poster_id");
+    itemId = getIntent().getStringExtra("item_id");
+    posterId = getIntent().getStringExtra("poster_id");
 
-    Log.d(TAG, "User ID is " + poster_id);
-    Log.d(TAG, "Item ID is " + item_id);
+    Log.d(TAG, "User ID is " + posterId);
+    Log.d(TAG, "Item ID is " + itemId);
 
     // get the Firestore document reference for the given user and item ids
     itemDocReference =
-        db.collection("users").document(poster_id).collection("items").document(item_id);
+        db.collection("users").document(posterId).collection("items").document(itemId);
 
     // initializing views and buttons
     username = findViewById(R.id.username_text_view);
-    item_title = findViewById(R.id.item_title_text_view);
-    item_description = findViewById(R.id.description_text_view);
-    offer_trade_button = findViewById(R.id.offer_trade_button);
-    image_view = findViewById(R.id.item_image_view);
+    itemTitle = findViewById(R.id.item_title_text_view);
+    itemDescription = findViewById(R.id.description_text_view);
+    offerTradeButton = findViewById(R.id.offer_trade_button);
+    imageView = findViewById(R.id.item_image_view);
 
     // populate our private fields with data from Firestore
     itemDocReference
@@ -69,8 +67,8 @@ public class ItemDetailPage extends AppCompatActivity {
                 Log.d(TAG, "Item information: " + item);
 
                 // set the title and description based on information from the object
-                item_title.setText(item.getTitle());
-                item_description.setText(item.getDescription());
+                itemTitle.setText(item.getTitle());
+                itemDescription.setText(item.getDescription());
 
                 // get the title of the poster by checking the parent collections and documents
                 // TODO: There may be a better way to write this
@@ -98,16 +96,18 @@ public class ItemDetailPage extends AppCompatActivity {
                     .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
 
                 // get the image for this item from Firebase Cloud Storage
-                imageReference = imageStorage.getReferenceFromUrl(item.getImage_uri());
+                imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
 
                 final long ONE_MEGABYTE = 1024 * 1024;
-                imageReference.getBytes(ONE_MEGABYTE)
-                        .addOnSuccessListener(bytes -> {
+                imageReference
+                    .getBytes(ONE_MEGABYTE)
+                    .addOnSuccessListener(
+                        bytes -> {
                           // convert the ByteArray of the image into a Bitmap
                           Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                          image_view.setImageBitmap(itemImage);
+                          imageView.setImageBitmap(itemImage);
                         })
-                        .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+                    .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
