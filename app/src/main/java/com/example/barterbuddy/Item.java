@@ -14,8 +14,8 @@ public class Item {
   private String title;
   // description holds the description of the item
   private String description;
-  // image_id holds the id of the item's image in Firebase
-  private String image_id;
+  // image_uri holds the uri of the item's image in Firebase Cloud Storage
+  private String image_uri;
   // is_active holds true if the item is the active item for trade and false if not
   private boolean is_active;
 
@@ -36,8 +36,8 @@ public class Item {
     return description;
   }
 
-  public String getImage_id() {
-    return image_id;
+  public String getImage_uri() {
+    return image_uri;
   }
 
   public boolean getIs_active() {
@@ -61,8 +61,8 @@ public class Item {
     this.description = description;
   }
 
-  public void setImage_id(String image_id) {
-    this.image_id = image_id;
+  public void setImage_uri(String image_uri) {
+    this.image_uri = image_uri;
   }
 
   public void setIs_active(boolean is_active) {
@@ -75,13 +75,13 @@ public class Item {
 //      String item_id,
       String title,
       String description,
-      String image_id,
+      String image_uri,
       boolean is_active) {
 //    this.owner_id = owner_id;
 //    this.item_id = item_id;
     this.title = title;
     this.description = description;
-    this.image_id = image_id;
+    this.image_uri = image_uri;
     this.is_active = is_active;
   }
 
