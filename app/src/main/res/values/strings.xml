@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Barter Buddy</string>
+    <string name="posted_by">Posted by\ </string>
+    <string name="description">Description</string>
+    <string name="offer_trade">Offer Trade</string>
+    <string name="title">Title</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="pick_from_your_photos">Pick from your photos</string>
+    <string name="choose_a_photo_for_your_item">Choose a photo for your item</string>
+</resources>
