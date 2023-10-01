@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
   // declaring temp buttons
   Button details_button;
   Button add_item_button;
+  Button view_my_items_button;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,5 +41,11 @@ public class MainActivity extends AppCompatActivity {
           intent.putExtra("user_id", "temp_value");
           startActivity(intent);
         });
+      add_item_button = findViewById(R.id.go_to_my_items);
+      add_item_button.setOnClickListener(
+              view -> {
+                  Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
+                  startActivity(intent);
+              });
   }
 }
