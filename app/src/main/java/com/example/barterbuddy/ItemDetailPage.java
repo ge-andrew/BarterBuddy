@@ -69,20 +69,28 @@ public class ItemDetailPage extends AppCompatActivity {
                   itemTitle.setText(item.getTitle());
                   itemDescription.setText(item.getDescription());
 
-                  // get the image for this item from Firebase Cloud Storage
-                  imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
+                  // Get the image for this item directly from Firestore
+                  Bitmap itemImage = item.getPhoto();
+                  if (itemImage != null) {
+                    imageView.setImageBitmap(itemImage);
+                  } else {
+                    Log.w(TAG, "Item image is null");
+                  }
 
-                  final long ONE_MEGABYTE = 1024 * 1024;
-                  imageReference
-                      .getBytes(ONE_MEGABYTE)
-                      .addOnSuccessListener(
-                          bytes -> {
-                            // convert the ByteArray of the image into a Bitmap
-                            Bitmap itemImage =
-                                BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            imageView.setImageBitmap(itemImage);
-                          })
-                      .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+//                  // get the image for this item from Firebase Cloud Storage
+//                  imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
+//
+//                  final long ONE_MEGABYTE = 1024 * 1024;
+//                  imageReference
+//                      .getBytes(ONE_MEGABYTE)
+//                      .addOnSuccessListener(
+//                          bytes -> {
+//                            // convert the ByteArray of the image into a Bitmap
+//                            Bitmap itemImage =
+//                                BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                            imageView.setImageBitmap(itemImage);
+//                          })
+//                      .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
                 } else {
                   Log.w(TAG, "Item is null");
                 }

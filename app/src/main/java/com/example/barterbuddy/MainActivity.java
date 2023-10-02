@@ -11,8 +11,8 @@ import com.google.android.material.textfield.TextInputEditText;
 public class MainActivity extends AppCompatActivity {
 
     // declaring temp itemId (for testing and demonstration)
-    private static final String sampleItemId = "2KQyKs0TWNc4ABmev3IP";
-    private static final String samplePosterId = "lRpydQcIPq4bIo1cvcl4";
+    private static final String sampleItemId = "pacodataco@google.com-Dog";
+    private static final String samplePosterId = "pacodataco@google.com";
     private String username;
     private String email;
 
