@@ -6,7 +6,11 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.barterbuddy.Models.RecyclerItem;
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.databinding.RecycleRowBinding;
+import com.example.barterbuddy.Models.RecyclerItem;
 
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +38,7 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(layout.recyle_row, parent, false); // Use recycle_row.xml here
+                .inflate(R.layout.recycle_row, parent, false); // Use recycle_row.xml here
         return new ViewHolder(view);
     }
 
@@ -44,11 +48,11 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemRestaurantBinding binding;
+        private final RecycleRowBinding binding;
 
         public ViewHolder(ItemRestaurantBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+            super(itemView);
+            binding = RecycleRowBinding.bind(itemView);
         }
 
         public void bind(final DocumentSnapshot snapshot, final OnItemSelectedListener listener) {
@@ -62,17 +66,12 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
             // Load image
             Glide.with(binding.restaurantItemImage.getContext())
                     .load(restaurant.getPhoto())
-                    .into(binding.restaurantItemImage);
+                    .into(binding.);
 
             int numRatings = restaurant.getNumRatings();
 
-            binding.restaurantItemName.setText(restaurant.getName());
-            binding.restaurantItemRating.setRating(restaurant.getAvgRating());
-            binding.restaurantItemCity.setText(restaurant.getCity());
-            binding.restaurantItemCategory.setText(restaurant.getCategory());
-            binding.restaurantItemNumRatings.setText(resources.getString(
-                    R.string.fmt_num_ratings,
-                    numRatings));
+            binding.RecycleRowBinding.setText(RecyclerItem());
+            binding.RecycleRowDescription.setText(Item)
             binding.restaurantItemPrice.setText(RestaurantUtil.getPriceString(restaurant));
 
             // Click listener

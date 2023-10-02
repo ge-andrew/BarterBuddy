@@ -1,8 +1,10 @@
 package com.example.barterbuddy.Adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 
+import com.example.barterbuddy.R;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -16,7 +18,7 @@ import java.util.List;
 
 /**
  * RecyclerView adapter for displaying the results of a Firestore [Query].
- *
+ * <p>
  * Note that this class forgoes some efficiency to gain simplicity. For example, the result of
  * [DocumentSnapshot.toObject] is not cached so the same object may be deserialized
  * many times as the user scrolls.
@@ -27,9 +29,12 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder> exten
     private Query query;
     private ListenerRegistration registration;
     private List<DocumentSnapshot> snapshots = new ArrayList<>();
+    private int layoutRedId;
 
     public FirestoreAdapter(Query query) {
+
         this.query = query;
+        this.layoutRedId = R.layout.recycle_row;
     }
 
     public void startListening() {
@@ -116,7 +121,8 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder> exten
         Log.w(TAG, "onError", e);
     }
 
-    public void onDataChanged() {}
+    public void onDataChanged() {
+    }
 
     @Override
     public int getItemCount() {
