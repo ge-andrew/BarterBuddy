@@ -1,11 +1,14 @@
 package com.example.barterbuddy;
 
+import java.io.Serializable;
+
 /*
    This class stores all the data related to an Item in a structure identical to
    a document in the Firestore Users collection.
 */
-public class Item {
-  //  // title holds the title of the item
+// Serializable means it can be put into an Intent with putExtra
+public class Item implements Serializable {
+  //  title holds the title of the item
   private String title;
   // description holds the description of the item
   private String description;

@@ -2,6 +2,7 @@ package com.example.barterbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +26,7 @@ public class ItemDetailPage extends AppCompatActivity {
   private Button offerTradeButton;
   private String itemId;
   private String posterId;
+  private Item currentItem;
 
   private DocumentReference itemDocReference;
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -58,19 +61,18 @@ public class ItemDetailPage extends AppCompatActivity {
         .get()
         .addOnSuccessListener(
             documentSnapshot -> {
-              Item item;
               if (documentSnapshot.exists()) {
                 // convert the document data to an Item object
-                item = documentSnapshot.toObject(Item.class);
-                Log.d(TAG, "Item information: " + item);
+                currentItem = documentSnapshot.toObject(Item.class);
+                Log.d(TAG, "Item information: " + currentItem);
 
                 // set the title and description based on information from the object
-                if (item != null) {
-                  itemTitle.setText(item.getTitle());
-                  itemDescription.setText(item.getDescription());
+                if (currentItem != null) {
+                  itemTitle.setText(currentItem.getTitle());
+                  itemDescription.setText(currentItem.getDescription());
 
                   // get the image for this item from Firebase Cloud Storage
-                  imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
+                  imageReference = imageStorage.getReferenceFromUrl(currentItem.getImageUri());
 
                   final long ONE_MEGABYTE = 1024 * 1024;
                   imageReference
@@ -114,5 +116,17 @@ public class ItemDetailPage extends AppCompatActivity {
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
+
+    // prepare the offer trade button for advancing to the next page
+    offerTradeButton.setOnClickListener(
+      v -> {
+        // creates an intent that switches to the OfferTradePage activity and passes the item
+        // to the new activity
+        Intent intent = new Intent(ItemDetailPage.this, OfferTradePage.class);
+        intent.putExtra("itemToTradeFor", currentItem);
+        Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
+        toast.show();
+        // startActivity(intent);
+      });
   }
 }
