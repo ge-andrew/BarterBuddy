@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     
   // declaring temp itemId (for testing and demonstration)
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
   // declaring temp buttons
   Button details_button;
   Button add_item_button;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

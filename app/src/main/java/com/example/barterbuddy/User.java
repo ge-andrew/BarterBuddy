@@ -21,4 +21,5 @@ public class User {
     }
 
     public User() {}
+    //is it possible to add in rating field here so its attached to user
 }

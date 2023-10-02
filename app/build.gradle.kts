@@ -17,6 +17,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -46,4 +47,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     // Cloud storage library
     implementation("com.google.firebase:firebase-storage")
+    //RECYLER
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
 }
