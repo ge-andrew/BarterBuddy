@@ -14,7 +14,7 @@ public class Item {
   // isActive holds true if the item is the active item for trade and false if not
   private boolean isActive;
   // userName holds username of person who own this item
-  private String userName;
+  private String username;
 
   public String getTitle() {
     return title;
@@ -32,7 +32,7 @@ public class Item {
     return isActive;
   }
 
-  public String getUserName() { return userName; }
+  public String getUsername() { return username; }
 
   public void setTitle(String title) {
     this.title = title;
@@ -50,10 +50,10 @@ public class Item {
     this.isActive = active;
   }
 
-  public void setUserName(String userName) { this.userName = userName; }
+  public void setUsername(String username) { this.username = username; }
 
   // constructors
-  public Item(String title, String description, String imageUri, boolean isActive) {
+  public Item(String title, String description, String imageId, boolean isActive) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
