@@ -13,9 +13,11 @@ public class Item implements Serializable {
   // description holds the description of the item
   private String description;
   // imageUri holds the uri of the item's image in Firebase Cloud Storage
-  private String imageUri;
+  private String imageId;
   // isActive holds true if the item is the active item for trade and false if not
   private boolean isActive;
+  // userName holds username of person who own this item
+  private String username;
 
   public String getTitle() {
     return title;
@@ -25,13 +27,15 @@ public class Item implements Serializable {
     return description;
   }
 
-  public String getImageUri() {
-    return imageUri;
+  public String getImageId() {
+    return imageId;
   }
 
   public boolean getActive() {
     return isActive;
   }
+
+  public String getUsername() { return username; }
 
   public void setTitle(String title) {
     this.title = title;
@@ -41,19 +45,21 @@ public class Item implements Serializable {
     this.description = description;
   }
 
-  public void setImageUri(String imageUri) {
-    this.imageUri = imageUri;
+  public void setImageId(String imageUri) {
+    this.imageId = imageUri;
   }
 
   public void setActive(boolean active) {
     this.isActive = active;
   }
 
+  public void setUsername(String username) { this.username = username; }
+
   // constructors
-  public Item(String title, String description, String imageUri, boolean isActive) {
+  public Item(String title, String description, String imageId, boolean isActive) {
     this.title = title;
     this.description = description;
-    this.imageUri = imageUri;
+    this.imageId = imageId;
     this.isActive = isActive;
   }
 

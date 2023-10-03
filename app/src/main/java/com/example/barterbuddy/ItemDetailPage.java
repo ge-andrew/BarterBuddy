@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class ItemDetailPage extends AppCompatActivity {
+
   private static final String TAG = "ItemDetailPage"; // for logging from this activity
   private TextView itemTitle;
   private TextView username;
