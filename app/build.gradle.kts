@@ -7,6 +7,9 @@ android {
     namespace = "com.example.barterbuddy"
     compileSdk = 33
 
+    dataBinding {
+        enable = true;
+    }
     defaultConfig {
         applicationId = "com.example.barterbuddy"
         minSdk = 24
@@ -31,6 +34,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
@@ -48,6 +52,6 @@ dependencies {
     // Cloud storage library
     implementation("com.google.firebase:firebase-storage")
     //RECYLER
-    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("androidx.recyclerview:recyclerview:1.3.1")
 
 }

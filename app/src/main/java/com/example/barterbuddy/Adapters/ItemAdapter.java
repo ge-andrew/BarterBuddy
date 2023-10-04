@@ -6,18 +6,17 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.barterbuddy.Models.RecyclerItem;
-import com.example.barterbuddy.R;
-import com.example.barterbuddy.databinding.RecycleRowBinding;
-import com.example.barterbuddy.Models.RecyclerItem;
-
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.example.barterbuddy.Item;
+import com.example.barterbuddy.Models.RecyclerItem;
+import com.example.barterbuddy.Query.FireStoreQueryHelper;
+import com.example.barterbuddy.databinding.RecyclerowBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.example.barterbuddy.R;
 
 /**
  *
@@ -25,6 +24,12 @@ import com.google.firebase.firestore.Query;
 public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
 
     private final OnItemSelectedListener listener;
+    private final FireStoreQueryHelper queryHelper;
+
+    public  ItemAdapter(RecyclerowBinding binding){
+        super(itemBinding.getRoot());
+        this.binding = binding;
+    }
 
     public interface OnItemSelectedListener {
         void onItemSelected(DocumentSnapshot skateboard);
@@ -36,50 +41,51 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycle_row, parent, false); // Use recycle_row.xml here
-        return new ViewHolder(view);
-    }
-
-    @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), listener);
     }
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycle_row, parent, false);
+        return new ViewHolder(view);
+    }
+
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final RecycleRowBinding binding;
 
-        public ViewHolder(ItemRestaurantBinding binding) {
-            super(itemView);
-            binding = RecycleRowBinding.bind(itemView);
+        public ViewHolder(RecycleRowBinding itemBinding) {
+            super(itemBinding.getRoot());
+            binding = itemBinding;
         }
 
         public void bind(final DocumentSnapshot snapshot, final OnItemSelectedListener listener) {
-            Restaurant restaurant = snapshot.toObject(Restaurant.class);
-            if (restaurant == null) {
+
+            Item item = snapshot.toObject(Item.class);
+            if (item == null) {
                 return;
             }
 
             Resources resources = binding.getRoot().getResources();
 
             // Load image
-            Glide.with(binding.restaurantItemImage.getContext())
-                    .load(restaurant.getPhoto())
-                    .into(binding.);
+            ImageView imageView = itemView.findViewById(R.id.image); // Use findViewById
+            String imageUrl = item.getImageUri(); // Replace with the actual method to get the image URL
+            Glide.with(itemView.getContext()) // Use itemView.getContext() instead of 'this'
+                    .load(imageUrl)
+                    .into(imageView);
 
-            int numRatings = restaurant.getNumRatings();
-
-            binding.RecycleRowBinding.setText(RecyclerItem());
-            binding.RecycleRowDescription.setText(Item)
-            binding.restaurantItemPrice.setText(RestaurantUtil.getPriceString(restaurant));
+            binding.RecycleRowBinding.setText(item.getTitle());
+            binding.RecycleRowDescription.setText(item.getDescription());
 
             // Click listener
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onRestaurantSelected(snapshot);
+                        listener.onItemSelected(snapshot);
                     }
                 }
             });

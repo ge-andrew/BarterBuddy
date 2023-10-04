@@ -34,7 +34,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder> exten
     public FirestoreAdapter(Query query) {
 
         this.query = query;
-        this.layoutRedId = R.layout.recycle_row;
+        this.layoutRedId = R.layout.recyclerow;
     }
 
     public void startListening() {
