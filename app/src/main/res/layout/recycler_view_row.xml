@@ -21,23 +21,22 @@
 
             <ImageView
                 android:id="@+id/image_view"
-                android:layout_width="94dp"
-                android:layout_height="98dp"
+                android:layout_width="75dp"
+                android:layout_height="78dp"
                 android:src="@drawable/baseline_add_photo_alternate_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.047"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/item_title"
-                android:layout_width="197dp"
-                android:layout_height="50dp"
+                android:layout_width="268dp"
+                android:layout_height="49dp"
                 android:layout_marginStart="124dp"
                 android:text="Item Title Here"
-                android:textSize="36dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/image_view"

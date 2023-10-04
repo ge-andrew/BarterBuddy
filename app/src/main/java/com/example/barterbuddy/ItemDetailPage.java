@@ -70,7 +70,7 @@ public class ItemDetailPage extends AppCompatActivity {
                   itemDescription.setText(item.getDescription());
 
                   // get the image for this item from Firebase Cloud Storage
-                  imageReference = imageStorage.getReferenceFromUrl(item.getImageUri());
+                  imageReference = imageStorage.getReferenceFromUrl(item.getImageId());
 
                   final long ONE_MEGABYTE = 1024 * 1024;
                   imageReference

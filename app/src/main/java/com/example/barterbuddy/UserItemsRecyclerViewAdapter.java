@@ -1,6 +1,9 @@
 package com.example.barterbuddy;
 
 import android.content.Context; // If errors, this import may be wrong
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class UserItemsRecyclerViewAdapter extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
-
+    private final RecyclerViewInterface recyclerViewInterface;
     Context context;
     ArrayList<Item> items;
 
 
-    public UserItemsRecyclerViewAdapter(Context context, ArrayList<Item> items) {
+    public UserItemsRecyclerViewAdapter(Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
         this.items = items;
     }
@@ -28,7 +32,7 @@ public class UserItemsRecyclerViewAdapter extends RecyclerView.Adapter<UserItems
         // Inflate layout and give look to each row
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
-        return new UserItemsRecyclerViewAdapter.MyViewHolder(view);
+        return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface );
     }
 
     @Override
@@ -38,7 +42,7 @@ public class UserItemsRecyclerViewAdapter extends RecyclerView.Adapter<UserItems
         // based on position of recycler view
 
         holder.itemTitle.setText(items.get(position).getTitle());
-        //holder.imageView.setImageURI();
+        // TODO: load image here
     }
 
     @Override
@@ -53,11 +57,24 @@ public class UserItemsRecyclerViewAdapter extends RecyclerView.Adapter<UserItems
         ImageView imageView;
         TextView itemTitle;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.image_view);
             itemTitle = itemView.findViewById(R.id.item_title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(recyclerViewInterface != null) {
+                        int pos = getAdapterPosition();
+
+                        if(pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 }

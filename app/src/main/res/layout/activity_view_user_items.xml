@@ -28,9 +28,9 @@
 
         <ImageView
             android:id="@+id/profile_picture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_add_photo_alternate_24" />
+            android:layout_width="184dp"
+            android:layout_height="144dp"
+            android:src="@drawable/default_profile_face" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -41,7 +41,7 @@
             android:id="@+id/add_item_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Add Item" />
     </LinearLayout>
 
 
