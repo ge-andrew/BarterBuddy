@@ -2,6 +2,7 @@ package com.example.barterbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -106,13 +108,19 @@ public class ItemDetailPage extends AppCompatActivity {
                                 Log.w(TAG, "User object is null");
                               }
                             }
-                          })
-                      .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
-                } else {
-                  Log.w(TAG, "User is null");
-                }
-              }
-            })
-        .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
-  }
+                        })
+                .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
+
+        // prepare the offer trade button for advancing to the next page
+        offerTradeButton.setOnClickListener(
+                v -> {
+                    // creates an intent that switches to the OfferTradePage activity and passes the item
+                    // to the new activity
+                    Intent intent = new Intent(ItemDetailPage.this, OfferTradePage.class);
+                    intent.putExtra("itemToTradeFor", currentItem);
+                    Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
+                    toast.show();
+                    // startActivity(intent);
+                });
+    }
 }

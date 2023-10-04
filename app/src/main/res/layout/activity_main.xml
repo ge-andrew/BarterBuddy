@@ -6,16 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center_horizontal"
+    android:layout_margin="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trade stuff you don't need for stuff you don't want!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:text="Enter a dummy email username, and item id"
+        android:textSize="26sp"
+        android:layout_marginBottom="12dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@color/peach"
+        android:padding="8dp"
+        android:textColor="@color/white"
+        />
+
+    <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 4a -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_edit_text"
+            android:hint="@string/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edit_text"
+            android:hint="@string/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/item"
+            android:hint="item id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 8a -->
     <Button
@@ -23,15 +68,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Go to details page"
-        android:layout_margin="16dp"/>
+        android:layout_margin="12dp"/>
 
-    <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 4a -->
     <Button
         android:id="@+id/go_to_add_item_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Go to add item page"
-        android:layout_margin="16dp"/>
+        android:layout_margin="12dp"/>
 
     <Button
         android:id="@+id/go_to_my_items"
