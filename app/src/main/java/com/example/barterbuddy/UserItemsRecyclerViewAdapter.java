@@ -1,80 +1,83 @@
 package com.example.barterbuddy;
 
 import android.content.Context; // If errors, this import may be wrong
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 
-public class UserItemsRecyclerViewAdapter extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
-    private final RecyclerViewInterface recyclerViewInterface;
-    Context context;
-    ArrayList<Item> items;
+// This class is mainly standard setup for recyclerView
 
+public class UserItemsRecyclerViewAdapter
+    extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
+  private final RecyclerViewInterface recyclerViewInterface;
+  Context context;
+  ArrayList<Item> items;
 
-    public UserItemsRecyclerViewAdapter(Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-        this.context = context;
-        this.items = items;
-    }
-    @NonNull
-    @Override
-    public UserItemsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate layout and give look to each row
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
-        return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface );
-    }
+  // constructor
+  public UserItemsRecyclerViewAdapter(
+      Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface) {
+    this.recyclerViewInterface = recyclerViewInterface;
+    this.context = context;
+    this.items = items;
+  }
 
-    @Override
-    public void onBindViewHolder(@NonNull UserItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
-        // assigning values to each of the views as they are recycled back onto the screen
-        // values from recycler_view_row.xml layout file
-        // based on position of recycler view
+  @NonNull
+  @Override
+  public UserItemsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(
+      @NonNull ViewGroup parent, int viewType) {
+    // Inflate layout and give look to each row
+    LayoutInflater inflater = LayoutInflater.from(context);
+    View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
+    return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
+  }
 
-        holder.itemTitle.setText(items.get(position).getTitle());
-        // TODO: load image here
-    }
+  @Override
+  public void onBindViewHolder(
+      @NonNull UserItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
+    // assigning values to each of the views as they are recycled back onto the screen
+    // values from recycler_view_row.xml layout file
+    // based on position of recycler view
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
+    holder.itemTitle.setText(items.get(position).getTitle());
+    // TODO: load image here
+  }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // this method very very roughly equates to onCreate() from recyclerView
-        // sets up image and text views
+  @Override
+  public int getItemCount() {
+    return items.size();
+  }
 
-        ImageView imageView;
-        TextView itemTitle;
+  public static class MyViewHolder extends RecyclerView.ViewHolder {
+    // this method very very roughly equates to onCreate() from recyclerView
+    // sets up image and text views
 
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
-            super(itemView);
+    ImageView imageView;
+    TextView itemTitle;
 
-            imageView = itemView.findViewById(R.id.image_view);
-            itemTitle = itemView.findViewById(R.id.item_title);
+    public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+      super(itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(recyclerViewInterface != null) {
-                        int pos = getAdapterPosition();
+      imageView = itemView.findViewById(R.id.image_view);
+      itemTitle = itemView.findViewById(R.id.item_title);
 
-                        if(pos != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(pos);
-                        }
-                    }
+      itemView.setOnClickListener(
+          new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              if (recyclerViewInterface != null) {
+                int pos = getAdapterPosition();
+
+                if (pos != RecyclerView.NO_POSITION) {
+                  recyclerViewInterface.onItemClick(pos);
                 }
-            });
-        }
+              }
+            }
+          });
     }
+  }
 }

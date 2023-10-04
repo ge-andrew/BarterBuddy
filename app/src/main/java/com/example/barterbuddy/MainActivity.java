@@ -1,13 +1,12 @@
 package com.example.barterbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    
+
   // declaring temp itemId (for testing and demonstration)
   private static final String sampleItemId = "2KQyKs0TWNc4ABmev3IP";
   private static final String samplePosterId = "lRpydQcIPq4bIo1cvcl4";
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
           intent.putExtra("poster_id", samplePosterId);
           startActivity(intent);
         });
-
     add_item_button = findViewById(R.id.go_to_add_item_button);
     add_item_button.setOnClickListener(
         view -> {
@@ -41,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
           intent.putExtra("user_id", "temp_value");
           startActivity(intent);
         });
-      add_item_button = findViewById(R.id.go_to_my_items);
-      add_item_button.setOnClickListener(
-              view -> {
-                  Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
-                  startActivity(intent);
-              });
+    view_my_items_button = findViewById(R.id.go_to_my_items);
+    view_my_items_button.setOnClickListener(
+        view -> {
+          Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
+          startActivity(intent);
+        });
   }
 }
