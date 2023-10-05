@@ -50,8 +50,7 @@ public class ItemDetailPage extends AppCompatActivity {
         Log.d(TAG, "Item ID is " + itemId);
 
         // get the Firestore document reference for the given user and item ids
-        itemDocReference =
-                db.collection("users").document(email).collection("items").document(itemId);
+        itemDocReference = db.collection("users").document(email).collection("items").document(itemId);
 
         // initializing views and buttons
         usernameTextView = findViewById(R.id.username_text_view);
@@ -76,7 +75,8 @@ public class ItemDetailPage extends AppCompatActivity {
                                     itemDescription.setText(currentItem.getDescription());
 
                                     // get the image for this item from Firebase Cloud Storage
-                                    imageReference = imageStorage.getReference().child("users/" + email + "/" + itemId + ".jpg");
+                                    imageReference =
+                                            imageStorage.getReference().child("users/" + email + "/" + itemId + ".jpg");
 
                                     final long ONE_MEGABYTE = 1024 * 1024;
                                     imageReference
