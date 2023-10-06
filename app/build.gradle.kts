@@ -8,7 +8,7 @@ android {
     compileSdk = 33
 
     dataBinding {
-        enable = true;
+        enable = true
     }
     defaultConfig {
         applicationId = "com.example.barterbuddy"
