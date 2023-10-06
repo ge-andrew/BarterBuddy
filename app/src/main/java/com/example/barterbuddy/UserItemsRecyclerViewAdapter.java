@@ -1,6 +1,7 @@
 package com.example.barterbuddy;
 
 import android.content.Context; // If errors, this import may be wrong
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,15 @@ public class UserItemsRecyclerViewAdapter
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
   ArrayList<Item> items;
+  ArrayList<Bitmap> itemImages;
 
   // constructor
   public UserItemsRecyclerViewAdapter(
-      Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface) {
+          Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface, ArrayList<Bitmap> itemImages) {
     this.recyclerViewInterface = recyclerViewInterface;
     this.context = context;
     this.items = items;
+    this.itemImages = itemImages;
   }
 
   @NonNull
@@ -47,6 +50,9 @@ public class UserItemsRecyclerViewAdapter
 
     holder.itemTitle.setText(items.get(position).getTitle());
     // TODO: load image here
+    if(itemImages.size() != 0 && itemImages.size() == items.size()) {
+      holder.imageView.setImageBitmap(itemImages.get(position));
+    }
 
   }
 
