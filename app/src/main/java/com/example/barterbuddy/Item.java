@@ -1,23 +1,40 @@
 package com.example.barterbuddy;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 
-/*
-   This class stores all the data related to an Item in a structure identical to
-   a document in the Firestore Users collection.
-*/
 // Serializable means it can be put into an Intent with putExtra
+/**
+ * Stores all the data related to an Item in a structure identical to
+ * a document in the Firestore Users collection.
+ */
 public class Item implements Serializable {
-  //  title holds the title of the item
+  /**
+   * the title of the item
+   */
   private String title;
-  // description holds the description of the item
+  /**
+   * the description of the item
+   */
   private String description;
-  // imageUri holds the uri of the item's image in Firebase Cloud Storage
+  /**
+   * the uri of the item's image in Firebase Cloud Storage
+   */
   private String imageId;
-  // isActive holds true if the item is the active item for trade and false if not
+  /**
+   * true if the item is the active item for trade and false if not
+   */
   private boolean isActive;
-  // userName holds username of person who own this item
+  /**
+   * username of person who owns this item
+   */
   private String username;
+  /**
+   * email of user who owns this item
+   */
+  private String email;
 
   public String getTitle() {
     return title;
@@ -36,6 +53,7 @@ public class Item implements Serializable {
   }
 
   public String getUsername() { return username; }
+  public String getEmail() { return email; }
 
   public void setTitle(String title) {
     this.title = title;
@@ -54,13 +72,16 @@ public class Item implements Serializable {
   }
 
   public void setUsername(String username) { this.username = username; }
+  public void setEmail (String email) { this.email = email; }
 
   // constructors
-  public Item(String title, String description, String imageId, boolean isActive) {
+  public Item(String title, String description, String imageId, boolean isActive, String username, String email) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
+    this.username = username;
+    this.email = email;
   }
 
   public Item() {}
