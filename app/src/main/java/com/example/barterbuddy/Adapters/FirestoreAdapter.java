@@ -28,8 +28,8 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder> exten
 
     private Query query;
     private ListenerRegistration registration;
-    private List<DocumentSnapshot> snapshots = new ArrayList<>();
-    private int layoutRedId;
+    private final List<DocumentSnapshot> snapshots = new ArrayList<>();
+    private final int layoutRedId;
 
     public FirestoreAdapter(Query query) {
 

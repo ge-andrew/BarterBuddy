@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="items">
+        <item>Coffee Mug</item>
+        <item>Notebook</item>
+        <item>Phone Case</item>
+        <item>Sunglasses</item>
+        <item>USB Flash Drive</item>
+        <item>Water Bottle</item>
+        <item>Keychain</item>
+        <item>Socks (Pack of 3)</item>
+        <item>Pen Set</item>
+        <item>Pocket Knife</item>
+    </string-array>
+
+    <string-array name="item_descriptions">
+        <item>A stylish coffee mug for your morning brew.</item>
+        <item>A high-quality notebook for jotting down notes.</item>
+        <item>Protective phone case for your smartphone.</item>
+        <item>Trendy sunglasses to shield your eyes from the sun.</item>
+        <item>Portable USB flash drive for your data storage needs.</item>
+        <item>Reusable water bottle to stay hydrated on the go.</item>
+        <item>Cute keychain to accessorize your keys.</item>
+        <item>Comfortable socks, a pack of 3 pairs.</item>
+        <item>Premium pen set for smooth writing.</item>
+        <item>Handy pocket knife for various tasks.</item>
+    </string-array>
+    <string-array name="poster">
+        <item>Matthew</item>
+        <item>Andrew</item>
+        <item>Skyler</item>
+        <item>Daniel</item>
+        <item>Emily</item>
+        <item>Ava</item>
+        <item>Liam</item>
+        <item>Sophia</item>
+        <item>Oliver</item>
+        <item>Isabella</item>
+        <item>Ethan</item>
+    </string-array>
+    <integer-array name="item_prices">
+        <item>1599</item>
+        <item>1249</item>
+        <item>1995</item>
+        <item>799</item>
+        <item>1450</item>
+        <item>1875</item>
+        <item>999</item>
+        <item>1095</item>
+        <item>1325</item>
+        <item>650</item>
+
+    </integer-array>
+</resources>

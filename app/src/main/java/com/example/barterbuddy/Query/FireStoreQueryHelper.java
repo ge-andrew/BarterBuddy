@@ -14,7 +14,7 @@ public class FireStoreQueryHelper {
     private FirebaseFirestore db;
     private CollectionReference collectionRef;
 
-    public FirestoreQueryHelper() {
+    public void FirestoreQueryHelper() {
         db = FirebaseFirestore.getInstance();
         collectionRef = db.collection("your_collection_name");
     }

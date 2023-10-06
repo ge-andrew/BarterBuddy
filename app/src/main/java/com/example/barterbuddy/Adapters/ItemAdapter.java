@@ -1,4 +1,4 @@
-package com.example.barterbuddy.Adapters;
+/*package com.example.barterbuddy.Adapters;
 
 import static android.os.Build.VERSION_CODES.R;
 
@@ -21,7 +21,7 @@ import com.example.barterbuddy.R;
 /**
  *
  */
-public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
+/*public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
 
     private final OnItemSelectedListener listener;
     private final FireStoreQueryHelper queryHelper;
@@ -77,7 +77,7 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
                     .load(imageUrl)
                     .into(imageView);
 
-            binding.RecycleRowBinding.setText(item.getTitle());
+            binding.title.setText(item.getTitle());
             binding.RecycleRowDescription.setText(item.getDescription());
 
             // Click listener
@@ -92,4 +92,4 @@ public class ItemAdapter extends FirestoreAdapter<ItemAdapter.ViewHolder> {
         }
     }
 }
-
+*/
