@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.barterbuddy.Adapters.DummyAdapter;
@@ -26,12 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
   ArrayList<RecyclerItemModel> RecyclerItemModels = new ArrayList<>();
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
-    RecyclerView recyclerView = findViewById(R.id.Recycler);
+    View recyclerLayout = LayoutInflater.from(this).inflate(R.layout.recycler, null);
+    RecyclerView recyclerView = recyclerLayout.findViewById(R.id.Recycler);
 
       //sets up dummy data for now, will be used to create items using firestore data
     setUpRecyclerItems();
