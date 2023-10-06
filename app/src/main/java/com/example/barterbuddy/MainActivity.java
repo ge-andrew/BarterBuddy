@@ -81,12 +81,11 @@ public class MainActivity extends AppCompatActivity {
                   documentSnapshot -> {
                     Item itemToActivate = documentSnapshot.toObject(Item.class);
                     Log.d(TAG, "Activating item");
-                      if (itemToActivate != null) {
-                          UpdateItemDocument.makeItemActive(itemToActivate, true);
-                      }
-                      else {
-                          Log.w(TAG, "Item not found");
-                      }
+                    if (itemToActivate != null) {
+                      UpdateItemDocument.makeItemActive(itemToActivate, true);
+                    } else {
+                      Log.w(TAG, "Item not found");
+                    }
                   })
               .addOnFailureListener(e -> Log.w(TAG, "Getting item failed", e));
         });
