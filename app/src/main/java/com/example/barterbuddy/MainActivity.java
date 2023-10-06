@@ -63,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
         view_my_items_button = findViewById(R.id.go_to_my_items);
         view_my_items_button.setOnClickListener(
                 view -> {
+                    username = String.valueOf(usernameEditText.getText());
+                    email = String.valueOf(emailEditText.getText());
                     Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                 });
     }

@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
+import org.w3c.dom.Document;
+
 // This class is mainly standard setup for recyclerView
 
 public class UserItemsRecyclerViewAdapter
@@ -45,6 +47,7 @@ public class UserItemsRecyclerViewAdapter
 
     holder.itemTitle.setText(items.get(position).getTitle());
     // TODO: load image here
+
   }
 
   @Override
