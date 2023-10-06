@@ -52,7 +52,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     //RECYLER
     implementation ("androidx.recyclerview:recyclerview:1.3.1")
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$1.9.10")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$1.8.0")
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
