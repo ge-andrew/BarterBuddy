@@ -37,4 +37,12 @@
         android:text="Go to add item page"
         android:layout_margin="12dp"/>
 
+    <!-- ANOTHER TEMP BUTTON FOR TESTING TASK 11a -->
+    <Button
+        android:id="@+id/set_item_active_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make item active"
+        android:layout_margin="12dp"/>
+
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.example.barterbuddy;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,9 +22,17 @@ public class UpdateItemDocument {
    * @param item the item to be updated
    * @param active true if the item should be set to active
    * @return true if the item status was changed
+   * @throws NullPointerException if the "email" or "title" fields are not found in the given item
    */
   static boolean makeItemActive(@NonNull Item item, boolean active) {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    // Check for missing fields
+    if (item.getEmail() == null) {
+      throw new NullPointerException("email not found in item");
+    } else if (item.getTitle() == null) {
+      throw new NullPointerException("title not found in item");
+    }
+    // update active status
     if (item.getActive() == active) {
       return false; // item status was not changed
     } else {
