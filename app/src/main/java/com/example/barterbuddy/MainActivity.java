@@ -1,12 +1,10 @@
 package com.example.barterbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,18 +13,19 @@ public class MainActivity extends AppCompatActivity {
   // for LogCat
   String TAG = "MainActivity";
 
-  // declaring temp itemId (for testing and demonstration)
-  private String username;
-  private String email;
 
-  TextInputEditText itemIdEditText;
+    // declaring temp buttons
+    Button details_button;
+    Button add_item_button;
+    Button view_my_items_button;
+    Button set_active_button;
+    TextInputEditText itemIdEditText;
+    // declaring temp itemId (for testing and demonstration)
+    private String username;
+    private String email;
+    private String itemId;
 
-  private String itemId;
-
-  // declaring temp buttons
-  Button details_button;
-  Button add_item_button;
-  Button set_active_button;
+  
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
           intent.putExtra("email", email);
           startActivity(intent);
         });
+
+    view_my_items_button = findViewById(R.id.go_to_my_items);
+        view_my_items_button.setOnClickListener(
+                view -> {
+                    username = String.valueOf(usernameEditText.getText());
+                    email = String.valueOf(emailEditText.getText());
+                    Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                });
 
     // setting up active item button
     set_active_button = findViewById(R.id.set_item_active_button);

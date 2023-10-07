@@ -63,6 +63,7 @@ public class Item implements Serializable {
     this.description = description;
   }
 
+
   public void setImageId(String imageUri) {
     this.imageId = imageUri;
   }

@@ -32,6 +32,9 @@
             android:name=".ItemDetailPage"
             android:exported="false" />
         <activity
+            android:name=".UserItemsPage"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>
