@@ -13,19 +13,15 @@ public class MainActivity extends AppCompatActivity {
   // for LogCat
   String TAG = "MainActivity";
 
-
-    // declaring temp buttons
-    Button details_button;
-    Button add_item_button;
-    Button view_my_items_button;
-    Button set_active_button;
-    TextInputEditText itemIdEditText;
-    // declaring temp itemId (for testing and demonstration)
-    private String username;
-    private String email;
-    private String itemId;
-
-  
+  // declaring temp buttons
+  Button details_button;
+  Button view_my_items_button;
+  Button set_active_button;
+  TextInputEditText itemIdEditText;
+  // declaring temp itemId (for testing and demonstration)
+  private String username;
+  private String email;
+  private String itemId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +50,14 @@ public class MainActivity extends AppCompatActivity {
           startActivity(intent);
         });
 
-    // setting up add item button
-    add_item_button = findViewById(R.id.go_to_add_item_button);
-    add_item_button.setOnClickListener(
+    view_my_items_button = findViewById(R.id.go_to_my_items);
+    view_my_items_button.setOnClickListener(
         view -> {
-          // creating intent to open AddNewItem activity
-          Intent intent = new Intent(MainActivity.this, AddNewItem.class);
+          Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
           intent.putExtra("username", username);
           intent.putExtra("email", email);
           startActivity(intent);
         });
-
-    view_my_items_button = findViewById(R.id.go_to_my_items);
-        view_my_items_button.setOnClickListener(
-                view -> {
-                    username = String.valueOf(usernameEditText.getText());
-                    email = String.valueOf(emailEditText.getText());
-                    Intent intent = new Intent(MainActivity.this, UserItemsPage.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("email", email);
-                    startActivity(intent);
-                });
 
     // setting up active item button
     set_active_button = findViewById(R.id.set_item_active_button);

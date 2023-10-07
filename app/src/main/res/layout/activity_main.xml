@@ -25,22 +25,14 @@
     <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 8a -->
     <Button
         android:id="@+id/go_to_details_button"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Go to details page"
         android:layout_margin="12dp"/>
 
     <Button
-        android:id="@+id/go_to_add_item_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to add item page"
-        android:layout_margin="12dp"/>
-
-
-    <Button
         android:id="@+id/go_to_my_items"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="See my items"
         android:layout_margin="16dp"/>
@@ -48,7 +40,7 @@
     <!-- ANOTHER TEMP BUTTON FOR TESTING TASK 11a -->
     <Button
         android:id="@+id/set_item_active_button"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Make item active"
         android:layout_margin="12dp"/>
