@@ -15,39 +15,32 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 
 public class UserItemsPage extends AppCompatActivity implements RecyclerViewInterface {
 
   private static final String TAG = "UserItemsPage";
+  final long ONE_MEGABYTE = 1024 * 1024;
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  //  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
-  //  FirebaseUser user;
+  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
   Button add_item_button;
   private ArrayList<Item> items = new ArrayList<Item>();
-  private ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
+  private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
   private String username;
   private String email;
   private CollectionReference collectionReference;
   private StorageReference imageReference;
-  final long ONE_MEGABYTE = 1024 * 1024;
-  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
 
     @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_user_items);
-
-    // TODO: include after authentication has been implemented
-    // user = FirebaseAuth.getInstance().getCurrentUser();
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
@@ -72,7 +65,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     db.collection("users")
-        .document(email) // TODO: change documentPath placeholder to variable
+        .document(email) 
         .collection("items")
         .get()
         .addOnCompleteListener(
@@ -84,8 +77,6 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
                 if (task.isSuccessful()) {
                   for (QueryDocumentSnapshot document :
                       task.getResult()) { // add data from each document (1 currently)
-                    // TODO: need to map to object instead of individual fields when everything
-                    // fully set up
                     newItems.add((document.toObject(Item.class)));
                   }
                 } else {

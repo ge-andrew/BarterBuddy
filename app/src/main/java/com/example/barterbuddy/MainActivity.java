@@ -4,15 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
-
-    // declaring temp itemId (for testing and demonstration)
-    private String username;
-    private String email;
-    private String itemId;
 
     // declaring temp buttons
     Button details_button;
@@ -21,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText usernameEditText;
     TextInputEditText emailEditText;
     TextInputEditText itemIdEditText;
+    // declaring temp itemId (for testing and demonstration)
+    private String username;
+    private String email;
+    private String itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

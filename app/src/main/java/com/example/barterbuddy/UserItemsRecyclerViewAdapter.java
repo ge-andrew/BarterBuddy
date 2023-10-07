@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-import org.w3c.dom.Document;
-
 // This class is mainly standard setup for recyclerView
 
 public class UserItemsRecyclerViewAdapter
@@ -24,7 +22,10 @@ public class UserItemsRecyclerViewAdapter
 
   // constructor
   public UserItemsRecyclerViewAdapter(
-          Context context, ArrayList<Item> items, RecyclerViewInterface recyclerViewInterface, ArrayList<Bitmap> itemImages) {
+      Context context,
+      ArrayList<Item> items,
+      RecyclerViewInterface recyclerViewInterface,
+      ArrayList<Bitmap> itemImages) {
     this.recyclerViewInterface = recyclerViewInterface;
     this.context = context;
     this.items = items;
@@ -49,11 +50,9 @@ public class UserItemsRecyclerViewAdapter
     // based on position of recycler view
 
     holder.itemTitle.setText(items.get(position).getTitle());
-    // TODO: load image here
-    if(itemImages.size() != 0 && itemImages.size() == items.size()) {
+    if (itemImages.size() != 0 && itemImages.size() == items.size()) {
       holder.imageView.setImageBitmap(itemImages.get(position));
     }
-
   }
 
   @Override
