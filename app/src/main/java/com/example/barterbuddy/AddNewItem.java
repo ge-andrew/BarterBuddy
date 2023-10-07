@@ -2,6 +2,7 @@ package com.example.barterbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -78,7 +79,11 @@ public class AddNewItem extends AppCompatActivity {
 
     // setting up onclick behaviors
     itemImageView.setOnClickListener(view -> showCustomDialog());
-    save_button.setOnClickListener(view -> saveItem());
+    save_button.setOnClickListener(
+        view -> {
+          // saving item
+          saveItem();
+        });
   }
 
   /** This function saves teh data from the data fields and saves them to the database */
@@ -150,6 +155,10 @@ public class AddNewItem extends AppCompatActivity {
           .addOnSuccessListener(
               unused -> {
                 Toast.makeText(AddNewItem.this, "Added item", Toast.LENGTH_SHORT).show();
+
+                // causing UserItemsPage to refresh if save button is pressed
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
                 finish();
               })
           .addOnFailureListener(
