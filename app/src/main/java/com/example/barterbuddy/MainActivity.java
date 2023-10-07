@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         view -> {
           itemId = String.valueOf(itemIdEditText.getText());
           // creating intent to open ItemDetailPage activity
-          Intent intent = new Intent(MainActivity.this, ItemDetailPage.class);
+          Intent intent = new Intent(MainActivity.this, UserItemDetailPage.class);
           intent.putExtra("username", username);
           intent.putExtra("email", email);
           intent.putExtra("itemId", itemId);

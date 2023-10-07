@@ -29,7 +29,7 @@
             android:name=".AddNewItem"
             android:exported="false" />
         <activity
-            android:name=".ItemDetailPage"
+            android:name=".UserItemDetailPage"
             android:exported="false" />
         <activity
             android:name=".UserItemsPage"

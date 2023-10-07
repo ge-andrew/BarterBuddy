@@ -1,7 +1,5 @@
 package com.example.barterbuddy;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -113,7 +111,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(UserItemsPage.this, ItemDetailPage.class);
+    Intent intent = new Intent(UserItemsPage.this, UserItemDetailPage.class);
 
     intent.putExtra("itemId", items.get(position).getImageId());
     intent.putExtra("username", username);

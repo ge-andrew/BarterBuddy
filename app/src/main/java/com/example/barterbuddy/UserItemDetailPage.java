@@ -1,5 +1,7 @@
 package com.example.barterbuddy;
 
+import static com.example.barterbuddy.UpdateItemDocument.makeItemActive;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ItemDetailPage extends AppCompatActivity {
+public class UserItemDetailPage extends AppCompatActivity {
 
     private static final String TAG = "ItemDetailPage"; // for logging from this activity
     private TextView itemTitle;
@@ -38,7 +40,7 @@ public class ItemDetailPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail_page);
+        setContentView(R.layout.activity_user_item_detail_page);
 
         // get item id and poster id from recycler view
         username = getIntent().getStringExtra("username");
@@ -124,11 +126,14 @@ public class ItemDetailPage extends AppCompatActivity {
         // prepare the offer trade button for advancing to the next page
         offerTradeButton.setOnClickListener(
                 v -> {
+
+                    makeItemActive(new Item((String) itemTitle.getText(), (String) itemDescription.getText(), itemId, true, username, email), true);
+
                     // creates an intent that switches to the OfferTradePage activity and passes the item
                     // to the new activity
-                    Intent intent = new Intent(ItemDetailPage.this, OfferTradePage.class);
+                    Intent intent = new Intent(UserItemDetailPage.this, OfferTradePage.class);
                     intent.putExtra("itemToTradeFor", currentItem);
-                    Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(this, "Set to Active", Toast.LENGTH_LONG);
                     toast.show();
                     // startActivity(intent);
                 });
