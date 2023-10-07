@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
@@ -116,7 +117,6 @@ public class AddNewItem extends AppCompatActivity {
             new_item.setUsername(userName);
             new_item.setImageId(itemId);
 
-
             // converting bitmap to byte array
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -124,8 +124,14 @@ public class AddNewItem extends AppCompatActivity {
             byte[] imageData = baos.toByteArray();
 
             // storing byte array in Firebase Storage
-            imageReference.putBytes(imageData).addOnSuccessListener(taskSnapshot -> {
-            }).addOnFailureListener(e -> Toast.makeText(AddNewItem.this, "Failed to upload photo", Toast.LENGTH_SHORT).show());
+            imageReference
+                    .putBytes(imageData)
+                    .addOnSuccessListener(taskSnapshot -> {
+                    })
+                    .addOnFailureListener(
+                            e ->
+                                    Toast.makeText(AddNewItem.this, "Failed to upload photo", Toast.LENGTH_SHORT)
+                                            .show());
 
             // creating user document
             // firebase variables
@@ -135,11 +141,12 @@ public class AddNewItem extends AppCompatActivity {
             userDocumentReference.set(user_name_to_store);
 
             // creating item document
-            DocumentReference itemDocumentReference = dbItem
-                    .collection("users")
-                    .document(email)
-                    .collection("items")
-                    .document(new_item.getImageId());
+            DocumentReference itemDocumentReference =
+                    dbItem
+                            .collection("users")
+                            .document(email)
+                            .collection("items")
+                            .document(new_item.getImageId());
 
             // saving item to new item document
             itemDocumentReference
@@ -206,6 +213,11 @@ public class AddNewItem extends AppCompatActivity {
 
             // setting image view scale type
             itemImageView.setScaleType(ShapeableImageView.ScaleType.CENTER_CROP);
+
+            // setting image view width
+            ViewGroup.LayoutParams layoutParams = itemImageView.getLayoutParams();
+            layoutParams.width = -2;
+
             // setting image view
             itemImageView.setImageBitmap(photoBitmap);
             imageWasChanged = true;
@@ -223,6 +235,14 @@ public class AddNewItem extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
+                // setting image view scale type
+                itemImageView.setScaleType(ShapeableImageView.ScaleType.CENTER_CROP);
+
+                // setting image view width
+                ViewGroup.LayoutParams layoutParams = itemImageView.getLayoutParams();
+                layoutParams.width = -2;
+
                 // setting image view
                 itemImageView.setImageURI(photoUri);
                 imageWasChanged = true;

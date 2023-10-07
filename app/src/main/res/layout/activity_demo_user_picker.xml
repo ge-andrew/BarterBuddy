@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DemoUserPicker"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to BarterBuddy!"
+        android:textStyle="bold"
+        android:textSize="32sp"
+        android:textColor="@color/peach"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="0"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick a user"
+            android:textStyle="bold"
+            android:textSize="26sp"
+            android:layout_marginBottom="12dp"/>
+        <Button
+            android:id="@+id/Andrew"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Andrew"
+            android:padding="12dp"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+        <Button
+            android:id="@+id/Matt"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Matt"
+            android:padding="12dp"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+        <Button
+            android:id="@+id/Skyler"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Skyler"
+            android:padding="12dp"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+        <Button
+            android:id="@+id/Daniel"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Daniel"
+            android:padding="12dp"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
