@@ -22,9 +22,10 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   final long ONE_MEGABYTE = 1024 * 1024;
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
+  private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
   Button add_item_button;
-  private ArrayList<Item> items = new ArrayList<>();
-  private final ArrayList<Bitmap> itemImages = new ArrayList<>();
+  
+  private ArrayList<Item> items = new ArrayList<Item>();
   private String username;
   private String email;
   private StorageReference imageReference;
@@ -106,7 +107,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(UserItemsPage.this, ItemDetailPage.class);
+    Intent intent = new Intent(UserItemsPage.this, UserItemDetailPage.class);
 
     intent.putExtra("itemId", items.get(position).getImageId());
     intent.putExtra("username", username);

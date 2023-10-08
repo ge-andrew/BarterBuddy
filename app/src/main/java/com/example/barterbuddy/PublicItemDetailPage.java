@@ -1,7 +1,5 @@
 package com.example.barterbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,15 +9,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ItemDetailPage extends AppCompatActivity {
+public class PublicItemDetailPage extends AppCompatActivity {
 
     private static final String TAG = "ItemDetailPage"; // for logging from this activity
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
     private TextView itemTitle;
     private TextView usernameTextView;
     private TextView itemDescription;
@@ -29,16 +29,13 @@ public class ItemDetailPage extends AppCompatActivity {
     private String username;
     private String email;
     private Item currentItem;
-
     private DocumentReference itemDocReference;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference imageReference;
-    private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail_page);
+        setContentView(R.layout.activity_public_item_detail_page);
 
         // get item id and poster id from recycler view
         username = getIntent().getStringExtra("username");
@@ -126,7 +123,7 @@ public class ItemDetailPage extends AppCompatActivity {
                 v -> {
                     // creates an intent that switches to the OfferTradePage activity and passes the item
                     // to the new activity
-                    Intent intent = new Intent(ItemDetailPage.this, OfferTradePage.class);
+                    Intent intent = new Intent(PublicItemDetailPage.this, OfferTradePage.class);
                     intent.putExtra("itemToTradeFor", currentItem);
                     Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
                     toast.show();

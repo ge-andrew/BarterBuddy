@@ -16,14 +16,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,16 +36,16 @@ public class AddNewItem extends AppCompatActivity {
 
   // constant for Firestore setup
   private static final String USER_NAME = "username";
-
+  private final FirebaseFirestore dbUser = FirebaseFirestore.getInstance();
+  private final FirebaseFirestore dbItem = FirebaseFirestore.getInstance();
+  private final FirebaseStorage dbImage = FirebaseStorage.getInstance();
   // used to determine if a picture was taken
   boolean imageWasChanged = false;
-
   // declaring views and buttons
   ShapeableImageView itemImageView;
   Button save_button;
   TextInputEditText titleEditText;
   TextInputEditText descriptionEditText;
-
   // variables for item
   String userName;
   String email;
@@ -55,11 +54,7 @@ public class AddNewItem extends AppCompatActivity {
   String itemId;
   Bitmap photoBitmap;
   Uri photoUri;
-
-  private final FirebaseFirestore dbUser = FirebaseFirestore.getInstance();
-  private final FirebaseFirestore dbItem = FirebaseFirestore.getInstance();
   StorageReference imageReference;
-  private final FirebaseStorage dbImage = FirebaseStorage.getInstance();
 
   /** this function is called when the activity is first loaded */
   @Override
