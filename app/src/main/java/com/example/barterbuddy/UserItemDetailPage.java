@@ -127,7 +127,7 @@ public class UserItemDetailPage extends AppCompatActivity {
         offerTradeButton.setOnClickListener(
                 v -> {
 
-                    makeItemActive(new Item((String) itemTitle.getText(), (String) itemDescription.getText(), itemId, true, username, email), true);
+                    makeItemActive(new Item((String) itemTitle.getText(), (String) itemDescription.getText(), itemId, false, username, email), true);
 
                     // creates an intent that switches to the OfferTradePage activity and passes the item
                     // to the new activity
