@@ -18,6 +18,8 @@ import com.google.firebase.storage.StorageReference;
 public class PublicItemDetailPage extends AppCompatActivity {
 
     private static final String TAG = "ItemDetailPage"; // for logging from this activity
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
     private TextView itemTitle;
     private TextView usernameTextView;
     private TextView itemDescription;
@@ -27,11 +29,8 @@ public class PublicItemDetailPage extends AppCompatActivity {
     private String username;
     private String email;
     private Item currentItem;
-
     private DocumentReference itemDocReference;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference imageReference;
-    private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
