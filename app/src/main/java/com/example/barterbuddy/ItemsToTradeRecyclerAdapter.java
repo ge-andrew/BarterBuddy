@@ -18,11 +18,11 @@ import java.util.ArrayList;
 public class ItemsToTradeRecyclerAdapter extends RecyclerView.Adapter<ItemsToTradeRecyclerAdapter.MyViewHolder> {
     private final RecyclerViewInterface recyclerViewInterface;
     Context context;
-    ArrayList<RecyclerItemModel> recyclerItemModels;
+    ArrayList<Item> Items;
     ArrayList<Bitmap> itemImages;
-    public ItemsToTradeRecyclerAdapter(Context context, ArrayList<RecyclerItemModel> recyclerItemModels, RecyclerViewInterface recyclerViewInterface,ArrayList<Bitmap> itemImages){
+    public ItemsToTradeRecyclerAdapter(Context context, ArrayList<Item> Items, RecyclerViewInterface recyclerViewInterface,ArrayList<Bitmap> itemImages){
         this.context = context;
-        this.recyclerItemModels = recyclerItemModels;
+        this.Items = Items;
         this.recyclerViewInterface = recyclerViewInterface;
         this.itemImages = itemImages;
     }
@@ -42,8 +42,13 @@ public class ItemsToTradeRecyclerAdapter extends RecyclerView.Adapter<ItemsToTra
 
     @Override
     public int getItemCount() {
-        return recyclerItemModels.size();
+        return Items.size();
     }
+
+   // @Override
+//    public int getItemCount() {
+//        //return Item.get();
+//    }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // this method very very roughly equates to onCreate() from recyclerView
         // sets up image and text views

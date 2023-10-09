@@ -31,8 +31,8 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     final long ONE_MEGABYTE = 1024 * 1024;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
-    private final CollectionReference itemsCollection = db.collectionGroup("items");
-    private ArrayList<RecyclerItemModel> items = new ArrayList<RecyclerItemModel>();
+
+    private ArrayList<Item> items = new ArrayList<Item>();
     private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
     private String username;
     private String email;
@@ -58,21 +58,17 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
     // Take arraylist of items to load recyclerView of user's items
     private void setUpItems(Context context) {
-        db.collection("users")
-                .document(email)
-                .collection("items")
-                .whereEqualTo("active",true)
-                .get()
+        db.collectionGroup("items").whereEqualTo("active", true).get()
                 .addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
                             // retrieve and insert firebase data into items
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                ArrayList<RecyclerItemModel> availableItems = new ArrayList<RecyclerItemModel>();
+                                ArrayList<Item> availableItems = new ArrayList<Item>();
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document :
                                             task.getResult()) { // add data from each document (1 currently)
-                                        availableItems.add((document.toObject(RecyclerItemModel.class)));
+                                        availableItems.add((document.toObject(Item.class)));
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
