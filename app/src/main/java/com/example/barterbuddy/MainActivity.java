@@ -3,8 +3,13 @@ package com.example.barterbuddy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.barterbuddy.Models.RecyclerItemModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
   Button details_button;
   Button view_my_items_button;
   Button set_active_button;
+  Button recycler_view_button;
   TextInputEditText itemIdEditText;
   // declaring temp itemId (for testing and demonstration)
   private String username;
@@ -82,5 +88,18 @@ public class MainActivity extends AppCompatActivity {
                   })
               .addOnFailureListener(e -> Log.w(TAG, "Getting item failed", e));
         });
+    recycler_view_button = findViewById(R.id.recycler_view_button);
+    recycler_view_button.setOnClickListener(
+            view -> {
+
+                Intent intent = new Intent(MainActivity.this, ItemsAvailablePage.class);
+                intent.putExtra("username", username);
+                intent.putExtra("email", email);
+                intent.putExtra("itemId", itemId);
+                startActivity(intent);
+            }
+    );
+
+
   }
 }
