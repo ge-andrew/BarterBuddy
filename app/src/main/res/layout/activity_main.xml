@@ -14,21 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/item"
-            android:hint="item id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"/>
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- THIS IS A TEMP BUTTON FOR TESTING TASK 8a -->
-    <Button
-        android:id="@+id/go_to_details_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Go to details page"
-        android:layout_margin="12dp"/>
 
     <Button
         android:id="@+id/go_to_my_items"
@@ -36,13 +22,13 @@
         android:layout_height="wrap_content"
         android:text="See my items"
         android:layout_margin="16dp"/>
-  
-    <!-- ANOTHER TEMP BUTTON FOR TESTING TASK 11a -->
+
+    <!-- Temp button to see items for trade -->
     <Button
-        android:id="@+id/set_item_active_button"
+        android:id="@+id/recycler_view_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Make item active"
+        android:text="See items for trade"
         android:layout_margin="12dp"/>
 
 </LinearLayout>
