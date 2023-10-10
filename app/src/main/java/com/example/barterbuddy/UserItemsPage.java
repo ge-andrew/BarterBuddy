@@ -30,6 +30,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
   Button add_item_button;
+  Button active_items_button;
   private ArrayList<Item> items = new ArrayList<Item>();
   private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
   private String username;
@@ -60,6 +61,15 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
           intent.putExtra("email", email);
           startActivity(intent);
         });
+    active_items_button = findViewById(R.id.active_items_buttons);
+    active_items_button.setOnClickListener(
+            view -> {
+                Intent intent = new Intent(UserItemsPage.this, ItemsAvailablePage.class);
+                intent.putExtra("username", username);
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+    );
   }
 
   // Take arraylist of items to load recyclerView of user's items

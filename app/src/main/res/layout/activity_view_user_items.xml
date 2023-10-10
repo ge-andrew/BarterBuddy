@@ -35,13 +35,19 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="461dp" />
+            android:layout_height="410dp" />
 
         <Button
             android:id="@+id/add_item_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Item" />
+
+        <Button
+            android:id="@+id/active_items_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Available Items" />
     </LinearLayout>
 
 
