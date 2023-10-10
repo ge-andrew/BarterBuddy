@@ -23,14 +23,13 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
   private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
+  private final int REQUEST_CODE = 1002;
   Button add_item_button;
   Button active_items_button;
-
   private ArrayList<Item> items = new ArrayList<Item>();
   private String username;
   private String email;
   private StorageReference imageReference;
-  private final int REQUEST_CODE = 1002;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
