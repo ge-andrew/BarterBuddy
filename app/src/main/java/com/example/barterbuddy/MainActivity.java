@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
 
+
     // setting up user items button
     view_my_items_button = findViewById(R.id.go_to_my_items);
     view_my_items_button.setOnClickListener(
