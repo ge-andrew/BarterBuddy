@@ -67,7 +67,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                                 ArrayList<Item> availableItems = new ArrayList<Item>();
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document :
-                                            task.getResult()) { // add data from each document (1 currently)
+                                            task.getResult()) {
                                         availableItems.add((document.toObject(Item.class)));
                                     }
                                 } else {
@@ -107,8 +107,8 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
         Intent intent = new Intent(ItemsAvailablePage.this, ItemDetailPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
-        intent.putExtra("username", username);
-        intent.putExtra("email", email);
+        intent.putExtra("username", items.get(position).getUsername());
+        intent.putExtra("email", items.get(position).getEmail());
 
         startActivity(intent);
     }

@@ -37,6 +37,9 @@ public class ItemsToTradeRecyclerAdapter extends RecyclerView.Adapter<ItemsToTra
 
     @Override
     public void onBindViewHolder(@NonNull ItemsToTradeRecyclerAdapter.MyViewHolder holder, int position) {
+        holder.itemTitle.setText(Items.get(position).getTitle());
+        holder.itemDescription.setText(Items.get(position).getDescription());
+        holder.itemPoster.setText(Items.get(position).getUsername());
 
     }
 
@@ -54,7 +57,7 @@ public class ItemsToTradeRecyclerAdapter extends RecyclerView.Adapter<ItemsToTra
         // sets up image and text views
 
         ImageView imageView;
-        TextView itemTitle,itemDescription, itemPoster;
+        TextView itemTitle, itemDescription, itemPoster;
 
         public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
