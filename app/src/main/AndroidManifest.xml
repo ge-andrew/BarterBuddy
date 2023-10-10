@@ -32,6 +32,9 @@
             android:name=".UserItemDetailPage"
             android:exported="false" />
         <activity
+            android:name=".PublicItemDetailPage"
+            android:exported="false" />
+        <activity
             android:name=".UserItemsPage"
             android:exported="false" />
         <activity

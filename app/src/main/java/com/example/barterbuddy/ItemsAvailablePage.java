@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.barterbuddy.Models.RecyclerItemModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,15 +29,14 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     final long ONE_MEGABYTE = 1024 * 1024;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
-
-    private ArrayList<Item> items = new ArrayList<Item>();
     private final ArrayList<Bitmap> itemImages = new ArrayList<Bitmap>();
+    Button user_items_button;
+    private ArrayList<Item> items = new ArrayList<Item>();
     private String username;
     private String email;
     private String description;
     private CollectionReference collectionReference;
     private StorageReference imageReference;
-    Button user_items_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +75,9 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document :
                                             task.getResult()) {
-                                        availableItems.add((document.toObject(Item.class)));
+                                        // don't add item if is user's own item
+                                        if(!(document.get("email").equals(email) && document.get("username").equals(username)))
+                                            availableItems.add((document.toObject(Item.class)));
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -110,11 +109,11 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                         });
     }
 
-    // take position of clicked card in recyclerView to start and send correct data to itemDetailPage
+    // take position of clicked card in recyclerView to start and send correct data to PublicItemDetailPage
     // activity
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(ItemsAvailablePage.this, ItemDetailPage.class);
+        Intent intent = new Intent(ItemsAvailablePage.this, PublicItemDetailPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
         intent.putExtra("username", items.get(position).getUsername());
