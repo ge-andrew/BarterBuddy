@@ -39,6 +39,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     private String description;
     private CollectionReference collectionReference;
     private StorageReference imageReference;
+    Button user_items_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,15 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
         // onComplete
 
         setUpItems(this);
+        user_items_button = findViewById(R.id.User_Items_Button);
+        user_items_button.setOnClickListener(
+                view -> {
+                    Intent intent = new Intent(ItemsAvailablePage.this, UserItemsPage.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+                );
 
     }
 
@@ -112,4 +122,5 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
         startActivity(intent);
     }
+
 }
