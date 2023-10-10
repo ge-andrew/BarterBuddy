@@ -1,39 +1,29 @@
 package com.example.barterbuddy;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.Serializable;
 
 // Serializable means it can be put into an Intent with putExtra
 /**
- * Stores all the data related to an Item in a structure identical to
- * a document in the Firestore Users collection.
+ * Stores all the data related to an Item in a structure identical to a document in the Firestore
+ * Users collection.
  */
 public class Item implements Serializable {
-  /**
-   * the title of the item
-   */
+  /** the title of the item */
   private String title;
-  /**
-   * the description of the item
-   */
+
+  /** the description of the item */
   private String description;
-  /**
-   * the uri of the item's image in Firebase Cloud Storage
-   */
+
+  /** the uri of the item's image in Firebase Cloud Storage */
   private String imageId;
-  /**
-   * true if the item is the active item for trade and false if not
-   */
+
+  /** true if the item is the active item for trade and false if not */
   private boolean isActive;
-  /**
-   * username of person who owns this item
-   */
+
+  /** username of person who owns this item */
   private String username;
-  /**
-   * email of user who owns this item
-   */
+
+  /** email of user who owns this item */
   private String email;
 
   public String getTitle() {
@@ -52,8 +42,13 @@ public class Item implements Serializable {
     return isActive;
   }
 
-  public String getUsername() { return username; }
-  public String getEmail() { return email; }
+  public String getUsername() {
+    return username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
 
   public void setTitle(String title) {
     this.title = title;
@@ -63,7 +58,6 @@ public class Item implements Serializable {
     this.description = description;
   }
 
-
   public void setImageId(String imageUri) {
     this.imageId = imageUri;
   }
@@ -72,11 +66,22 @@ public class Item implements Serializable {
     this.isActive = active;
   }
 
-  public void setUsername(String username) { this.username = username; }
-  public void setEmail (String email) { this.email = email; }
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
   // constructors
-  public Item(String title, String description, String imageId, boolean isActive, String username, String email) {
+  public Item(
+      String title,
+      String description,
+      String imageId,
+      boolean isActive,
+      String username,
+      String email) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;

@@ -38,10 +38,6 @@
             android:name=".UserItemsPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".ItemsAvailablePage"
             android:exported="false">
 

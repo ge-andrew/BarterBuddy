@@ -4,70 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".DemoUserPicker"
     android:padding="16dp"
-    android:gravity="center_horizontal">
+    tools:context=".DemoUserPicker">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to BarterBuddy!"
-        android:textStyle="bold"
-        android:textSize="32sp"
-        android:textColor="@color/peach"
         android:layout_marginBottom="12dp"
         android:layout_weight="0"
-        />
+        android:text="Welcome to BarterBuddy!"
+        android:textColor="@color/peach"
+        android:textSize="32sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_weight="1"
         android:gravity="center"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:text="Pick a user"
-            android:textStyle="bold"
             android:textSize="26sp"
-            android:layout_marginBottom="12dp"/>
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/Andrew"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Andrew"
+            android:layout_marginBottom="12dp"
             android:padding="12dp"
-            android:textSize="18sp"
-            android:layout_marginBottom="12dp"/>
+            android:text="Andrew"
+            android:textSize="20sp" />
+
         <Button
             android:id="@+id/Matt"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Matt"
+            android:layout_marginBottom="12dp"
             android:padding="12dp"
-            android:textSize="18sp"
-            android:layout_marginBottom="12dp"/>
+            android:text="Matt"
+            android:textSize="20sp" />
+
         <Button
             android:id="@+id/Skyler"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Skyler"
+            android:layout_marginBottom="12dp"
             android:padding="12dp"
-            android:textSize="18sp"
-            android:layout_marginBottom="12dp"/>
+            android:text="Skyler"
+            android:textSize="20sp" />
+
         <Button
             android:id="@+id/Daniel"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Daniel"
+            android:layout_marginBottom="12dp"
             android:padding="12dp"
-            android:textSize="18sp"/>
+            android:text="Daniel"
+            android:textSize="20sp" />
 
     </LinearLayout>
-
-
 
 </LinearLayout>

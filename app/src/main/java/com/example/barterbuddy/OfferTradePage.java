@@ -1,5 +1,3 @@
 package com.example.barterbuddy;
 
-public class OfferTradePage {
-
-}
+public class OfferTradePage {}
