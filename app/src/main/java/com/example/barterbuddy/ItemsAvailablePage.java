@@ -78,7 +78,9 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document :
                                             task.getResult()) {
-                                        availableItems.add((document.toObject(Item.class)));
+                                        // don't add item if is user's own item
+                                        if(!(document.get("email").equals(email) && document.get("username").equals(username)))
+                                            availableItems.add((document.toObject(Item.class)));
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -110,11 +112,11 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                         });
     }
 
-    // take position of clicked card in recyclerView to start and send correct data to itemDetailPage
+    // take position of clicked card in recyclerView to start and send correct data to PublicItemDetailPage
     // activity
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(ItemsAvailablePage.this, ItemDetailPage.class);
+        Intent intent = new Intent(ItemsAvailablePage.this, PublicItemDetailPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
         intent.putExtra("username", items.get(position).getUsername());
