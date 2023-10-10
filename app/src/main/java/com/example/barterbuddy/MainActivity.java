@@ -39,23 +39,7 @@ public class MainActivity extends AppCompatActivity {
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
 
-    // setting up item id text field
-    itemIdEditText = findViewById(R.id.item);
-    itemIdEditText.setText(email + "-");
-
-    // setting up details button
-    details_button = findViewById(R.id.go_to_details_button);
-    details_button.setOnClickListener(
-        view -> {
-          itemId = String.valueOf(itemIdEditText.getText());
-          // creating intent to open ItemDetailPage activity
-          Intent intent = new Intent(MainActivity.this, ItemDetailPage.class);
-          intent.putExtra("username", username);
-          intent.putExtra("email", email);
-          intent.putExtra("itemId", itemId);
-          startActivity(intent);
-        });
-
+    // setting up user items button
     view_my_items_button = findViewById(R.id.go_to_my_items);
     view_my_items_button.setOnClickListener(
         view -> {
@@ -65,29 +49,7 @@ public class MainActivity extends AppCompatActivity {
           startActivity(intent);
         });
 
-    // setting up active item button
-    set_active_button = findViewById(R.id.set_item_active_button);
-    set_active_button.setOnClickListener(
-        view -> {
-          // make this item active with the UpdateItemDocument class
-          FirebaseFirestore db = FirebaseFirestore.getInstance();
-          itemId = String.valueOf(itemIdEditText.getText());
-          DocumentReference itemDocRef =
-              db.collection("users").document(email).collection("items").document(itemId);
-          itemDocRef
-              .get()
-              .addOnSuccessListener(
-                  documentSnapshot -> {
-                    Item itemToActivate = documentSnapshot.toObject(Item.class);
-                    Log.d(TAG, "Activating item");
-                    if (itemToActivate != null) {
-                      UpdateItemDocument.makeItemActive(itemToActivate, true);
-                    } else {
-                      Log.w(TAG, "Item not found");
-                    }
-                  })
-              .addOnFailureListener(e -> Log.w(TAG, "Getting item failed", e));
-        });
+    // setting up public market button
     recycler_view_button = findViewById(R.id.recycler_view_button);
     recycler_view_button.setOnClickListener(
             view -> {

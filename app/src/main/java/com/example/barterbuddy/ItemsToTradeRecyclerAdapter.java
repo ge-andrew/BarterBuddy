@@ -40,7 +40,7 @@ public class ItemsToTradeRecyclerAdapter extends RecyclerView.Adapter<ItemsToTra
         holder.itemTitle.setText(Items.get(position).getTitle());
         holder.itemDescription.setText(Items.get(position).getDescription());
         holder.itemPoster.setText(Items.get(position).getUsername());
-
+        // holder.imageView.setImageBitmap(itemImages.get(position));                   // to be implemented after authentication, will fail anyways
     }
 
     @Override
