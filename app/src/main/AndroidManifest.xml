@@ -13,13 +13,34 @@
         android:theme="@style/Theme.BarterBuddy"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".DemoUserPicker"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".GetImageDialogBox"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewItem"
+            android:exported="false" />
+        <activity
+            android:name=".UserItemDetailPage"
+            android:exported="false" />
+        <activity
+            android:name=".PublicItemDetailPage"
+            android:exported="false" />
+        <activity
+            android:name=".UserItemsPage"
+            android:exported="false" />
+        <activity
+            android:name=".ItemsAvailablePage"
+            android:exported="false">
+
         </activity>
     </application>
 
