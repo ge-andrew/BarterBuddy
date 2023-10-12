@@ -8,7 +8,7 @@
     android:background="@drawable/custom_dialogue_box"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".GetImageDialogBox">
+    tools:context=".utils.GetImageDialogBox">
 
     <TextView
         android:layout_width="wrap_content"

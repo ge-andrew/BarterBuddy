@@ -23,22 +23,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GetImageDialogBox"
+            android:name=".utils.GetImageDialogBox"
             android:exported="false" />
         <activity
-            android:name=".AddNewItem"
+            android:name=".activities.AddNewItemPage"
             android:exported="false" />
         <activity
-            android:name=".UserItemDetailPage"
+            android:name=".activities.UserItemDetailPage"
             android:exported="false" />
         <activity
-            android:name=".PublicItemDetailPage"
+            android:name=".activities.PublicItemDetailPage"
             android:exported="false" />
         <activity
-            android:name=".UserItemsPage"
+            android:name=".activities.UserItemsPage"
             android:exported="false" />
         <activity
-            android:name=".ItemsAvailablePage"
+            android:name=".activities.ItemsAvailablePage"
             android:exported="false">
 
         </activity>

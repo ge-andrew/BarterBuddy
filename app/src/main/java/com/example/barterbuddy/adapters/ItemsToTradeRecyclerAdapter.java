@@ -1,4 +1,4 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,13 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.barterbuddy.R;
+import com.example.barterbuddy.interfaces.RecyclerViewInterface;
+import com.example.barterbuddy.models.Item;
 import java.util.ArrayList;
 
 public class ItemsToTradeRecyclerAdapter
     extends RecyclerView.Adapter<ItemsToTradeRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
-  ArrayList<Item> Items;
+  ArrayList<Item> items;
   ArrayList<Bitmap> itemImages;
 
   public ItemsToTradeRecyclerAdapter(
@@ -24,7 +27,7 @@ public class ItemsToTradeRecyclerAdapter
       RecyclerViewInterface recyclerViewInterface,
       ArrayList<Bitmap> itemImages) {
     this.context = context;
-    this.Items = Items;
+    this.items = Items;
     this.recyclerViewInterface = recyclerViewInterface;
     this.itemImages = itemImages;
   }
@@ -42,16 +45,16 @@ public class ItemsToTradeRecyclerAdapter
   @Override
   public void onBindViewHolder(
       @NonNull ItemsToTradeRecyclerAdapter.MyViewHolder holder, int position) {
-    holder.itemTitle.setText(Items.get(position).getTitle());
-    holder.itemDescription.setText(Items.get(position).getDescription());
-    holder.itemPoster.setText(Items.get(position).getUsername());
+    holder.itemTitle.setText(items.get(position).getTitle());
+    holder.itemDescription.setText(items.get(position).getDescription());
+    holder.itemPoster.setText(items.get(position).getUsername());
     // holder.imageView.setImageBitmap(itemImages.get(position));                   // to be
     // implemented after authentication, will fail anyways
   }
 
   @Override
   public int getItemCount() {
-    return Items.size();
+    return items.size();
   }
 
   // @Override
@@ -74,18 +77,15 @@ public class ItemsToTradeRecyclerAdapter
       itemPoster = itemView.findViewById(R.id.user);
 
       itemView.setOnClickListener(
-          new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              if (recyclerViewInterface != null) {
-                int pos = getAdapterPosition();
+              view -> {
+                if (recyclerViewInterface != null) {
+                  int pos = getAdapterPosition();
 
-                if (pos != RecyclerView.NO_POSITION) {
-                  recyclerViewInterface.onItemClick(pos);
+                  if (pos != RecyclerView.NO_POSITION) {
+                    recyclerViewInterface.onItemClick(pos);
+                  }
                 }
-              }
-            }
-          });
+              });
     }
   }
 }

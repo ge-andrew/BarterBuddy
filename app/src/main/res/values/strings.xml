@@ -9,4 +9,5 @@
     <string name="choose_a_photo_for_your_item">Choose a photo for your item</string>
     <string name="username">username</string>
     <string name="email">email</string>
+    <string name="welcome_message">Welcome to BarterBuddy!</string>
 </resources>

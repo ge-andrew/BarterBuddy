@@ -1,4 +1,4 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.models;
 
 import java.io.Serializable;
 
@@ -26,54 +26,6 @@ public class Item implements Serializable {
   /** email of user who owns this item */
   private String email;
 
-  public String getTitle() {
-    return title;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getImageId() {
-    return imageId;
-  }
-
-  public boolean getActive() {
-    return isActive;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setImageId(String imageUri) {
-    this.imageId = imageUri;
-  }
-
-  public void setActive(boolean active) {
-    this.isActive = active;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   // constructors
   public Item(
       String title,
@@ -91,4 +43,52 @@ public class Item implements Serializable {
   }
 
   public Item() {}
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getImageId() {
+    return imageId;
+  }
+
+  public void setImageId(String imageUri) {
+    this.imageId = imageUri;
+  }
+
+  public boolean getActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    this.isActive = active;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

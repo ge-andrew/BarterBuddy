@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.barterbuddy.activities.ItemsAvailablePage;
+
 public class DemoUserPicker extends AppCompatActivity {
 
   private final String DANIEL = "Daniel";

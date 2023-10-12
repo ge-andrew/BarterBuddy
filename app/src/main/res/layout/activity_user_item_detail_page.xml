@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".UserItemDetailPage">
+    tools:context=".activities.UserItemDetailPage">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/item_image_view"
