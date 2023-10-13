@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".AddNewItem">
+    tools:context=".activities.AddNewItemPage">
 
     <TextView
         android:layout_width="wrap_content"

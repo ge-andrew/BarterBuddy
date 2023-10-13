@@ -1,6 +1,6 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.activities;
 
-import static com.example.barterbuddy.UpdateItemDocument.makeItemActive;
+import static com.example.barterbuddy.network.UpdateItemDocument.makeItemActive;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.barterbuddy.R;
+import com.example.barterbuddy.models.Item;
+import com.example.barterbuddy.models.User;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,13 +23,13 @@ import com.google.firebase.storage.StorageReference;
 public class UserItemDetailPage extends AppCompatActivity {
 
   private static final String TAG = "ItemDetailPage"; // for logging from this activity
-  private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
+  private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
+  private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
   private TextView itemTitle;
   private TextView usernameTextView;
   private TextView itemDescription;
   private ImageView imageView;
-  private Button setActiveItemBtn;
+  private Button set_active_items_button;
   private String itemId;
   private String username;
   private String email;
@@ -49,13 +52,13 @@ public class UserItemDetailPage extends AppCompatActivity {
     Log.d(TAG, "Item ID is " + itemId);
 
     // get the Firestore document reference for the given user and item ids
-    itemDocReference = db.collection("users").document(email).collection("items").document(itemId);
+    itemDocReference = DB.collection("users").document(email).collection("items").document(itemId);
 
     // initializing views and buttons
     usernameTextView = findViewById(R.id.username_text_view);
     itemTitle = findViewById(R.id.item_title_text_view);
     itemDescription = findViewById(R.id.description_text_view);
-    setActiveItemBtn = findViewById(R.id.offer_trade_button);
+    set_active_items_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
 
     // populate our private fields with data from Firestore
@@ -75,7 +78,7 @@ public class UserItemDetailPage extends AppCompatActivity {
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
-                      imageStorage.getReference().child("users/" + email + "/" + itemId + ".jpg");
+                      IMAGE_STORAGE.getReference().child("users/" + email + "/" + itemId + ".jpg");
 
                   final long ONE_MEGABYTE = 1024 * 1024;
                   imageReference
@@ -121,7 +124,7 @@ public class UserItemDetailPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
 
     // prepare the offer trade button for advancing to the next page
-    setActiveItemBtn.setOnClickListener(
+    set_active_items_button.setOnClickListener(
         v -> {
           makeItemActive(
               new Item(

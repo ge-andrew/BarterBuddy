@@ -1,4 +1,4 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.barterbuddy.R;
+import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
+import com.example.barterbuddy.interfaces.RecyclerViewInterface;
+import com.example.barterbuddy.models.Item;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,9 +24,9 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
 
   private static final String TAG = "UserItemsPage";
   final long ONE_MEGABYTE = 1024 * 1024;
-  private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
-  private final ArrayList<Bitmap> itemImages = new ArrayList<>();
+  private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
+  private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private final int REQUEST_CODE = 1002;
   Button add_item_button;
   Button active_items_button;
@@ -49,7 +53,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     add_item_button = findViewById(R.id.add_item_button);
     add_item_button.setOnClickListener(
         view -> {
-          Intent intent = new Intent(UserItemsPage.this, AddNewItem.class);
+          Intent intent = new Intent(UserItemsPage.this, AddNewItemPage.class);
           intent.putExtra("username", username);
           intent.putExtra("email", email);
 
@@ -69,7 +73,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     // retrieve and insert firebase data into items
-    db.collection("users")
+    DB.collection("users")
         .document(email)
         .collection("items")
         .get()
@@ -88,7 +92,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
 
               for (Item item : items) {
                 imageReference =
-                    imageStorage
+                    IMAGE_STORAGE
                         .getReference()
                         .child("users/" + email + "/" + item.getImageId() + ".jpg");
                 imageReference
@@ -96,7 +100,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
                     .addOnSuccessListener(
                         bytes -> {
                           Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                          itemImages.add(itemImage);
+                          ITEM_IMAGES.add(itemImage);
                         })
                     .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
               }
@@ -105,7 +109,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
               RecyclerView recyclerView = findViewById(R.id.recycler_view);
               UserItemsRecyclerViewAdapter adapter =
                   new UserItemsRecyclerViewAdapter(
-                      context, items, (RecyclerViewInterface) context, itemImages);
+                      context, items, (RecyclerViewInterface) context, ITEM_IMAGES);
               recyclerView.setAdapter(adapter);
               recyclerView.setLayoutManager(new LinearLayoutManager(context));
             });

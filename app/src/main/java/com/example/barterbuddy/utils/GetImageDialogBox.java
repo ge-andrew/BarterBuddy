@@ -1,12 +1,8 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.utils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.barterbuddy.R;
 
 public class GetImageDialogBox extends AppCompatActivity {
 

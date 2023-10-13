@@ -1,6 +1,4 @@
-package com.example.barterbuddy;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.barterbuddy.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -17,6 +15,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.barterbuddy.R;
+import com.example.barterbuddy.models.Item;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddNewItem extends AppCompatActivity {
+public class AddNewItemPage extends AppCompatActivity {
 
   // request codes to allow result handler to find correct result
   private static final int CAMERA_REQUEST = 0;
@@ -36,9 +36,9 @@ public class AddNewItem extends AppCompatActivity {
 
   // constant for Firestore setup
   private static final String USER_NAME = "username";
-  private final FirebaseFirestore dbUser = FirebaseFirestore.getInstance();
-  private final FirebaseFirestore dbItem = FirebaseFirestore.getInstance();
-  private final FirebaseStorage dbImage = FirebaseStorage.getInstance();
+  private final FirebaseFirestore DB_USER = FirebaseFirestore.getInstance();
+  private final FirebaseFirestore DB_ITEM = FirebaseFirestore.getInstance();
+  private final FirebaseStorage DB_IMAGES = FirebaseStorage.getInstance();
   // used to determine if a picture was taken
   boolean imageWasChanged = false;
   // declaring views and buttons
@@ -94,13 +94,13 @@ public class AddNewItem extends AppCompatActivity {
         || (TextUtils.isEmpty(title) && TextUtils.isEmpty(description))
         || ((TextUtils.isEmpty(title) && !imageWasChanged))
         || ((TextUtils.isEmpty(description) && !imageWasChanged))) {
-      Toast.makeText(AddNewItem.this, "Missing information", Toast.LENGTH_SHORT).show();
+      Toast.makeText(AddNewItemPage.this, "Missing information", Toast.LENGTH_SHORT).show();
     } else if (TextUtils.isEmpty(title)) {
-      Toast.makeText(AddNewItem.this, "Missing title", Toast.LENGTH_SHORT).show();
+      Toast.makeText(AddNewItemPage.this, "Missing title", Toast.LENGTH_SHORT).show();
     } else if (TextUtils.isEmpty(description)) {
-      Toast.makeText(AddNewItem.this, "Missing description", Toast.LENGTH_SHORT).show();
+      Toast.makeText(AddNewItemPage.this, "Missing description", Toast.LENGTH_SHORT).show();
     } else if (!imageWasChanged) {
-      Toast.makeText(AddNewItem.this, "Missing picture", Toast.LENGTH_SHORT).show();
+      Toast.makeText(AddNewItemPage.this, "Missing picture", Toast.LENGTH_SHORT).show();
     } else {
       // saving data
 
@@ -117,7 +117,7 @@ public class AddNewItem extends AppCompatActivity {
       // converting bitmap to byte array
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-      imageReference = dbImage.getReference().child("users/" + email + "/" + itemId + ".jpg");
+      imageReference = DB_IMAGES.getReference().child("users/" + email + "/" + itemId + ".jpg");
       byte[] imageData = baos.toByteArray();
 
       // storing byte array in Firebase Storage
@@ -126,19 +126,19 @@ public class AddNewItem extends AppCompatActivity {
           .addOnSuccessListener(taskSnapshot -> {})
           .addOnFailureListener(
               e ->
-                  Toast.makeText(AddNewItem.this, "Failed to upload photo", Toast.LENGTH_SHORT)
+                  Toast.makeText(AddNewItemPage.this, "Failed to upload photo", Toast.LENGTH_SHORT)
                       .show());
 
       // creating user document
       // firebase variables
-      DocumentReference userDocumentReference = dbUser.collection("users").document(email);
+      DocumentReference userDocumentReference = DB_USER.collection("users").document(email);
       Map<String, Object> user_name_to_store = new HashMap<>();
       user_name_to_store.put(USER_NAME, userName);
       userDocumentReference.set(user_name_to_store);
 
       // creating item document
       DocumentReference itemDocumentReference =
-          dbItem
+          DB_ITEM
               .collection("users")
               .document(email)
               .collection("items")
@@ -149,7 +149,7 @@ public class AddNewItem extends AppCompatActivity {
           .set(new_item)
           .addOnSuccessListener(
               unused -> {
-                Toast.makeText(AddNewItem.this, "Added item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
 
                 // causing UserItemsPage to refresh if save button is pressed
                 Intent intent = new Intent();
@@ -158,7 +158,8 @@ public class AddNewItem extends AppCompatActivity {
               })
           .addOnFailureListener(
               e ->
-                  Toast.makeText(AddNewItem.this, "Failed to add item", Toast.LENGTH_SHORT).show());
+                  Toast.makeText(AddNewItemPage.this, "Failed to add item", Toast.LENGTH_SHORT)
+                      .show());
     }
   }
 
@@ -168,11 +169,12 @@ public class AddNewItem extends AppCompatActivity {
    */
   protected void showCustomDialog() {
     // creating a dialog box
-    Dialog dialog = new Dialog(AddNewItem.this);
+    Dialog dialog = new Dialog(AddNewItemPage.this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
     dialog.setContentView(R.layout.activity_get_image_dialog_box);
-    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    if (dialog.getWindow() != null)
+      dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
     // getting buttons from UI
     Button choose_photo = dialog.findViewById(R.id.choose_photo_button);

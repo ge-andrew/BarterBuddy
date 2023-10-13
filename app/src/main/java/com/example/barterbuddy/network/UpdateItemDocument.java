@@ -1,7 +1,8 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.network;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import com.example.barterbuddy.models.Item;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,7 +21,7 @@ public class UpdateItemDocument {
    * @return true if the item status was changed
    * @throws NullPointerException if the "email" or "title" fields are not found in the given item
    */
-  static boolean makeItemActive(@NonNull Item item, boolean active) {
+  public static boolean makeItemActive(@NonNull Item item, boolean active) {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Check for missing fields
     if (item.getEmail() == null) {

@@ -1,4 +1,4 @@
-package com.example.barterbuddy;
+package com.example.barterbuddy.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.firebase.firestore.CollectionReference;
+import com.example.barterbuddy.R;
+import com.example.barterbuddy.adapters.ItemsToTradeRecyclerAdapter;
+import com.example.barterbuddy.interfaces.RecyclerViewInterface;
+import com.example.barterbuddy.models.Item;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,15 +24,14 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
   private static final String TAG = "ItemsAvailable";
   final long ONE_MEGABYTE = 1024 * 1024;
-  private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private final FirebaseStorage imageStorage = FirebaseStorage.getInstance();
-  private final ArrayList<Bitmap> itemImages = new ArrayList<>();
+  private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
+  private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   Button user_items_button;
   private ArrayList<Item> items = new ArrayList<>();
   private String username;
   private String email;
-  private String description;
-  private CollectionReference collectionReference;
+  // private CollectionReference collectionReference;
   private StorageReference imageReference;
 
   @Override
@@ -58,7 +60,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     // retrieve and insert firebase data into items
-    db.collectionGroup("items")
+    DB.collectionGroup("items")
         .whereEqualTo("active", true)
         .get()
         .addOnCompleteListener(
@@ -67,8 +69,9 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
               if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                   // don't add item if is user's own item
-                  if (!(document.get("email").equals(email)
-                      && document.get("username").equals(username)))
+                  if ((document.get("email") != null && document.get("username") != null)
+                      && !(document.get("email").equals(email)
+                          && document.get("username").equals(username)))
                     availableItems.add((document.toObject(Item.class)));
                 }
               } else {
@@ -78,7 +81,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
               for (Item item : items) {
                 imageReference =
-                    imageStorage
+                    IMAGE_STORAGE
                         .getReference()
                         .child("users/" + email + "/" + item.getImageId() + ".jpg");
                 imageReference
@@ -86,7 +89,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
                     .addOnSuccessListener(
                         bytes -> {
                           Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                          itemImages.add(itemImage);
+                          ITEM_IMAGES.add(itemImage);
                         })
                     .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
               }
@@ -95,7 +98,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
               RecyclerView recyclerView = findViewById(R.id.RecyclerView);
               ItemsToTradeRecyclerAdapter adapter =
                   new ItemsToTradeRecyclerAdapter(
-                      context, items, (RecyclerViewInterface) context, itemImages);
+                      context, items, (RecyclerViewInterface) context, ITEM_IMAGES);
               recyclerView.setAdapter(adapter);
               recyclerView.setLayoutManager(new LinearLayoutManager(context));
             });
