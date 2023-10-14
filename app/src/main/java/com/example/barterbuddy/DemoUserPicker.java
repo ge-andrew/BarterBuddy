@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.barterbuddy.activities.ItemsAvailablePage;
+import com.example.barterbuddy.activities.RegisterAccountPage;
 
 public class DemoUserPicker extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class DemoUserPicker extends AppCompatActivity {
   Button skylerButton;
   Button danielButton;
 
+  Button registerButton;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,6 +36,8 @@ public class DemoUserPicker extends AppCompatActivity {
     mattButton = findViewById(R.id.Matt);
     skylerButton = findViewById(R.id.Skyler);
     danielButton = findViewById(R.id.Daniel);
+
+    registerButton = findViewById(R.id.register);
 
     andrewButton.setOnClickListener(
         view -> {
@@ -63,6 +68,12 @@ public class DemoUserPicker extends AppCompatActivity {
           Intent intent = new Intent(DemoUserPicker.this, ItemsAvailablePage.class);
           intent.putExtra("username", DANIEL);
           intent.putExtra("email", DANIEL_EMAIL);
+          startActivity(intent);
+        });
+
+    registerButton.setOnClickListener(
+        view -> {
+          Intent intent = new Intent(DemoUserPicker.this, RegisterAccountPage.class);
           startActivity(intent);
         });
   }
