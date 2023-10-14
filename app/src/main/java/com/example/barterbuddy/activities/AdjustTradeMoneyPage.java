@@ -17,9 +17,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class OfferTradePage extends AppCompatActivity {
+public class AdjustTradeMoneyPage extends AppCompatActivity{
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_adjust_trade_money);
 
-    private static final String TAG = "OfferTradePage";
 
-    private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
+  }
 }

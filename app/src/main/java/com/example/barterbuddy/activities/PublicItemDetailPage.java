@@ -125,10 +125,8 @@ public class PublicItemDetailPage extends AppCompatActivity {
         v -> {
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
-          Intent intent = new Intent(PublicItemDetailPage.this, OfferTradePage.class);
+          Intent intent = new Intent(PublicItemDetailPage.this, ChooseTradeItemPage.class);
           intent.putExtra("posterItem", currentItem);
-          intent.putExtra("posterUsername", username);
-          intent.putExtra("posterEmail", email);
           startActivity(intent);
         });
   }

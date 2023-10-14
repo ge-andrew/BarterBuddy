@@ -138,7 +138,7 @@ public class UserItemDetailPage extends AppCompatActivity {
 
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
-          Intent intent = new Intent(UserItemDetailPage.this, OfferTradePage.class);
+          Intent intent = new Intent(UserItemDetailPage.this, ChooseTradeItemPage.class);
           intent.putExtra("itemToTradeFor", currentItem);
           Toast toast = Toast.makeText(this, "Set to Active", Toast.LENGTH_LONG);
           toast.show();
