@@ -2,8 +2,10 @@ package com.example.barterbuddy.activities;
 
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -24,6 +26,7 @@ public class RegisterAccountPage extends AppCompatActivity {
   TextInputEditText passwordEditText;
   Button createButton;
   CheckBox showPasswordCheckBox;
+  ImageView nackArrow;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class RegisterAccountPage extends AppCompatActivity {
     passwordEditText = findViewById(R.id.password_text_field);
     createButton = findViewById(R.id.create_button);
     showPasswordCheckBox = findViewById(R.id.show_password_checkbox);
+    nackArrow = findViewById(R.id.back_arrow);
 
     // change the visibility status of of the password field
     showPasswordCheckBox.setOnClickListener(
@@ -63,5 +67,11 @@ public class RegisterAccountPage extends AppCompatActivity {
 
     // switch to login page
     loginTextView.setOnClickListener(view -> {});
+
+    // goes back to login page
+    nackArrow.setOnClickListener(view -> finish());
+
+    // goes back to login page
+    loginTextView.setOnClickListener(view -> finish());
   }
 }
