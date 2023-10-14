@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
@@ -127,10 +126,10 @@ public class PublicItemDetailPage extends AppCompatActivity {
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
           Intent intent = new Intent(PublicItemDetailPage.this, OfferTradePage.class);
-          intent.putExtra("itemToTradeFor", currentItem);
-          Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
-          toast.show();
-          // startActivity(intent);
+          intent.putExtra("posterItem", currentItem);
+          intent.putExtra("posterUsername", username);
+          intent.putExtra("posterEmail", email);
+          startActivity(intent);
         });
   }
 }
