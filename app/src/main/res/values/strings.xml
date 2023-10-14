@@ -10,4 +10,13 @@
     <string name="username">username</string>
     <string name="email">email</string>
     <string name="welcome_message">Welcome to BarterBuddy!</string>
+    <string name="password">password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="create">Create</string>
+    <string name="show_password">Show password</string>
+    <string name="already_have_an_account">Already have an account?\ </string>
+    <string name="create_account">Create Account</string>
+    <string name="item_details">Item Details</string>
+    <string name="save">Save</string>
 </resources>
