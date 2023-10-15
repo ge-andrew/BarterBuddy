@@ -19,4 +19,6 @@
     <string name="create_account">Create Account</string>
     <string name="item_details">Item Details</string>
     <string name="save">Save</string>
+    <string name="back_arrow">back_arrow</string>
+    <string name="write_message_here">Write message here</string>
 </resources>
