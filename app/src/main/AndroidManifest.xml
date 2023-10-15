@@ -42,6 +42,9 @@
         <activity
             android:name=".activities.ItemsAvailablePage"
             android:exported="false" />
+        <activity
+            android:name=".activities.ChatPage"
+            android:exported="true" />
     </application>
 
 </manifest>
