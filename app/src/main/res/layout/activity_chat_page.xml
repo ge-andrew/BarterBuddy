@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Back arrow -->
     <ImageView
         android:id="@+id/back_arrow"
         android:layout_width="36dp"
@@ -18,31 +19,40 @@
     <!-- Main text view -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chat_edit_text"
         />
 
-    <!-- Messages -->
+    <!-- Type messages -->
     <EditText
         android:id="@+id/chat_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:hint="@string/write_message_here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/send_button"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
-        />
+        android:inputType="textShortMessage"
+        android:autofillHints="string" />
 
+    <!-- Send messages -->
     <ImageButton
         android:id="@+id/send_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/baseline_send_24"
-        app:layout_constraintStart_toEndOf="@+id/chat_edit_text"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/chat_edit_text"
         app:tint="@color/peach"
-        />
+        android:contentDescription="@string/send_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
