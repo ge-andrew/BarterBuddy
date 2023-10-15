@@ -21,4 +21,5 @@
     <string name="save">Save</string>
     <string name="back_arrow">back_arrow</string>
     <string name="write_message_here">Write message here</string>
+    <string name="send_message">Send Message</string>
 </resources>
