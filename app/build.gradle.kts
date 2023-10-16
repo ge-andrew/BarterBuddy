@@ -41,6 +41,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // Mockito test implementation to mock Firestore and Activities during unit testing
+    testImplementation("org.mockito:mockito-core:2.19.0")
     // Firebase BoM for version consistency
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     // Firestore library

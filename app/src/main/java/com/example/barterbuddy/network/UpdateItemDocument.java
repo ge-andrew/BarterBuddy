@@ -21,8 +21,7 @@ public class UpdateItemDocument {
    * @return true if the item status was changed
    * @throws NullPointerException if the "email" or "title" fields are not found in the given item
    */
-  public static boolean makeItemActive(@NonNull Item item, boolean active) {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+  public static boolean makeItemActive(@NonNull Item item, boolean active, FirebaseFirestore db) {
     // Check for missing fields
     if (item.getEmail() == null) {
       throw new NullPointerException("email not found in item");
@@ -66,5 +65,12 @@ public class UpdateItemDocument {
 
       return true;
     }
+  }
+
+  // overload method so the other can be used for testing
+  // (this method with less arguments will pass in the actual FirebaseFirestore instance)
+  public static boolean makeItemActive(@NonNull Item item, boolean active) {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    return makeItemActive(item, active, db);
   }
 }
