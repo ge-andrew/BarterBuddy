@@ -1,6 +1,6 @@
 package com.example.barterbuddy.activities;
 
-import static com.example.barterbuddy.network.UpdateItemDocument.makeItemActive;
+import static com.example.barterbuddy.network.UpdateItemDocument.setItemToActive;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -126,15 +126,14 @@ public class UserItemDetailPage extends AppCompatActivity {
     // prepare the offer trade button for advancing to the next page
     set_active_items_button.setOnClickListener(
         v -> {
-          makeItemActive(
+          setItemToActive(
               new Item(
                   (String) itemTitle.getText(),
                   (String) itemDescription.getText(),
                   itemId,
                   false,
                   username,
-                  email),
-              true);
+                  email));
 
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
