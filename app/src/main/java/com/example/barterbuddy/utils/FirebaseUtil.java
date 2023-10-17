@@ -1,5 +1,6 @@
 package com.example.barterbuddy.utils;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -17,6 +18,16 @@ public class FirebaseUtil {
    */
   public static DocumentReference getChatroomReference(String chatroomId) {
     return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
+  }
+
+  /**
+   * Get a collection reference to a Chatroom Message Collection saved in Firestore
+   *
+   * @param chatroomId the id of the chatroom
+   * @return the collection reference
+   */
+  public static CollectionReference getChatroomMessageReference(String chatroomId) {
+    return getChatroomReference(chatroomId).collection("chats");
   }
 
   /**

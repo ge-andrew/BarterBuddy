@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
 import com.example.barterbuddy.models.User;
 import com.example.barterbuddy.utils.FirebaseUtil;
@@ -47,7 +48,31 @@ public class ChatPage extends AppCompatActivity {
     sendMessageButton = findViewById(R.id.send_button);
     chatRecyclerView = findViewById(R.id.chat_recycler_view);
 
+    sendMessageButton.setOnClickListener(
+        v -> {
+          String message = messageInput.getText().toString().trim();
+          if (message.isEmpty()) return;
+          sendMessageToUser(message);
+        });
+
     getOrCreateChatroomModel();
+  }
+
+  void sendMessageToUser(String message) {
+    // update the chatroom model in Firestore with this new message
+    chatroomModel.setLastMessageTimestamp(Timestamp.now());
+    chatroomModel.setLastMessageSenderId(currentUserId);
+    FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+
+    ChatMessageModel chatMessage = new ChatMessageModel(message, currentUserId, Timestamp.now());
+    FirebaseUtil.getChatroomMessageReference(chatroomId)
+        .add(chatMessage)
+        .addOnSuccessListener(
+            documentReference -> {
+              // if it's successful we want to clear the text field in the activity
+              messageInput.setText("");
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Sending chat message failed"));
   }
 
   void getOrCreateChatroomModel() {
