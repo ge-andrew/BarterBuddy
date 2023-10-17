@@ -30,12 +30,12 @@
     <!-- Type messages -->
     <EditText
         android:id="@+id/chat_edit_text"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:hint="@string/write_message_here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/send_button"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
         android:inputType="textShortMessage"
