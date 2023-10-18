@@ -77,7 +77,6 @@ public class CreateAccountPage extends AppCompatActivity {
     // attempts to create account
     createButton.setOnClickListener(
         view -> {
-          // setting warnings to "gone"
           hideEmailWarning();
           hideUsernameWarning();
 
