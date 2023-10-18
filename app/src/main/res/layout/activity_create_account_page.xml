@@ -40,7 +40,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username_text_field"
@@ -69,6 +69,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="2dp">
 
             <com.google.android.material.textfield.TextInputEditText

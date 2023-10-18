@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.User;
@@ -18,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class CreateAccountPage extends AppCompatActivity {
 
@@ -73,9 +74,13 @@ public class CreateAccountPage extends AppCompatActivity {
           }
         });
 
-    // save account and save data in database
+    // attempts to create account
     createButton.setOnClickListener(
         view -> {
+          // setting warnings to "gone"
+          hideEmailWarning();
+          hideUsernameWarning();
+
           // getting account information from input fields
           username = String.valueOf(usernameEditText.getText());
           email = String.valueOf(emailEditText.getText());
@@ -86,36 +91,26 @@ public class CreateAccountPage extends AppCompatActivity {
 
           if (missingUserInfo(newUser)) {
             return;
-          } else if (usernameAlreadyExists(newUser)) {
-            showUsernameWarning();
-            return;
           }
-          userAuthentication
-              .createUserWithEmailAndPassword(email, password)
+
+          // checking if username already exists and attempting to create an account if it does not
+          Query query =
+              DATABASE_INSTANCE.collection("users").whereEqualTo("username", newUser.getUsername());
+          query
+              .get()
               .addOnCompleteListener(
                   task -> {
                     if (task.isSuccessful()) {
-                      Toast.makeText(CreateAccountPage.this, "Account created!", Toast.LENGTH_SHORT)
-                          .show();
-
-                      // create reference to new user
-                      DocumentReference userReference =
-                          DATABASE_INSTANCE.collection("users").document(newUser.getEmail());
-
-                      // store user data in Firestore
-                      userReference.set(newUser);
-
-                      finish();
-                    } else {
-                      // If sign in fails, display a message to the user.
-                      if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                        showEmailWarning();
+                      boolean usernameAlreadyExists = false;
+                      for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.get("username") != null) {
+                          usernameAlreadyExists = true;
+                        }
+                      }
+                      if (!usernameAlreadyExists) {
+                        createAccount(newUser);
                       } else {
-                        Toast.makeText(
-                                CreateAccountPage.this,
-                                "Account creation failed.",
-                                Toast.LENGTH_SHORT)
-                            .show();
+                        showUsernameWarning();
                       }
                     }
                   });
@@ -159,15 +154,56 @@ public class CreateAccountPage extends AppCompatActivity {
     }
   }
 
-  public boolean usernameAlreadyExists(User user) {
-    return false;
+  public void createAccount(User user) {
+    userAuthentication
+        .createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+        .addOnCompleteListener(
+            task -> {
+              if (task.isSuccessful()) {
+                showAccountedCreatedToast();
+                addUserToFirestore(user);
+                finish();
+              } else {
+                // If sign in fails, display a message to the user.
+                if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                  showEmailWarning();
+                } else {
+                  showAccountFailedToCreateToast();
+                }
+              }
+            });
+  }
+
+  public void showAccountedCreatedToast() {
+    Toast.makeText(CreateAccountPage.this, "Account created!", Toast.LENGTH_SHORT).show();
+  }
+
+  public void showAccountFailedToCreateToast() {
+    Toast.makeText(CreateAccountPage.this, "Account creation failed.", Toast.LENGTH_SHORT).show();
+  }
+
+  public void addUserToFirestore(User user) {
+    // create reference to new user
+    DocumentReference userReference =
+        DATABASE_INSTANCE.collection("users").document(user.getEmail());
+
+    // store user data in Firestore
+    userReference.set(user);
   }
 
   public void showUsernameWarning() {
     usernameWarningTextView.setVisibility(View.VISIBLE);
   }
 
+  public void hideUsernameWarning() {
+    usernameWarningTextView.setVisibility(View.GONE);
+  }
+
   public void showEmailWarning() {
     emailWarningTextView.setVisibility(View.VISIBLE);
+  }
+
+  public void hideEmailWarning() {
+    emailWarningTextView.setVisibility(View.GONE);
   }
 }
