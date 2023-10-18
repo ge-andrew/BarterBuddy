@@ -13,9 +13,6 @@
         android:theme="@style/Theme.BarterBuddy"
         tools:targetApi="31">
         <activity
-            android:name=".account_already_exists_dialog"
-            android:exported="false" />
-        <activity
             android:name=".activities.CreateAccountPage"
             android:exported="false" />
         <activity
