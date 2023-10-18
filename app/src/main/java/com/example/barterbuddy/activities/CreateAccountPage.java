@@ -122,12 +122,7 @@ public class CreateAccountPage extends AppCompatActivity {
     loginTextView.setOnClickListener(view -> finish());
   }
 
-  /**
-   * This method takes a user object and checks if any of the members are empty
-   *
-   * @param user takes a user object containing a user's account information
-   * @return boolean
-   */
+  // check if information is missing
   public boolean missingUserInfo(User user) {
     // check if all information was provided
     if (TextUtils.isEmpty(user.getUsername()) && TextUtils.isEmpty(user.getEmail())) {
