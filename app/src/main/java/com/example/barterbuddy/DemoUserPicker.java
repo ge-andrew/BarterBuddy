@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.barterbuddy.activities.ItemsAvailablePage;
-import com.example.barterbuddy.activities.RegisterAccountPage;
+import com.example.barterbuddy.activities.CreateAccountPage;
 
 public class DemoUserPicker extends AppCompatActivity {
 
@@ -73,7 +73,7 @@ public class DemoUserPicker extends AppCompatActivity {
 
     registerButton.setOnClickListener(
         view -> {
-          Intent intent = new Intent(DemoUserPicker.this, RegisterAccountPage.class);
+          Intent intent = new Intent(DemoUserPicker.this, CreateAccountPage.class);
           startActivity(intent);
         });
   }
