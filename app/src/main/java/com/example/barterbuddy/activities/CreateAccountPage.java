@@ -98,10 +98,10 @@ public class CreateAccountPage extends AppCompatActivity {
           query
               .get()
               .addOnCompleteListener(
-                  task -> {
-                    if (task.isSuccessful()) {
+                  documentSnapshot -> {
+                    if (documentSnapshot.isSuccessful()) {
                       boolean usernameAlreadyExists = false;
-                      for (QueryDocumentSnapshot document : task.getResult()) {
+                      for (QueryDocumentSnapshot document : documentSnapshot.getResult()) {
                         if (document.get("username") != null) {
                           usernameAlreadyExists = true;
                         }
@@ -154,7 +154,7 @@ public class CreateAccountPage extends AppCompatActivity {
         .addOnCompleteListener(
             task -> {
               if (task.isSuccessful()) {
-                showAccountedCreatedToast();
+                showAccountCreatedToast();
                 addUserToFirestore(user);
                 finish();
               } else {
@@ -168,7 +168,7 @@ public class CreateAccountPage extends AppCompatActivity {
             });
   }
 
-  public void showAccountedCreatedToast() {
+  public void showAccountCreatedToast() {
     Toast.makeText(CreateAccountPage.this, "Account created!", Toast.LENGTH_SHORT).show();
   }
 
