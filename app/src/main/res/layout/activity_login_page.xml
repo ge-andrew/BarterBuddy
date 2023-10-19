@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.loginPage"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center_horizontal">
+    tools:context=".activities.LoginPage">
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,8 +22,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -67,12 +64,12 @@
 
             <TextView
                 android:id="@+id/invalidUsernameOrPasswordWarning"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Invalid email or password"
+                android:layout_weight="1"
+                android:text="@string/invalid_email_or_password"
                 android:textColor="@color/red"
-                android:visibility="gone"
-                android:layout_weight="1"/>
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,7 +84,6 @@
                 android:checked="false" />
 
         </LinearLayout>
-
 
         <Button
             android:id="@+id/login_button"
@@ -109,14 +105,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account? "
+                android:text="@string/don_t_have_an_account"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/sign_up_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign up"
+                android:text="@string/sign_up"
                 android:textColor="@color/peach"
                 android:textSize="18sp"
                 android:textStyle="bold" />

@@ -39,7 +39,7 @@ public class CreateAccountPage extends AppCompatActivity {
   TextInputEditText usernameEditText;
   TextInputEditText emailEditText;
   TextInputEditText passwordEditText;
-  Button createButton;
+  Button create_button;
   CheckBox showPassword;
   ImageView backArrow;
 
@@ -58,7 +58,7 @@ public class CreateAccountPage extends AppCompatActivity {
     usernameEditText = findViewById(R.id.username_text_field);
     emailEditText = findViewById(R.id.email_text_field);
     passwordEditText = findViewById(R.id.password_text_field);
-    createButton = findViewById(R.id.create_button);
+    create_button = findViewById(R.id.create_button);
     showPassword = findViewById(R.id.show_password_checkbox);
     backArrow = findViewById(R.id.back_arrow);
 
@@ -75,7 +75,7 @@ public class CreateAccountPage extends AppCompatActivity {
         });
 
     // attempts to create account
-    createButton.setOnClickListener(
+    create_button.setOnClickListener(
         view -> {
           hideEmailWarning();
           hideUsernameWarning();
