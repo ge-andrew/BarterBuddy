@@ -36,6 +36,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
     final long ONE_MEGABYTE = 1024 * 1024;
+    private final int REQUEST_CODE = 1002;
     private StorageReference imageReference;
     private ArrayList<Item> items = new ArrayList<>();
     private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
@@ -51,7 +52,6 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
 
         add_item_button = findViewById(R.id.add_item_button);
 
-        // dummy data
         Item offeringItem = new Item();
 
         setUpItems(this);
@@ -60,9 +60,9 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
                 v -> {
                     // creates an intent that switches to the OfferTradePage activity and passes the item
                     // to the new activity
-                    Intent intent = new Intent(ChooseTradeItemPage.this, AdjustTradeMoneyPage.class);
-                    intent.putExtra("posterItem", posterItem);
-                    intent.putExtra("offeringItem", offeringItem);
+                    Intent intent = new Intent(ChooseTradeItemPage.this, AddNewItemPage.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                 });
     }
@@ -115,12 +115,22 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
     // activity
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(ChooseTradeItemPage.this, UserItemDetailPage.class);
+        Intent intent = new Intent(ChooseTradeItemPage.this, AdjustTradeMoneyPage.class);
 
-        intent.putExtra("itemId", items.get(position).getImageId());
-        intent.putExtra("username", username);
-        intent.putExtra("email", email);
+        intent.putExtra("offeringItem", items.get(position));
+        intent.putExtra("posterItem", posterItem);
 
         startActivity(intent);
+    }
+
+    // refreshes page if an item was added
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            setUpItems(this);
+        }
     }
 }

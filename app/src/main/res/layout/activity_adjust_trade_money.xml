@@ -6,99 +6,101 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/adjustMoneyTitle"
         android:layout_width="133dp"
         android:layout_height="0dp"
         android:layout_marginTop="40dp"
-        android:text="TextView"
+        android:text="You will trade "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/offeringItemImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="56dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/adjustMoneyTitle"
         app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/posterItemImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="72dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/forText"
         app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/offeringItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="20dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/offeringItemImage"
+        app:layout_constraintTop_toTopOf="@+id/offeringItemImage" />
 
     <EditText
-        android:id="@+id/editTextNumberSigned"
+        android:id="@+id/offeringItemMoneyField"
         android:layout_width="97dp"
         android:layout_height="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
-        android:inputType="numberSigned"
+        android:padding="5dp"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.575"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toEndOf="@+id/offeringItemTitle"
+        app:layout_constraintTop_toTopOf="@+id/offeringItemImage" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/posterItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="20dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintStart_toEndOf="@+id/posterItemImage"
+        app:layout_constraintTop_toTopOf="@+id/posterItemImage" />
 
     <EditText
-        android:id="@+id/editTextNumberSigned2"
+        android:id="@+id/posterItemMoneyField"
         android:layout_width="105dp"
         android:layout_height="45dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="numberSigned"
+        android:padding="5dp"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintStart_toEndOf="@+id/posterItemTitle"
+        app:layout_constraintTop_toTopOf="@+id/posterItemImage" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/forText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
         android:layout_marginTop="84dp"
-        android:text="TextView"
+        android:text="For "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/offeringItemImage" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/submit_trade_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="124dp"
-        android:text="Button"
+        android:text="Barter!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/posterItemImage"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
