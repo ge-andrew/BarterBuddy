@@ -32,16 +32,12 @@ public class CreateAccountPage extends AppCompatActivity {
   private String email;
   private String password;
 
-  // declaring views
-  TextView loginTextView;
-  TextView emailWarningTextView;
-  TextView usernameWarningTextView;
-  TextInputEditText usernameEditText;
-  TextInputEditText emailEditText;
-  TextInputEditText passwordEditText;
-  Button create_button;
-  CheckBox showPassword;
-  ImageView backArrow;
+  private TextView emailWarningTextView;
+  private TextView usernameWarningTextView;
+  private TextInputEditText usernameEditText;
+  private TextInputEditText emailEditText;
+  private TextInputEditText passwordEditText;
+  private CheckBox showPassword;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +48,16 @@ public class CreateAccountPage extends AppCompatActivity {
     userAuthentication = AUTHENTICATION_INSTANCE;
 
     // find views
-    loginTextView = findViewById(R.id.login_text_view);
+    // declaring views
+    TextView loginTextView = findViewById(R.id.login_text_view);
     emailWarningTextView = findViewById(R.id.email_warning);
     usernameWarningTextView = findViewById(R.id.username_warning);
     usernameEditText = findViewById(R.id.username_text_field);
     emailEditText = findViewById(R.id.email_text_field);
     passwordEditText = findViewById(R.id.password_text_field);
-    create_button = findViewById(R.id.create_button);
+    Button create_button = findViewById(R.id.create_button);
     showPassword = findViewById(R.id.show_password_checkbox);
-    backArrow = findViewById(R.id.back_arrow);
+    ImageView backArrow = findViewById(R.id.back_arrow);
 
     // change the visibility status of the password field
     showPassword.setOnClickListener(
