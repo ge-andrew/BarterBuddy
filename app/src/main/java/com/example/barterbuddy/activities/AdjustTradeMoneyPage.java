@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
@@ -21,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 public class AdjustTradeMoneyPage extends AppCompatActivity {
 
   private static final String TAG = "AdjustTradeMoneyPage";
+  final long ONE_MEGABYTE = 1024 * 1024;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
   private Item offeringItem;
@@ -36,7 +36,6 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   private DocumentReference offeringItemDocReference;
   private StorageReference posterItemImageReference;
   private StorageReference offeringItemImageReference;
-  final long ONE_MEGABYTE = 1024 * 1024;
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,13 +45,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     offeringItem = (Item) getIntent().getSerializableExtra("offeringItem");
 
     // assign xml variables to elements
-    offeringItemImageView = findViewById(R.id.offeringItemImage);
-    posterItemImageView = findViewById(R.id.posterItemImage);
-    offeringItemTitle = findViewById(R.id.offeringItemTitle);
-    posterItemTitle = findViewById(R.id.posterItemTitle);
-    offeringItemMoneyField = findViewById(R.id.offeringItemMoneyField);
-    posterItemMoneyField = findViewById(R.id.posterItemMoneyField);
-    submit_trade_button = findViewById(R.id.submit_trade_button);
+    getXmlElements();
 
     // establish directories in Firebase
     posterItemDocReference =
@@ -119,5 +112,15 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
             }
     );
 
+  }
+
+  private void getXmlElements() {
+    offeringItemImageView = findViewById(R.id.offeringItemImage);
+    posterItemImageView = findViewById(R.id.posterItemImage);
+    offeringItemTitle = findViewById(R.id.offeringItemTitle);
+    posterItemTitle = findViewById(R.id.posterItemTitle);
+    offeringItemMoneyField = findViewById(R.id.offeringItemMoneyField);
+    posterItemMoneyField = findViewById(R.id.posterItemMoneyField);
+    submit_trade_button = findViewById(R.id.submit_trade_button);
   }
 }

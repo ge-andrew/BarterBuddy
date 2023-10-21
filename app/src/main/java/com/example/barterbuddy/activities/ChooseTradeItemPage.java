@@ -7,23 +7,17 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
-import com.example.barterbuddy.models.User;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 
 public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerViewInterface {
@@ -50,12 +44,11 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
 
-        add_item_button = findViewById(R.id.add_item_button);
-
-        Item offeringItem = new Item();
+        getXmlElements();
 
         setUpItems(this);
 
+        // setup onclick listener for adding item
         add_item_button.setOnClickListener(
                 v -> {
                     // creates an intent that switches to the OfferTradePage activity and passes the item
@@ -75,6 +68,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
                 .get()
                 .addOnCompleteListener(
                         task -> {
+                            // Get each item from request and add to NewItems
                             ArrayList<Item> newItems = new ArrayList<>();
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document :
@@ -86,6 +80,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
                             }
                             items = newItems;
 
+                            // For each item's image, place in ITEM_IMAGES
                             for (Item item : items) {
                                 imageReference =
                                         IMAGE_STORAGE
@@ -111,8 +106,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
                         });
     }
 
-    // take position of clicked card in recyclerView to start and send correct data to itemDetailPage
-    // activity
+    // take position of clicked card in recyclerView to start and send correct data to adjustTradeMoneyPage
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(ChooseTradeItemPage.this, AdjustTradeMoneyPage.class);
@@ -123,14 +117,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
         startActivity(intent);
     }
 
-    // refreshes page if an item was added
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            setUpItems(this);
-        }
+  private void getXmlElements() {
+        add_item_button = findViewById(R.id.add_item_button);
     }
 }
