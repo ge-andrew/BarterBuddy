@@ -6,14 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,6 +44,9 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_user_items);
+
+    Toolbar toolbar = findViewById(R.id.menu);
+    setSupportActionBar(toolbar);
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
@@ -68,6 +76,25 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
           intent.putExtra("email", email);
           startActivity(intent);
         });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.profile_menu, menu);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      FirebaseAuth.getInstance().signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    }
+    return true;
   }
 
   // Take arraylist of items to load recyclerView of user's items

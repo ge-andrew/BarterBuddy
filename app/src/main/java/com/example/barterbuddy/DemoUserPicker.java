@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import com.example.barterbuddy.activities.ItemsAvailablePage;
 import com.example.barterbuddy.activities.LoginPage;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class DemoUserPicker extends AppCompatActivity {
 
@@ -25,7 +27,8 @@ public class DemoUserPicker extends AppCompatActivity {
   Button skylerButton;
   Button danielButton;
 
-  Button registerButton;
+  FirebaseUser user;
+  FirebaseAuth auth;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,14 @@ public class DemoUserPicker extends AppCompatActivity {
     skylerButton = findViewById(R.id.Skyler);
     danielButton = findViewById(R.id.Daniel);
 
-    registerButton = findViewById(R.id.login_button);
+    auth = FirebaseAuth.getInstance();
+    user = auth.getCurrentUser();
+
+    if (user == null) {
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    }
 
     andrewButton.setOnClickListener(
         view -> {
@@ -68,12 +78,6 @@ public class DemoUserPicker extends AppCompatActivity {
           Intent intent = new Intent(DemoUserPicker.this, ItemsAvailablePage.class);
           intent.putExtra("username", DANIEL);
           intent.putExtra("email", DANIEL_EMAIL);
-          startActivity(intent);
-        });
-
-    registerButton.setOnClickListener(
-        view -> {
-          Intent intent = new Intent(DemoUserPicker.this, LoginPage.class);
           startActivity(intent);
         });
   }
