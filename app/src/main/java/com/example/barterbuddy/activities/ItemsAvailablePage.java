@@ -14,6 +14,8 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ItemsToTradeRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,36 +25,37 @@ import java.util.ArrayList;
 public class ItemsAvailablePage extends AppCompatActivity implements RecyclerViewInterface {
 
   private static final String TAG = "ItemsAvailable";
-  final long ONE_MEGABYTE = 1024 * 1024;
-  private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
-  private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+  private final long ONE_MEGABYTE = 1024 * 1024;
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
-  Button user_items_button;
+  private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private StorageReference imageReference;
+  private FirebaseUser currentUser;
+  private Button user_items_button;
   private ArrayList<Item> items = new ArrayList<>();
   private String username;
   private String email;
-  // private CollectionReference collectionReference;
-  private StorageReference imageReference;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.recycler_layout);
+    setContentView(R.layout.activity_public_items);
 
-    username = getIntent().getStringExtra("username");
-    email = getIntent().getStringExtra("email");
+    getCurrentUser();
+    if (currentUser == null) {
+      goToLoginPage();
+    }
+    getCurrentUserInfo();
 
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
-
     setUpItems(this);
     user_items_button = findViewById(R.id.User_Items_Button);
     user_items_button.setOnClickListener(
         view -> {
           Intent intent = new Intent(ItemsAvailablePage.this, UserItemsPage.class);
-          intent.putExtra("username", username);
-          intent.putExtra("email", email);
           startActivity(intent);
         });
   }
@@ -60,7 +63,8 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     // retrieve and insert firebase data into items
-    DB.collectionGroup("items")
+    FIRESTORE_INSTANCE
+        .collectionGroup("items")
         .whereEqualTo("active", true)
         .get()
         .addOnCompleteListener(
@@ -81,7 +85,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
               for (Item item : items) {
                 imageReference =
-                    IMAGE_STORAGE
+                    IMAGE_STORAGE_INSTANCE
                         .getReference()
                         .child("users/" + email + "/" + item.getImageId() + ".jpg");
                 imageReference
@@ -110,11 +114,22 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
   @Override
   public void onItemClick(int position) {
     Intent intent = new Intent(ItemsAvailablePage.this, PublicItemDetailPage.class);
-
     intent.putExtra("itemId", items.get(position).getImageId());
-    intent.putExtra("username", items.get(position).getUsername());
-    intent.putExtra("email", items.get(position).getEmail());
-
     startActivity(intent);
+  }
+
+  private void getCurrentUser() {
+    currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+  }
+
+  private void goToLoginPage() {
+    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    startActivity(intent);
+    finish();
+  }
+
+  private void getCurrentUserInfo() {
+    username = currentUser.getDisplayName();
+    email = currentUser.getEmail();
   }
 }

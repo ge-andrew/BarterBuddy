@@ -41,7 +41,7 @@ public class UserItemsRecyclerViewAdapter
       @NonNull ViewGroup parent, int viewType) {
     // Inflate layout and give look to each row
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
+    View view = inflater.inflate(R.layout.private_items_recycler_card, parent, false);
     return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
