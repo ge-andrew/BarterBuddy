@@ -6,14 +6,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.adapters.ChatRecyclerAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
 import com.example.barterbuddy.models.User;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Query;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.Arrays;
 
@@ -56,6 +60,26 @@ public class ChatPage extends AppCompatActivity {
         });
 
     getOrCreateChatroomModel();
+    setupChatRecyclerView();
+  }
+
+  void setupChatRecyclerView() {
+    Query query =
+        FirebaseUtil.getChatroomMessageReference(chatroomId)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .limit(50);
+
+    FirestoreRecyclerOptions<ChatMessageModel> options =
+        new FirestoreRecyclerOptions.Builder<ChatMessageModel>()
+            .setQuery(query, ChatMessageModel.class)
+            .build();
+
+    ChatRecyclerAdapter adapter = new ChatRecyclerAdapter(options);
+    LinearLayoutManager manager = new LinearLayoutManager(this);
+    manager.setReverseLayout(true);
+    chatRecyclerView.setLayoutManager(manager);
+    chatRecyclerView.setAdapter(adapter);
+    adapter.startListening();
   }
 
   void sendMessageToUser(String message) {

@@ -49,4 +49,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     // Cloud storage library
     implementation("com.google.firebase:firebase-storage")
+    // FirebaseUI (for chat message recycler)
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
 }
