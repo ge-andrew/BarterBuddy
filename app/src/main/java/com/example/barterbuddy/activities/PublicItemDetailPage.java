@@ -35,6 +35,7 @@ public class PublicItemDetailPage extends AppCompatActivity {
   private String itemEmail;
   private String username;
   private String email;
+  private Item posterItem;
   private DocumentReference itemDocReference;
   private StorageReference imageReference;
   private FirebaseUser currentUser;

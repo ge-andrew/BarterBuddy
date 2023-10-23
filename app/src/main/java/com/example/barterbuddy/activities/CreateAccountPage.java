@@ -114,7 +114,6 @@ public class CreateAccountPage extends AppCompatActivity {
     loginTextView.setOnClickListener(view -> finish());
   }
 
-  // check if information is missing
   public boolean missingUserInfo(User user) {
     // check if all information was provided
     if (TextUtils.isEmpty(user.getUsername()) && TextUtils.isEmpty(user.getEmail())) {

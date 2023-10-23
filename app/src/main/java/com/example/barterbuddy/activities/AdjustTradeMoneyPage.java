@@ -1,5 +1,6 @@
 package com.example.barterbuddy.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,6 +26,8 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   final long ONE_MEGABYTE = 1024 * 1024;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private FirebaseUser currentUser;
   private Item offeringItem;
   private Item posterItem;
   private ImageView offeringItemImageView;
@@ -36,6 +41,8 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   private DocumentReference offeringItemDocReference;
   private StorageReference posterItemImageReference;
   private StorageReference offeringItemImageReference;
+  private String username;
+  private String email;
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -122,5 +129,20 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     offeringItemMoneyField = findViewById(R.id.offeringItemMoneyField);
     posterItemMoneyField = findViewById(R.id.posterItemMoneyField);
     submit_trade_button = findViewById(R.id.submit_trade_button);
+  }
+
+  private void goToLoginPage() {
+    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    startActivity(intent);
+    finish();
+  }
+
+  private void getCurrentUser() {
+    currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+  }
+
+  private void getCurrentUserInfo() {
+    username = currentUser.getDisplayName();
+    email = currentUser.getEmail();
   }
 }
