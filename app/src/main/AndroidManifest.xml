@@ -44,7 +44,17 @@
             android:exported="false" />
         <activity
             android:name=".activities.ItemsAvailablePage"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.ChooseTradeItemPage"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.AdjustTradeMoneyPage"
+            android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>

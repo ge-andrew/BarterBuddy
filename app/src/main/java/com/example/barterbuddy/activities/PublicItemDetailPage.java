@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
@@ -28,10 +27,9 @@ public class PublicItemDetailPage extends AppCompatActivity {
   private TextView itemDescription;
   private ImageView imageView;
   private Button offer_trade_button;
-  private String itemId;
+  private Item posterItem;
   private String username;
   private String email;
-  private Item currentItem;
   private DocumentReference itemDocReference;
   private StorageReference imageReference;
 
@@ -41,16 +39,12 @@ public class PublicItemDetailPage extends AppCompatActivity {
     setContentView(R.layout.activity_public_item_detail_page);
 
     // get item id and poster id from recycler view
+    posterItem = (Item) getIntent().getSerializableExtra("posterItem");
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
-    itemId = getIntent().getStringExtra("itemId");
-
-    Log.d(TAG, "User username is " + username);
-    Log.d(TAG, "User email is " + email);
-    Log.d(TAG, "Item ID is " + itemId);
 
     // get the Firestore document reference for the given user and item ids
-    itemDocReference = DB.collection("users").document(email).collection("items").document(itemId);
+    itemDocReference = DB.collection("users").document(posterItem.getEmail()).collection("items").document(posterItem.getEmail() + "-" + posterItem.getTitle());
 
     // initializing views and buttons
     usernameTextView = findViewById(R.id.username_text_view);
@@ -66,17 +60,17 @@ public class PublicItemDetailPage extends AppCompatActivity {
             documentSnapshot -> {
               if (documentSnapshot.exists()) {
                 // convert the document data to an Item object
-                currentItem = documentSnapshot.toObject(Item.class);
-                Log.d(TAG, "Item information: " + currentItem);
+                posterItem = documentSnapshot.toObject(Item.class);
+                Log.d(TAG, "Item information: " + posterItem);
 
                 // set the title and description based on information from the object
-                if (currentItem != null) {
-                  itemTitle.setText(currentItem.getTitle());
-                  itemDescription.setText(currentItem.getDescription());
+                if (posterItem != null) {
+                  itemTitle.setText(posterItem.getTitle());
+                  itemDescription.setText(posterItem.getDescription());
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
-                      IMAGE_STORAGE.getReference().child("users/" + email + "/" + itemId + ".jpg");
+                      IMAGE_STORAGE.getReference().child("users/" + posterItem.getEmail() + "/" + posterItem.getEmail() + "-" + posterItem.getTitle() + ".jpg");
 
                   final long ONE_MEGABYTE = 1024 * 1024;
                   imageReference
@@ -126,11 +120,11 @@ public class PublicItemDetailPage extends AppCompatActivity {
         v -> {
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
-          Intent intent = new Intent(PublicItemDetailPage.this, OfferTradePage.class);
-          intent.putExtra("itemToTradeFor", currentItem);
-          Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
-          toast.show();
-          // startActivity(intent);
+          Intent intent = new Intent(PublicItemDetailPage.this, ChooseTradeItemPage.class);
+          intent.putExtra("posterItem", posterItem);
+          intent.putExtra("username", username);
+          intent.putExtra("email", email);
+          startActivity(intent);
         });
   }
 }
