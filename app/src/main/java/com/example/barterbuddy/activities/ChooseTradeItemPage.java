@@ -14,6 +14,8 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -29,6 +31,8 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
     private Button add_item_button;
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+    private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
     final long ONE_MEGABYTE = 1024 * 1024;
     private final int REQUEST_CODE = 1002;
     private StorageReference imageReference;
@@ -39,6 +43,12 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_trade_item);
+
+        getCurrentUser();
+        if (currentUser == null) {
+            goToLoginPage();
+        }
+        getCurrentUserInfo();
 
         posterItem = (Item) getIntent().getSerializableExtra("posterItem");
         username = getIntent().getStringExtra("username");
@@ -115,6 +125,21 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
         intent.putExtra("posterItem", posterItem);
 
         startActivity(intent);
+    }
+
+    private void goToLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getCurrentUser() {
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    }
+
+    private void getCurrentUserInfo() {
+        username = currentUser.getDisplayName();
+        email = currentUser.getEmail();
     }
 
   private void getXmlElements() {

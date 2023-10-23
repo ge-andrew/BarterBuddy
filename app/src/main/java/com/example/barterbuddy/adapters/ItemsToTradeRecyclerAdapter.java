@@ -38,7 +38,7 @@ public class ItemsToTradeRecyclerAdapter
       @NonNull ViewGroup parent, int viewType) {
     // sets look of item card
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.items_to_trade_recycler, parent, false);
+    View view = inflater.inflate(R.layout.public_items_recycler_card, parent, false);
     return new ItemsToTradeRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 

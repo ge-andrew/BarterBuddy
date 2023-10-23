@@ -1,5 +1,6 @@
 package com.example.barterbuddy.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -15,6 +16,8 @@ import com.example.barterbuddy.models.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -22,42 +25,38 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class CreateAccountPage extends AppCompatActivity {
 
-  // declaring firebase variables
   private final FirebaseFirestore DATABASE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-  FirebaseAuth userAuthentication;
-
-  // declaring variables for holding user data
   private String username;
   private String email;
   private String password;
-
+  private Button create_button;
+  private ImageView backArrow;
   private TextView emailWarningTextView;
   private TextView usernameWarningTextView;
+  private TextView loginTextView;
   private TextInputEditText usernameEditText;
   private TextInputEditText emailEditText;
   private TextInputEditText passwordEditText;
   private CheckBox showPassword;
 
   @Override
+  public void onStart() {
+    super.onStart();
+    FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    if (currentUser != null) {
+      Intent intent = new Intent(getApplicationContext(), ItemsAvailablePage.class);
+      startActivity(intent);
+      finish();
+    }
+  }
+
+  @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_create_account_page);
 
-    // initializing authenticator variable
-    userAuthentication = AUTHENTICATION_INSTANCE;
-
-    // find views
-    // declaring views
-    TextView loginTextView = findViewById(R.id.login_text_view);
-    emailWarningTextView = findViewById(R.id.email_warning);
-    usernameWarningTextView = findViewById(R.id.username_warning);
-    usernameEditText = findViewById(R.id.username_text_field);
-    emailEditText = findViewById(R.id.email_text_field);
-    passwordEditText = findViewById(R.id.password_text_field);
-    Button create_button = findViewById(R.id.create_button);
-    showPassword = findViewById(R.id.show_password_checkbox);
-    ImageView backArrow = findViewById(R.id.back_arrow);
+    getXmlElements();
 
     // change the visibility status of the password field
     showPassword.setOnClickListener(
@@ -77,12 +76,8 @@ public class CreateAccountPage extends AppCompatActivity {
           hideEmailWarning();
           hideUsernameWarning();
 
-          // getting account information from input fields
-          username = String.valueOf(usernameEditText.getText());
-          email = String.valueOf(emailEditText.getText());
-          password = String.valueOf(passwordEditText.getText());
+          getUserInfo();
 
-          // create user object to store data
           User newUser = new User(username, email, password);
 
           if (missingUserInfo(newUser)) {
@@ -119,7 +114,6 @@ public class CreateAccountPage extends AppCompatActivity {
     loginTextView.setOnClickListener(view -> finish());
   }
 
-  // check if information is missing
   public boolean missingUserInfo(User user) {
     // check if all information was provided
     if (TextUtils.isEmpty(user.getUsername()) && TextUtils.isEmpty(user.getEmail())) {
@@ -146,11 +140,20 @@ public class CreateAccountPage extends AppCompatActivity {
   }
 
   public void createAccount(User user) {
-    userAuthentication
+    AUTHENTICATION_INSTANCE
         .createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
         .addOnCompleteListener(
             task -> {
               if (task.isSuccessful()) {
+
+                UserProfileChangeRequest userProfileChangeRequest =
+                    new UserProfileChangeRequest.Builder()
+                        .setDisplayName(user.getUsername())
+                        .build();
+
+                FirebaseUser currentUser = task.getResult().getUser();
+                currentUser.updateProfile(userProfileChangeRequest);
+
                 showAccountCreatedToast();
                 addUserToFirestore(user);
                 finish();
@@ -180,6 +183,24 @@ public class CreateAccountPage extends AppCompatActivity {
 
     // store user data in Firestore
     userReference.set(user);
+  }
+
+  private void getXmlElements() {
+    loginTextView = findViewById(R.id.login_text_view);
+    emailWarningTextView = findViewById(R.id.email_warning);
+    usernameWarningTextView = findViewById(R.id.username_warning);
+    usernameEditText = findViewById(R.id.username_text_field);
+    emailEditText = findViewById(R.id.email_text_field);
+    passwordEditText = findViewById(R.id.password_text_field);
+    create_button = findViewById(R.id.create_button);
+    showPassword = findViewById(R.id.show_password_checkbox);
+    backArrow = findViewById(R.id.back_arrow);
+  }
+
+  private void getUserInfo() {
+    username = String.valueOf(usernameEditText.getText());
+    email = String.valueOf(emailEditText.getText());
+    password = String.valueOf(passwordEditText.getText());
   }
 
   public void showUsernameWarning() {
