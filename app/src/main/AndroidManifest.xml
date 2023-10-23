@@ -14,19 +14,17 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.LoginPage"
-            android:exported="false" />
-        <activity
-            android:name=".activities.CreateAccountPage"
-            android:exported="false" />
-        <activity
-            android:name=".DemoUserPicker"
-            android:exported="true">
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.CreateAccountPage"
+            android:exported="false" />
+
         <activity
             android:name=".utils.GetImageDialogBox"
             android:exported="false" />
@@ -46,6 +44,7 @@
             android:name=".activities.ItemsAvailablePage"
             android:exported="false">
         </activity>
+
         <activity
             android:name=".activities.ChooseTradeItemPage"
             android:exported="false">
@@ -54,7 +53,6 @@
             android:name=".activities.AdjustTradeMoneyPage"
             android:exported="false">
         </activity>
-
     </application>
 
 </manifest>

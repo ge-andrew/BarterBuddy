@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.barterbuddy.DemoUserPicker;
 import com.example.barterbuddy.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,13 +25,13 @@ public class LoginPage extends AppCompatActivity {
   private TextView invalidCredentialsWarning;
   private Button login_button;
   private CheckBox showPassword;
-  private FirebaseAuth authenticationInstance;
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
 
   // Check if user is signed in and sends them to the home screen if they are
   @Override
   public void onStart() {
     super.onStart();
-    FirebaseUser currentUser = authenticationInstance.getCurrentUser();
+    FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
       Intent intent = new Intent(getApplicationContext(), ItemsAvailablePage.class);
       startActivity(intent);
@@ -46,8 +45,6 @@ public class LoginPage extends AppCompatActivity {
     setContentView(R.layout.activity_login_page);
 
     getXmlElements();
-
-    authenticationInstance = FirebaseAuth.getInstance();
 
     // attempts to login a user with the given credentials
     login_button.setOnClickListener(
@@ -120,7 +117,7 @@ public class LoginPage extends AppCompatActivity {
 
   // attempts to sign in with the given credentials
   public void attemptSignIn() {
-    authenticationInstance
+    AUTHENTICATION_INSTANCE
         .signInWithEmailAndPassword(email, password)
         .addOnCompleteListener(
             task -> {
@@ -128,7 +125,7 @@ public class LoginPage extends AppCompatActivity {
 
                 Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(getApplicationContext(), DemoUserPicker.class);
+                Intent intent = new Intent(getApplicationContext(), ItemsAvailablePage.class);
                 startActivity(intent);
                 finish();
 
