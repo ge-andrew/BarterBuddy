@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
@@ -33,10 +32,9 @@ public class PublicItemDetailPage extends AppCompatActivity {
   private Button offer_trade_button;
   private String itemId;
   private String itemUsername;
-  private  String itemEmail;
+  private String itemEmail;
   private String username;
   private String email;
-  private Item currentItem;
   private DocumentReference itemDocReference;
   private StorageReference imageReference;
   private FirebaseUser currentUser;
@@ -67,13 +65,13 @@ public class PublicItemDetailPage extends AppCompatActivity {
             documentSnapshot -> {
               if (documentSnapshot.exists()) {
                 // convert the document data to an Item object
-                currentItem = documentSnapshot.toObject(Item.class);
-                Log.d(TAG, "Item information: " + currentItem);
+                posterItem = documentSnapshot.toObject(Item.class);
+                Log.d(TAG, "Item information: " + posterItem);
 
                 // set the title and description based on information from the object
-                if (currentItem != null) {
-                  itemTitle.setText(currentItem.getTitle());
-                  itemDescription.setText(currentItem.getDescription());
+                if (posterItem != null) {
+                  itemTitle.setText(posterItem.getTitle());
+                  itemDescription.setText(posterItem.getDescription());
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
@@ -129,11 +127,11 @@ public class PublicItemDetailPage extends AppCompatActivity {
         v -> {
           // creates an intent that switches to the OfferTradePage activity and passes the item
           // to the new activity
-          Intent intent = new Intent(PublicItemDetailPage.this, OfferTradePage.class);
-          intent.putExtra("itemToTradeFor", currentItem);
-          Toast toast = Toast.makeText(this, "Offering Trade", Toast.LENGTH_LONG);
-          toast.show();
-          // startActivity(intent);
+          Intent intent = new Intent(PublicItemDetailPage.this, ChooseTradeItemPage.class);
+          intent.putExtra("posterItem", posterItem);
+          intent.putExtra("username", username);
+          intent.putExtra("email", email);
+          startActivity(intent);
         });
   }
 
