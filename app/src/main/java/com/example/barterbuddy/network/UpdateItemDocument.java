@@ -15,10 +15,9 @@ public class UpdateItemDocument {
    * Set the Firestore field for the given item to active and set all the user's other items to
    * inactive
    *
-   * @param item the item to be updated
    * @throws NullPointerException if the "email" or "title" fields are not found in the given item
    */
-  public static void setItemToActive(@NonNull Item item) {
+  public static void setAsTheActiveItem(@NonNull Item item) {
     ensureTitleAndEmailExist(item);
     if (!item.getActive()) {
       // update status in the Item object

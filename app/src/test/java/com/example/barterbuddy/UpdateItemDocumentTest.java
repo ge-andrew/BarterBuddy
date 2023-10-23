@@ -38,13 +38,13 @@ public class UpdateItemDocumentTest {
   public void setActive_emailFieldNull_throwsException() {
     testItem.setEmail(null);
     assertThrows(
-        NullPointerException.class, () -> UpdateItemDocument.setItemToActive(testItem));
+        NullPointerException.class, () -> UpdateItemDocument.setAsTheActiveItem(testItem));
   }
 
   @Test
   public void setInactive_titleFieldNull_throwsException() {
     testItem.setTitle(null);
     assertThrows(
-        NullPointerException.class, () -> UpdateItemDocument.setItemToActive(testItem));
+        NullPointerException.class, () -> UpdateItemDocument.setAsTheActiveItem(testItem));
   }
 }

@@ -10,32 +10,22 @@ public class FirebaseUtil {
      Citation: The idea for this class comes from Easy Tuto on YouTube: https://youtu.be/fx_WtPtT6gY?feature=shared
   */
 
-  /**
-   * Get a document reference to a Chatroom saved in Firestore
-   *
-   * @param chatroomId the id of the chatroom
-   * @return the document reference
-   */
+  /** Get a document reference to a Chatroom saved in Firestore */
   public static DocumentReference getChatroomReference(String chatroomId) {
     return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
   }
 
-  /**
-   * Get a collection reference to a Chatroom Message Collection saved in Firestore
-   *
-   * @param chatroomId the id of the chatroom
-   * @return the collection reference
-   */
+  /** Get a collection reference to a Chatroom Message Collection saved in Firestore */
   public static CollectionReference getChatroomMessageReference(String chatroomId) {
     return getChatroomReference(chatroomId).collection("chats");
   }
 
   /**
-   * Get a unique chatroom id, given two chatting users
+   * Get a unique chatroom id, given two chatting users. User order is irrelevant.
    *
    * @param userId1 the email of one of the users
    * @param userId2 the email of the other user
-   * @return the id of the chatroom with these users
+   * @return the id of the chatroom between these users
    */
   public static String getChatroomId(String userId1, String userId2) {
     // We don't want to store "Alice chatting with Bob" differently from "Bob chatting with Alice",
