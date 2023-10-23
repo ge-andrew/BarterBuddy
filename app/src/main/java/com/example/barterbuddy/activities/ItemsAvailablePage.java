@@ -115,6 +115,8 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
   public void onItemClick(int position) {
     Intent intent = new Intent(ItemsAvailablePage.this, PublicItemDetailPage.class);
     intent.putExtra("itemId", items.get(position).getImageId());
+    intent.putExtra("username", items.get(position).getUsername());
+    intent.putExtra("email", items.get(position).getEmail());
     startActivity(intent);
   }
 

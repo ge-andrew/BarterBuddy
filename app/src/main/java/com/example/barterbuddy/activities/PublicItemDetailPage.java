@@ -32,6 +32,8 @@ public class PublicItemDetailPage extends AppCompatActivity {
   private ImageView imageView;
   private Button offer_trade_button;
   private String itemId;
+  private String itemUsername;
+  private  String itemEmail;
   private String username;
   private String email;
   private Item currentItem;
@@ -49,7 +51,7 @@ public class PublicItemDetailPage extends AppCompatActivity {
       goToLoginPage();
     }
     getCurrentUserInfo();
-    itemId = getIntent().getStringExtra("itemId");
+    getItemDataFromIntent();
 
     Log.d(TAG, "User username is " + username);
     Log.d(TAG, "User email is " + email);
@@ -77,7 +79,7 @@ public class PublicItemDetailPage extends AppCompatActivity {
                   imageReference =
                       IMAGE_STORAGE_INSTANCE
                           .getReference()
-                          .child("users/" + email + "/" + itemId + ".jpg");
+                          .child("users/" + itemEmail + "/" + itemId + ".jpg");
 
                   final long ONE_MEGABYTE = 1024 * 1024;
                   imageReference
@@ -152,7 +154,7 @@ public class PublicItemDetailPage extends AppCompatActivity {
 
   private void establishItemReference() {
     itemDocReference =
-        FIRESTORE_INSTANCE.collection("users").document(email).collection("items").document(itemId);
+        FIRESTORE_INSTANCE.collection("users").document(itemEmail).collection("items").document(itemId);
   }
 
   private void getXmlElements() {
@@ -161,5 +163,11 @@ public class PublicItemDetailPage extends AppCompatActivity {
     itemDescription = findViewById(R.id.description_text_view);
     offer_trade_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
+  }
+
+  private void getItemDataFromIntent() {
+    itemId = getIntent().getStringExtra("itemId");
+    itemUsername = getIntent().getStringExtra("username");
+    itemEmail = getIntent().getStringExtra("email");
   }
 }
