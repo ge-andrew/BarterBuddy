@@ -1,6 +1,5 @@
 package com.example.barterbuddy.adapters;
 
-import android.content.Context; // If errors, this import may be wrong
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +12,19 @@ import com.example.barterbuddy.models.ChatMessageModel;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-//import java.util.ArrayList;
-
 // Based on UserItemsRecyclerViewAdapter class and EasyTuto
 
 public class ChatRecyclerAdapter
     extends FirestoreRecyclerAdapter<ChatMessageModel, ChatRecyclerAdapter.ChatModelViewHolder> {
-  //private final RecyclerViewInterface recyclerViewInterface;
-  //Context context;
   FirestoreRecyclerOptions<ChatMessageModel> chatMessages;
   // TODO: Explicit user id is temporary
   String currentUserId = "me@google.com";
 
   // constructor
   public ChatRecyclerAdapter(
-          //Context context,
           FirestoreRecyclerOptions<ChatMessageModel> chatMessages
-          //RecyclerViewInterface recyclerViewInterface
      ) {
     super(chatMessages);
-    //this.recyclerViewInterface = recyclerViewInterface;
-    //this.context = context;
     this.chatMessages = chatMessages;
   }
 
@@ -78,7 +69,7 @@ public class ChatRecyclerAdapter
     TextView rightMessage;
 
     public ChatModelViewHolder(
-        @NonNull View itemView //RecyclerViewInterface recyclerViewInterface
+        @NonNull View itemView
     ) {
       super(itemView);
 

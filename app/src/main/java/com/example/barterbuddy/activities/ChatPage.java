@@ -79,6 +79,7 @@ public class ChatPage extends AppCompatActivity {
     manager.setReverseLayout(true);
     chatRecyclerView.setLayoutManager(manager);
     chatRecyclerView.setAdapter(adapter);
+
     adapter.startListening();
   }
 
