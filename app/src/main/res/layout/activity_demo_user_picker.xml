@@ -15,7 +15,7 @@
         android:layout_weight="0"
         android:text="@string/welcome_message"
         android:textColor="@color/peach"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <LinearLayout

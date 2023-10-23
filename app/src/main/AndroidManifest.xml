@@ -13,9 +13,14 @@
         android:theme="@style/Theme.BarterBuddy"
         tools:targetApi="31">
         <activity
+            android:name=".activities.LoginPage"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CreateAccountPage"
+            android:exported="false" />
+        <activity
             android:name=".DemoUserPicker"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,6 +54,7 @@
             android:name=".activities.AdjustTradeMoneyPage"
             android:exported="false">
         </activity>
+
     </application>
 
 </manifest>

@@ -83,7 +83,7 @@ public class AddNewItemPage extends AppCompatActivity {
 
   /** This function saves teh data from the data fields and saves them to the database */
   protected void saveItem() {
-    Item new_item = new Item();
+    Item newItem = new Item();
 
     title = String.valueOf(titleEditText.getText());
     description = String.valueOf(descriptionEditText.getText());
@@ -105,14 +105,14 @@ public class AddNewItemPage extends AppCompatActivity {
       // saving data
 
       // initializing item to not active
-      new_item.setActive(false);
+      newItem.setActive(false);
 
       // getting item data from fields
-      new_item.setTitle(title);
-      new_item.setDescription(description);
-      new_item.setUsername(userName);
-      new_item.setImageId(itemId);
-      new_item.setEmail(email);
+      newItem.setTitle(title);
+      newItem.setDescription(description);
+      newItem.setUsername(userName);
+      newItem.setImageId(itemId);
+      newItem.setEmail(email);
 
       // converting bitmap to byte array
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -142,11 +142,11 @@ public class AddNewItemPage extends AppCompatActivity {
               .collection("users")
               .document(email)
               .collection("items")
-              .document(new_item.getImageId());
+              .document(newItem.getImageId());
 
       // saving item to new item document
       itemDocumentReference
-          .set(new_item)
+          .set(newItem)
           .addOnSuccessListener(
               unused -> {
                 Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
