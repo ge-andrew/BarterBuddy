@@ -16,6 +16,8 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ItemsToTradeRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,6 +38,10 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     private String email;
     // private CollectionReference collectionReference;
     private StorageReference imageReference;
+    private FirebaseAuth AUTHENICATION_INSTANCW = FirebaseAUth.getinsat
+            private FirebaseUser currentUser;
+    priavte string currentEmail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
-
+        //getCurrentUser()
         // Set up recyclerView
         // RecyclerView setup inside this method to prevent late loading of Firebase data from
         // onComplete
@@ -120,4 +126,7 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
         startActivity(intent);
     }
+
+    private void getCurrentUSer(){currentUser = AUTHENICATION_INSTANCW.getCurrentUser()}
+
 }

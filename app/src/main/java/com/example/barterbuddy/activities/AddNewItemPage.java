@@ -164,8 +164,8 @@ public class AddNewItemPage extends AppCompatActivity {
   }
 
   /**
-   * this function generates and shows a custom dialog to give the user the choice between taking a
-   * picture and choosing a picture from the gallery
+   this function generates and shows a custom dialog to give the user the choice between taking a
+   picture and choosing a picture from the gallery
    */
   protected void showCustomDialog() {
     // creating a dialog box

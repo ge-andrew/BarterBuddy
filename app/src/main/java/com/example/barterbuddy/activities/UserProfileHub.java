@@ -23,9 +23,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
+
 import java.util.ArrayList;
 
-public class userProfileHub extends AppCompatActivity {
+public class UserProfileHub extends AppCompatActivity implements RecyclerViewInterface {
     private Button incoming_offers_button;
     private Button your_offers_button;
     private Button your_items_button;
@@ -39,8 +41,6 @@ public class userProfileHub extends AppCompatActivity {
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
     private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
     private final int REQUEST_CODE = 1002;
-    Button add_item_button;
-    Button active_items_button;
     private ArrayList<Item> items = new ArrayList<>();
     private String username;
     private String email;
@@ -62,7 +62,7 @@ public class userProfileHub extends AppCompatActivity {
     //Takes you to userItemsPage
     your_items_button.setOnClickListener(
             v -> {
-                Intent your_items_page = new Intent(userProfileHub.this, UserItemsPage.class);
+                Intent your_items_page = new Intent(UserProfileHub.this, UserItemsPage.class);
 
             }
     );
@@ -70,14 +70,14 @@ public class userProfileHub extends AppCompatActivity {
     //Takes you to your offers
         your_offers_button.setOnClickListener(
                 v -> {
-                    Intent your_offers_page = new Intent(userProfileHub.this, YourOffersPage.class);
+                    Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
                 }
         );
 
         //Take you to your incoming offers
         incoming_offers_button.setOnClickListener(
                 v -> {
-                    Intent incoming_offers_page = new Intent(userProfileHub.this,IncomingOffersPage.class);
+                    Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
                 }
         );
 
@@ -138,7 +138,7 @@ public class userProfileHub extends AppCompatActivity {
     // activity
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(userProfileHub.this, UserItemDetailPage.class);
+        Intent intent = new Intent(UserProfileHub.this, UserItemDetailPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
         intent.putExtra("username", username);
