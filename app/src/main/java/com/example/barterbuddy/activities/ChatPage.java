@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.ChatRecyclerAdapter;
+import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
 import com.example.barterbuddy.models.User;
@@ -74,7 +74,7 @@ public class ChatPage extends AppCompatActivity {
             .setQuery(query, ChatMessageModel.class)
             .build();
 
-    ChatRecyclerAdapter adapter = new ChatRecyclerAdapter(options);
+    ChatRecyclerViewAdapter adapter = new ChatRecyclerViewAdapter(options);
     LinearLayoutManager manager = new LinearLayoutManager(this);
     manager.setReverseLayout(true);
     chatRecyclerView.setLayoutManager(manager);
