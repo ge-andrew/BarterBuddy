@@ -6,14 +6,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -24,24 +30,32 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
 
   private static final String TAG = "UserItemsPage";
   final long ONE_MEGABYTE = 1024 * 1024;
-  private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
-  private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
-  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private final int REQUEST_CODE = 1002;
-  Button add_item_button;
-  Button active_items_button;
+  private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private StorageReference imageReference;
+  private FirebaseUser currentUser;
+  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private ArrayList<Item> items = new ArrayList<>();
+  private Button add_item_button;
+  private Button active_items_button;
   private String username;
   private String email;
-  private StorageReference imageReference;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_view_user_items);
+    setContentView(R.layout.activity_user_items);
 
-    username = getIntent().getStringExtra("username");
-    email = getIntent().getStringExtra("email");
+    Toolbar toolbar = findViewById(R.id.menu);
+    setSupportActionBar(toolbar);
+
+    getCurrentUser();
+    if (currentUser == null) {
+      goToLoginPage();
+    }
+    getCurrentUserInfo();
 
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
@@ -54,9 +68,6 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     add_item_button.setOnClickListener(
         view -> {
           Intent intent = new Intent(UserItemsPage.this, AddNewItemPage.class);
-          intent.putExtra("username", username);
-          intent.putExtra("email", email);
-
           // allows this page to refresh if an item was added
           startActivityForResult(intent, REQUEST_CODE);
         });
@@ -64,16 +75,34 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     active_items_button.setOnClickListener(
         view -> {
           Intent intent = new Intent(UserItemsPage.this, ItemsAvailablePage.class);
-          intent.putExtra("username", username);
-          intent.putExtra("email", email);
           startActivity(intent);
         });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.profile_menu, menu);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      AUTHENTICATION_INSTANCE.signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    }
+    return true;
   }
 
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     // retrieve and insert firebase data into items
-    DB.collection("users")
+    FIRESTORE_INSTANCE
+        .collection("users")
         .document(email)
         .collection("items")
         .get()
@@ -92,7 +121,7 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
 
               for (Item item : items) {
                 imageReference =
-                    IMAGE_STORAGE
+                    IMAGE_STORAGE_INSTANCE
                         .getReference()
                         .child("users/" + email + "/" + item.getImageId() + ".jpg");
                 imageReference
@@ -122,8 +151,6 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     Intent intent = new Intent(UserItemsPage.this, UserItemDetailPage.class);
 
     intent.putExtra("itemId", items.get(position).getImageId());
-    intent.putExtra("username", username);
-    intent.putExtra("email", email);
 
     startActivity(intent);
   }
@@ -137,5 +164,20 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
       setUpItems(this);
     }
+  }
+
+  private void getCurrentUser() {
+    currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+  }
+
+  private void goToLoginPage() {
+    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    startActivity(intent);
+    finish();
+  }
+
+  private void getCurrentUserInfo() {
+    username = currentUser.getDisplayName();
+    email = currentUser.getEmail();
   }
 }

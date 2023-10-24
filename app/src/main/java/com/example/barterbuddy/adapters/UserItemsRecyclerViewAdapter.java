@@ -20,18 +20,18 @@ public class UserItemsRecyclerViewAdapter
     extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
-  ArrayList<Item> items;
+  ArrayList<Item> userItems;
   ArrayList<Bitmap> itemImages;
 
   // constructor
   public UserItemsRecyclerViewAdapter(
       Context context,
-      ArrayList<Item> items,
+      ArrayList<Item> userItems,
       RecyclerViewInterface recyclerViewInterface,
       ArrayList<Bitmap> itemImages) {
     this.recyclerViewInterface = recyclerViewInterface;
     this.context = context;
-    this.items = items;
+    this.userItems = userItems;
     this.itemImages = itemImages;
   }
 
@@ -41,7 +41,7 @@ public class UserItemsRecyclerViewAdapter
       @NonNull ViewGroup parent, int viewType) {
     // Inflate layout and give look to each row
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
+    View view = inflater.inflate(R.layout.private_items_recycler_card, parent, false);
     return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
@@ -52,15 +52,15 @@ public class UserItemsRecyclerViewAdapter
     // values from recycler_view_row.xml layout file
     // based on position of recycler view
 
-    holder.itemTitle.setText(items.get(position).getTitle());
-    if (itemImages.size() != 0 && itemImages.size() == items.size()) {
+    holder.itemTitle.setText(userItems.get(position).getTitle());
+    if (itemImages.size() != 0 && itemImages.size() == userItems.size()) {
       holder.imageView.setImageBitmap(itemImages.get(position));
     }
   }
 
   @Override
   public int getItemCount() {
-    return items.size();
+    return userItems.size();
   }
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {

@@ -19,6 +19,8 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,145 +32,95 @@ import java.util.Map;
 
 public class AddNewItemPage extends AppCompatActivity {
 
-  // request codes to allow result handler to find correct result
-  private static final int CAMERA_REQUEST = 0;
-  private static final int GALLERY_REQUEST = 1;
-
-  // constant for Firestore setup
+  private static final int CAMERA_REQUEST_CODE = 0;
+  private static final int GALLERY_REQUEST_CODE = 1;
   private static final String USER_NAME = "username";
-  private final FirebaseFirestore DB_USER = FirebaseFirestore.getInstance();
-  private final FirebaseFirestore DB_ITEM = FirebaseFirestore.getInstance();
-  private final FirebaseStorage DB_IMAGES = FirebaseStorage.getInstance();
-  // used to determine if a picture was taken
-  boolean imageWasChanged = false;
-  // declaring views and buttons
-  ShapeableImageView itemImageView;
-  Button save_button;
-  TextInputEditText titleEditText;
-  TextInputEditText descriptionEditText;
-  // variables for item
-  String userName;
-  String email;
-  String title;
-  String description;
-  String itemId;
-  Bitmap photoBitmap;
-  Uri photoUri;
-  StorageReference imageReference;
+  private final FirebaseFirestore DATABASE_INSTANCE = FirebaseFirestore.getInstance();
+  private final FirebaseStorage FIRESTORE_INSTANCE = FirebaseStorage.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private FirebaseUser currentUser;
+  private ShapeableImageView itemImageView;
+  private Button save_button;
+  private TextInputEditText titleEditText;
+  private TextInputEditText descriptionEditText;
+  private String username;
+  private String email;
+  private String title;
+  private String description;
+  private Bitmap photoBitmap;
+  private String itemId;
+  private Item newItem;
+  private boolean imageWasChanged = false;
 
-  /** this function is called when the activity is first loaded */
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_new_item);
 
-    // getting data from intent
-    userName = getIntent().getStringExtra("username");
-    email = getIntent().getStringExtra("email");
+    getCurrentUser();
+    if (currentUser == null) {
+      goToLoginPage();
+    }
+    getCurrentUserInfo();
+    getXmlElements();
 
-    // getting views and buttons
-    itemImageView = findViewById(R.id.item_image_view);
-    titleEditText = findViewById(R.id.title);
-    descriptionEditText = findViewById(R.id.description);
-    save_button = findViewById(R.id.save_new_item_button);
-
-    // setting up onclick behaviors
     itemImageView.setOnClickListener(view -> showCustomDialog());
     save_button.setOnClickListener(
         view -> {
-          // saving item
           saveItem();
         });
   }
 
-  /** This function saves teh data from the data fields and saves them to the database */
   protected void saveItem() {
-    Item new_item = new Item();
-
-    title = String.valueOf(titleEditText.getText());
-    description = String.valueOf(descriptionEditText.getText());
-    itemId = email + "-" + title;
-
-    // checking for empty fields
-    if ((TextUtils.isEmpty(title) && TextUtils.isEmpty(description) && !imageWasChanged)
-        || (TextUtils.isEmpty(title) && TextUtils.isEmpty(description))
-        || ((TextUtils.isEmpty(title) && !imageWasChanged))
-        || ((TextUtils.isEmpty(description) && !imageWasChanged))) {
-      Toast.makeText(AddNewItemPage.this, "Missing information", Toast.LENGTH_SHORT).show();
-    } else if (TextUtils.isEmpty(title)) {
-      Toast.makeText(AddNewItemPage.this, "Missing title", Toast.LENGTH_SHORT).show();
-    } else if (TextUtils.isEmpty(description)) {
-      Toast.makeText(AddNewItemPage.this, "Missing description", Toast.LENGTH_SHORT).show();
-    } else if (!imageWasChanged) {
-      Toast.makeText(AddNewItemPage.this, "Missing picture", Toast.LENGTH_SHORT).show();
-    } else {
-      // saving data
-
-      // initializing item to not active
-      new_item.setActive(false);
-
-      // getting item data from fields
-      new_item.setTitle(title);
-      new_item.setDescription(description);
-      new_item.setUsername(userName);
-      new_item.setImageId(itemId);
-      new_item.setEmail(email);
-
-      // converting bitmap to byte array
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-      imageReference = DB_IMAGES.getReference().child("users/" + email + "/" + itemId + ".jpg");
-      byte[] imageData = baos.toByteArray();
-
-      // storing byte array in Firebase Storage
-      imageReference
-          .putBytes(imageData)
-          .addOnSuccessListener(taskSnapshot -> {})
-          .addOnFailureListener(
-              e ->
-                  Toast.makeText(AddNewItemPage.this, "Failed to upload photo", Toast.LENGTH_SHORT)
-                      .show());
-
-      // creating user document
-      // firebase variables
-      DocumentReference userDocumentReference = DB_USER.collection("users").document(email);
-      Map<String, Object> user_name_to_store = new HashMap<>();
-      user_name_to_store.put(USER_NAME, userName);
-      userDocumentReference.set(user_name_to_store);
-
-      // creating item document
-      DocumentReference itemDocumentReference =
-          DB_ITEM
-              .collection("users")
-              .document(email)
-              .collection("items")
-              .document(new_item.getImageId());
-
-      // saving item to new item document
-      itemDocumentReference
-          .set(new_item)
-          .addOnSuccessListener(
-              unused -> {
-                Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
-
-                // causing UserItemsPage to refresh if save button is pressed
-                Intent intent = new Intent();
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-              })
-          .addOnFailureListener(
-              e ->
-                  Toast.makeText(AddNewItemPage.this, "Failed to add item", Toast.LENGTH_SHORT)
-                      .show());
+    getItemInfo();
+    if (missingItemData()) {
+      return;
     }
+    initializeItem();
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    StorageReference imageReference =
+        FIRESTORE_INSTANCE.getReference().child("users/" + email + "/" + itemId + ".jpg");
+    byte[] imageData = baos.toByteArray();
+
+    imageReference
+        .putBytes(imageData)
+        .addOnSuccessListener(taskSnapshot -> {})
+        .addOnFailureListener(
+            e ->
+                Toast.makeText(AddNewItemPage.this, "Failed to upload photo", Toast.LENGTH_SHORT)
+                    .show());
+
+    DocumentReference userDocumentReference = DATABASE_INSTANCE.collection("users").document(email);
+    Map<String, Object> user_name_to_store = new HashMap<>();
+    user_name_to_store.put(USER_NAME, username);
+    userDocumentReference.set(user_name_to_store);
+
+    DocumentReference itemDocumentReference =
+        DATABASE_INSTANCE
+            .collection("users")
+            .document(email)
+            .collection("items")
+            .document(newItem.getImageId());
+
+    itemDocumentReference
+        .set(newItem)
+        .addOnSuccessListener(
+            unused -> {
+              Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
+
+              Intent intent = new Intent();
+              setResult(Activity.RESULT_OK, intent);
+              finish();
+            })
+        .addOnFailureListener(
+            e ->
+                Toast.makeText(AddNewItemPage.this, "Failed to add item", Toast.LENGTH_SHORT)
+                    .show());
   }
 
-  /**
-   * this function generates and shows a custom dialog to give the user the choice between taking a
-   * picture and choosing a picture from the gallery
-   */
   protected void showCustomDialog() {
-    // creating a dialog box
     Dialog dialog = new Dialog(AddNewItemPage.this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
@@ -176,30 +128,24 @@ public class AddNewItemPage extends AppCompatActivity {
     if (dialog.getWindow() != null)
       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-    // getting buttons from UI
     Button choose_photo = dialog.findViewById(R.id.choose_photo_button);
     Button take_photo = dialog.findViewById(R.id.take_photo_button);
 
-    // setting up on click listener
     take_photo.setOnClickListener(
         v -> {
-          // sending intent to get get picture
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-          startActivityForResult(intent, CAMERA_REQUEST);
+          startActivityForResult(intent, CAMERA_REQUEST_CODE);
           dialog.dismiss();
         });
 
-    // setting up on click listener for picking image
     choose_photo.setOnClickListener(
         v -> {
-          // sending intent to get picture from gallery
           Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
           intent.setType("image/*");
-          startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
+          startActivityForResult(
+              Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
           dialog.dismiss();
         });
-
-    // launching the dialog box
     dialog.show();
   }
 
@@ -207,7 +153,7 @@ public class AddNewItemPage extends AppCompatActivity {
   @Override
   protected void onActivityResult(int request_code, int result_code, Intent data) {
     super.onActivityResult(request_code, result_code, data);
-    if (request_code == CAMERA_REQUEST && result_code == RESULT_OK) {
+    if (request_code == CAMERA_REQUEST_CODE && result_code == RESULT_OK) {
       // getting bitmap from camera
       photoBitmap = (Bitmap) data.getExtras().get("data");
 
@@ -221,9 +167,9 @@ public class AddNewItemPage extends AppCompatActivity {
       // setting image view
       itemImageView.setImageBitmap(photoBitmap);
       imageWasChanged = true;
-    } else if (request_code == GALLERY_REQUEST && result_code == RESULT_OK) {
+    } else if (request_code == GALLERY_REQUEST_CODE && result_code == RESULT_OK) {
       // getting data from gallery
-      photoUri = data.getData();
+      Uri photoUri = data.getData();
 
       // checking if uri is null
       if (photoUri != null) {
@@ -248,5 +194,63 @@ public class AddNewItemPage extends AppCompatActivity {
         imageWasChanged = true;
       }
     }
+  }
+
+  private void goToLoginPage() {
+    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    startActivity(intent);
+    finish();
+  }
+
+  private void getCurrentUser() {
+    currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+  }
+
+  private void getCurrentUserInfo() {
+    username = currentUser.getDisplayName();
+    email = currentUser.getEmail();
+  }
+
+  private void getXmlElements() {
+    itemImageView = findViewById(R.id.item_image_view);
+    titleEditText = findViewById(R.id.title);
+    descriptionEditText = findViewById(R.id.description);
+    save_button = findViewById(R.id.save_new_item_button);
+  }
+
+  private boolean missingItemData() {
+    if ((TextUtils.isEmpty(title) && TextUtils.isEmpty(description) && !imageWasChanged)
+        || (TextUtils.isEmpty(title) && TextUtils.isEmpty(description))
+        || ((TextUtils.isEmpty(title) && !imageWasChanged))
+        || ((TextUtils.isEmpty(description) && !imageWasChanged))) {
+      Toast.makeText(AddNewItemPage.this, "Missing information", Toast.LENGTH_SHORT).show();
+      return true;
+    } else if (TextUtils.isEmpty(title)) {
+      Toast.makeText(AddNewItemPage.this, "Missing title", Toast.LENGTH_SHORT).show();
+      return true;
+    } else if (TextUtils.isEmpty(description)) {
+      Toast.makeText(AddNewItemPage.this, "Missing description", Toast.LENGTH_SHORT).show();
+      return true;
+    } else if (!imageWasChanged) {
+      Toast.makeText(AddNewItemPage.this, "Missing picture", Toast.LENGTH_SHORT).show();
+      return true;
+    }
+    return false;
+  }
+
+  private void getItemInfo() {
+    title = String.valueOf(titleEditText.getText());
+    description = String.valueOf(descriptionEditText.getText());
+  }
+
+  private void initializeItem() {
+    newItem = new Item();
+    itemId = email + "-" + title;
+    newItem.setTitle(title);
+    newItem.setDescription(description);
+    newItem.setUsername(username);
+    newItem.setImageId(itemId);
+    newItem.setEmail(email);
+    newItem.setActive(false);
   }
 }

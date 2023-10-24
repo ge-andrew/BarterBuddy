@@ -18,16 +18,16 @@ public class ItemsToTradeRecyclerAdapter
     extends RecyclerView.Adapter<ItemsToTradeRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
-  ArrayList<Item> items;
+  ArrayList<Item> userItems;
   ArrayList<Bitmap> itemImages;
 
   public ItemsToTradeRecyclerAdapter(
       Context context,
-      ArrayList<Item> Items,
+      ArrayList<Item> userItems,
       RecyclerViewInterface recyclerViewInterface,
       ArrayList<Bitmap> itemImages) {
     this.context = context;
-    this.items = Items;
+    this.userItems = userItems;
     this.recyclerViewInterface = recyclerViewInterface;
     this.itemImages = itemImages;
   }
@@ -38,29 +38,25 @@ public class ItemsToTradeRecyclerAdapter
       @NonNull ViewGroup parent, int viewType) {
     // sets look of item card
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.items_to_trade_recycler, parent, false);
+    View view = inflater.inflate(R.layout.public_items_recycler_card, parent, false);
     return new ItemsToTradeRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
   @Override
   public void onBindViewHolder(
       @NonNull ItemsToTradeRecyclerAdapter.MyViewHolder holder, int position) {
-    holder.itemTitle.setText(items.get(position).getTitle());
-    holder.itemDescription.setText(items.get(position).getDescription());
-    holder.itemPoster.setText(items.get(position).getUsername());
+    holder.itemTitle.setText(userItems.get(position).getTitle());
+    holder.itemDescription.setText(userItems.get(position).getDescription());
+    holder.itemPoster.setText(userItems.get(position).getUsername());
     // holder.imageView.setImageBitmap(itemImages.get(position));                   // to be
     // implemented after authentication, will fail anyways
   }
 
   @Override
   public int getItemCount() {
-    return items.size();
+    return userItems.size();
   }
 
-  // @Override
-  //    public int getItemCount() {
-  //        //return Item.get();
-  //    }
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     // this method very very roughly equates to onCreate() from recyclerView
     // sets up image and text views
