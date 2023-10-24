@@ -19,7 +19,7 @@
     <!-- Main text view -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycler_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/back_arrow"
         app:layout_constraintStart_toStartOf="parent"

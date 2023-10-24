@@ -42,7 +42,6 @@ public class ChatPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat_page);
 
-    // get User models
     // TODO: replace these lines with actual user account integration
     otherUser = new User("you", "you@google.com", "password1");
     currentUserId = "me@gmail.com";
@@ -94,7 +93,7 @@ public class ChatPage extends AppCompatActivity {
         .add(chatMessage)
         .addOnSuccessListener(
             documentReference -> {
-              // if it's successful we want to clear the text field in the activity
+              // if it's successful we want to clear the typing text field
               messageInput.setText("");
             })
         .addOnFailureListener(e -> Log.w(TAG, "Sending chat message failed"));

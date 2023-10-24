@@ -1,5 +1,6 @@
 package com.example.barterbuddy.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 public class ChatRecyclerViewAdapter
     extends FirestoreRecyclerAdapter<
         ChatMessageModel, ChatRecyclerViewAdapter.ChatModelViewHolder> {
+  final String TAG = "ChatRecyclerViewAdapter";
   FirestoreRecyclerOptions<ChatMessageModel> chatMessages;
   // TODO: Explicit user id is temporary
-  String currentUserId = "me@google.com";
+  String currentUserId = "me@gmail.com";
 
-  // constructor
   public ChatRecyclerViewAdapter(FirestoreRecyclerOptions<ChatMessageModel> chatMessages) {
     super(chatMessages);
     this.chatMessages = chatMessages;
@@ -29,7 +30,6 @@ public class ChatRecyclerViewAdapter
   @Override
   public ChatRecyclerViewAdapter.ChatModelViewHolder onCreateViewHolder(
       @NonNull ViewGroup parent, int viewType) {
-    // Inflate layout and give look to each row
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
     View view = inflater.inflate(R.layout.chat_message_recycler_row, parent, false);
     return new ChatRecyclerViewAdapter.ChatModelViewHolder(
@@ -41,12 +41,13 @@ public class ChatRecyclerViewAdapter
   public void onBindViewHolder(
       @NonNull ChatModelViewHolder holder, int position, ChatMessageModel model) {
     // put my messages on the right side, your messages on the left side
-
     if (model.getSenderId().equals(currentUserId)) {
+      Log.d(TAG, "Right message");
       holder.leftChatCardview.setVisibility(View.GONE);
       holder.rightChatCardview.setVisibility(View.VISIBLE);
       holder.rightMessage.setText(model.getMessage());
     } else {
+      Log.d(TAG, "Left message");
       holder.leftChatCardview.setVisibility(View.VISIBLE);
       holder.rightChatCardview.setVisibility(View.GONE);
       holder.leftMessage.setText(model.getMessage());
@@ -59,8 +60,6 @@ public class ChatRecyclerViewAdapter
   }
 
   public static class ChatModelViewHolder extends RecyclerView.ViewHolder {
-    // this class is responsible for creating the views of this RecyclerView
-
     CardView leftChatCardview;
     CardView rightChatCardview;
     TextView leftMessage;
