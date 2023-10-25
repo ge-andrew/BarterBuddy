@@ -1,5 +1,9 @@
 package com.example.barterbuddy.models;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 
 // Serializable means it can be put into an Intent with putExtra
@@ -26,7 +30,9 @@ public class Item implements Serializable {
   /** email of user who owns this item */
   private String email;
 
-  // constructors
+  private FirebaseFirestore db;
+
+  // default constructor
   public Item(
       String title,
       String description,
@@ -34,14 +40,28 @@ public class Item implements Serializable {
       boolean isActive,
       String username,
       String email) {
+    this(title, description, imageId, isActive, username, email, FirebaseFirestore.getInstance());
+  }
+
+  // constructor accepting a database reference for mocking in testing
+  public Item(
+      String title,
+      String description,
+      String imageId,
+      boolean isActive,
+      String username,
+      String email,
+      FirebaseFirestore database) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
     this.username = username;
     this.email = email;
+    this.db = database;
   }
 
+  // empty constructor necessary for Firebase
   public Item() {}
 
   public String getTitle() {
@@ -90,5 +110,17 @@ public class Item implements Serializable {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getId() {
+    return this.getEmail() + "-" + this.getTitle();
+  }
+
+  public DocumentReference getItemDocument() {
+    return getParent().document(this.getId());
+  }
+
+  public CollectionReference getParent() {
+    return db.collection("users").document(this.getEmail()).collection("items");
   }
 }

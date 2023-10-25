@@ -42,17 +42,16 @@
             android:exported="false" />
         <activity
             android:name=".activities.ItemsAvailablePage"
-            android:exported="false">
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".activities.ChooseTradeItemPage"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activities.AdjustTradeMoneyPage"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name=".activities.ChatPage"
+            android:exported="true" />
     </application>
 
 </manifest>

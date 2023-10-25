@@ -42,10 +42,14 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // Mockito test implementation to mock Firestore and Activities during unit testing
+    testImplementation("org.mockito:mockito-core:2.19.0")
     // Firebase BoM for version consistency
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     // Firestore library
     implementation("com.google.firebase:firebase-firestore")
     // Cloud storage library
     implementation("com.google.firebase:firebase-storage")
+    // FirebaseUI (for chat message recycler)
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
 }

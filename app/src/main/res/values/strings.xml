@@ -22,4 +22,8 @@
     <string name="invalid_email_or_password">Invalid email or password</string>
     <string name="don_t_have_an_account">Don\'t have an account?\ </string>
     <string name="sign_up">Sign up</string>
+    <string name="back_arrow">back_arrow</string>
+    <string name="write_message_here">Write message here</string>
+    <string name="send_message">Send Message</string>
+    <string name="empty_message">Empty Message</string>
 </resources>
