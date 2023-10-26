@@ -69,7 +69,7 @@ public class UserItemsRecyclerViewAdapter
                     + userItems.get(position).getImageId()
                     + ".jpg");
 
-    long ONE_MEGABYTE = 1024 * 1024;
+    long ONE_MEGABYTE = 1024 * 1024 * 5;
     imageReference
         .getBytes(ONE_MEGABYTE)
         .addOnSuccessListener(

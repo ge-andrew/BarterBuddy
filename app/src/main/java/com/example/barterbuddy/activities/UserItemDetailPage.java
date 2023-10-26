@@ -82,7 +82,7 @@ public class UserItemDetailPage extends AppCompatActivity {
                           .getReference()
                           .child("users/" + email + "/" + itemId + ".jpg");
 
-                  final long ONE_MEGABYTE = 1024 * 1024;
+                  final long ONE_MEGABYTE = 1024 * 1024 * 5;
                   imageReference
                       .getBytes(ONE_MEGABYTE)
                       .addOnSuccessListener(
