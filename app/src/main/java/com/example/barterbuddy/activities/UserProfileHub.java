@@ -31,6 +31,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     private Button incoming_offers_button;
     private Button your_offers_button;
     private Button your_items_button;
+    private Button add_item_button;
     private ImageView offeredItemImage;
     private ImageView wantedItemImage;
     private TextView offeredTrade;
@@ -64,6 +65,8 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     your_items_button.setOnClickListener(
             v -> {
                 Intent your_items_page = new Intent(UserProfileHub.this, UserItemsPage.class);
+                your_items_page.putExtra("username", username);
+                your_items_page.putExtra("email", email);
 
             }
     );
@@ -72,6 +75,8 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
         your_offers_button.setOnClickListener(
                 v -> {
                     Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
+                    your_offers_page.putExtra("username", username);
+                    your_offers_page.putExtra("email", email);
                 }
         );
 
@@ -79,6 +84,8 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
         incoming_offers_button.setOnClickListener(
                 v -> {
                     Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
+                    incoming_offers_page.putExtra("username", username);
+                    incoming_offers_page  .putExtra("email", email);
                 }
         );
         add_item_button.setOnClickListener(

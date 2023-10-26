@@ -38,9 +38,9 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     private String email;
     // private CollectionReference collectionReference;
     private StorageReference imageReference;
-    private FirebaseAuth AUTHENICATION_INSTANCW = FirebaseAUth.getinsat
-            private FirebaseUser currentUser;
-    priavte string currentEmail;
+    private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
+    private String currentEmail;
 
 
     @Override
@@ -127,6 +127,6 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
         startActivity(intent);
     }
 
-    private void getCurrentUSer(){currentUser = AUTHENICATION_INSTANCW.getCurrentUser()}
+    private void getCurrentUSer(){currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();}
 
 }
