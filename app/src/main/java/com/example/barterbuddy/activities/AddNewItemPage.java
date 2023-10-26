@@ -1,5 +1,4 @@
 package com.example.barterbuddy.activities;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -66,9 +65,9 @@ public class AddNewItemPage extends AppCompatActivity {
 
     itemImageView.setOnClickListener(view -> showCustomDialog());
     save_button.setOnClickListener(
-            view -> {
-              saveItem();
-            });
+        view -> {
+          saveItem();
+        });
   }
 
   protected void saveItem() {
@@ -81,16 +80,16 @@ public class AddNewItemPage extends AppCompatActivity {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
     StorageReference imageReference =
-            FIRESTORE_INSTANCE.getReference().child("users/" + email + "/" + itemId + ".jpg");
+        FIRESTORE_INSTANCE.getReference().child("users/" + email + "/" + itemId + ".jpg");
     byte[] imageData = baos.toByteArray();
 
     imageReference
-            .putBytes(imageData)
-            .addOnSuccessListener(taskSnapshot -> {})
-            .addOnFailureListener(
-                    e ->
-                            Toast.makeText(AddNewItemPage.this, "Failed to upload photo", Toast.LENGTH_SHORT)
-                                    .show());
+        .putBytes(imageData)
+        .addOnSuccessListener(taskSnapshot -> {})
+        .addOnFailureListener(
+            e ->
+                Toast.makeText(AddNewItemPage.this, "Failed to upload photo", Toast.LENGTH_SHORT)
+                    .show());
 
     DocumentReference userDocumentReference = DATABASE_INSTANCE.collection("users").document(email);
     Map<String, Object> user_name_to_store = new HashMap<>();
@@ -100,24 +99,24 @@ public class AddNewItemPage extends AppCompatActivity {
     DocumentReference itemDocumentReference =
         DATABASE_INSTANCE
             .collection("users")
-            .document(newItem.getEmail())
+            .document(email)
             .collection("items")
-            .document(newItem.getImageId());
+            .document(itemId);
 
     itemDocumentReference
-            .set(newItem)
-            .addOnSuccessListener(
-                    unused -> {
-                      Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
+        .set(newItem)
+        .addOnSuccessListener(
+            unused -> {
+              Toast.makeText(AddNewItemPage.this, "Added item", Toast.LENGTH_SHORT).show();
 
-                      Intent intent = new Intent();
-                      setResult(Activity.RESULT_OK, intent);
-                      finish();
-                    })
-            .addOnFailureListener(
-                    e ->
-                            Toast.makeText(AddNewItemPage.this, "Failed to add item", Toast.LENGTH_SHORT)
-                                    .show());
+              Intent intent = new Intent();
+              setResult(Activity.RESULT_OK, intent);
+              finish();
+            })
+        .addOnFailureListener(
+            e ->
+                Toast.makeText(AddNewItemPage.this, "Failed to add item", Toast.LENGTH_SHORT)
+                    .show());
   }
 
   protected void showCustomDialog() {
@@ -132,20 +131,20 @@ public class AddNewItemPage extends AppCompatActivity {
     Button take_photo = dialog.findViewById(R.id.take_photo_button);
 
     take_photo.setOnClickListener(
-            v -> {
-              Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-              startActivityForResult(intent, CAMERA_REQUEST_CODE);
-              dialog.dismiss();
-            });
+        v -> {
+          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+          startActivityForResult(intent, CAMERA_REQUEST_CODE);
+          dialog.dismiss();
+        });
 
     choose_photo.setOnClickListener(
-            v -> {
-              Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-              intent.setType("image/*");
-              startActivityForResult(
-                      Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
-              dialog.dismiss();
-            });
+        v -> {
+          Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+          intent.setType("image/*");
+          startActivityForResult(
+              Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
+          dialog.dismiss();
+        });
     dialog.show();
   }
 
@@ -220,9 +219,9 @@ public class AddNewItemPage extends AppCompatActivity {
 
   private boolean missingItemData() {
     if ((TextUtils.isEmpty(title) && TextUtils.isEmpty(description) && !imageWasChanged)
-            || (TextUtils.isEmpty(title) && TextUtils.isEmpty(description))
-            || ((TextUtils.isEmpty(title) && !imageWasChanged))
-            || ((TextUtils.isEmpty(description) && !imageWasChanged))) {
+        || (TextUtils.isEmpty(title) && TextUtils.isEmpty(description))
+        || ((TextUtils.isEmpty(title) && !imageWasChanged))
+        || ((TextUtils.isEmpty(description) && !imageWasChanged))) {
       Toast.makeText(AddNewItemPage.this, "Missing information", Toast.LENGTH_SHORT).show();
       return true;
     } else if (TextUtils.isEmpty(title)) {

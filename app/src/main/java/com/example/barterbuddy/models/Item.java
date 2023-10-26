@@ -116,11 +116,11 @@ public class Item implements Serializable {
     return this.getEmail() + "-" + this.getTitle();
   }
 
-  public DocumentReference getItemDocument() {
-    return getParent().document(this.getId());
-  }
-
-  public CollectionReference getParent() {
-    return db.collection("users").document(this.getEmail()).collection("items");
-  }
+//  public DocumentReference getItemDocument() {
+//    return getParent().document(this.getId());
+//  }
+//
+//  public CollectionReference getParent() {
+//    return db.collection("users").document(this.getEmail()).collection("items");
+//  }
 }
