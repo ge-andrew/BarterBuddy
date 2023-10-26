@@ -2,6 +2,7 @@ package com.example.barterbuddy.adapters;
 
 import android.content.Context; // If errors, this import may be wrong
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 // This class is mainly standard setup for recyclerView
 
 public class UserItemsRecyclerViewAdapter
     extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
+  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
   ArrayList<Item> userItems;
@@ -53,9 +57,26 @@ public class UserItemsRecyclerViewAdapter
     // based on position of recycler view
 
     holder.itemTitle.setText(userItems.get(position).getTitle());
-    if (itemImages.size() != 0 && itemImages.size() == userItems.size()) {
-      holder.imageView.setImageBitmap(itemImages.get(position));
-    }
+
+    StorageReference imageReference;
+    imageReference =
+        IMAGE_STORAGE_INSTANCE
+            .getReference()
+            .child(
+                "users/"
+                    + userItems.get(position).getEmail()
+                    + "/"
+                    + userItems.get(position).getImageId()
+                    + ".jpg");
+
+    long ONE_MEGABYTE = 1024 * 1024;
+    imageReference
+        .getBytes(ONE_MEGABYTE)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              holder.imageView.setImageBitmap(itemImage);
+            });
   }
 
   @Override
@@ -77,15 +98,15 @@ public class UserItemsRecyclerViewAdapter
       itemTitle = itemView.findViewById(R.id.item_title);
 
       itemView.setOnClickListener(
-              view -> {
-                if (recyclerViewInterface != null) {
-                  int pos = getAdapterPosition();
+          view -> {
+            if (recyclerViewInterface != null) {
+              int pos = getAdapterPosition();
 
-                  if (pos != RecyclerView.NO_POSITION) {
-                    recyclerViewInterface.onItemClick(pos);
-                  }
-                }
-              });
+              if (pos != RecyclerView.NO_POSITION) {
+                recyclerViewInterface.onItemClick(pos);
+              }
+            }
+          });
     }
   }
 }

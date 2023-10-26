@@ -15,98 +15,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/private_item_recycler_card_iamge"
+                android:layout_width="match_parent"
+                android:layout_height="340dp"
+                android:adjustViewBounds="true"
+                android:background="@color/light_gray"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundimageview"
+                android:layout_marginBottom="16dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="75dp"
-                    android:layout_height="78dp"
-                    android:layout_margin="4dp"
-                    android:src="@drawable/baseline_add_photo_alternate_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="public item card"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/ItemName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="Item title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="description"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/ItemName"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:orientation="vertical">
+                    android:text="Item title"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
 
-                    <TextView
-                        android:id="@+id/value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/user"
-                        android:layout_width="79dp"
-                        android:layout_height="21dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="username"
-                        android:textColor="@color/peach"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/rating"
-                        android:layout_width="77dp"
-                        android:layout_height="19dp"
-                        android:layout_marginBottom="4dp"
-                        android:text=""
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/user" />
-
-                </LinearLayout>
+                    android:text="username"
+                    android:textColor="@color/peach"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/private_item_recycler_card_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:maxLines="3"
+                android:ellipsize="end"/>
+
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

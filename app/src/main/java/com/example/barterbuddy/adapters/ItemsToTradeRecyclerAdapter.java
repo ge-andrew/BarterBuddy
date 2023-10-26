@@ -2,21 +2,25 @@ package com.example.barterbuddy.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class ItemsToTradeRecyclerAdapter
     extends RecyclerView.Adapter<ItemsToTradeRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
+  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   Context context;
   ArrayList<Item> userItems;
   ArrayList<Bitmap> itemImages;
@@ -46,10 +50,28 @@ public class ItemsToTradeRecyclerAdapter
   public void onBindViewHolder(
       @NonNull ItemsToTradeRecyclerAdapter.MyViewHolder holder, int position) {
     holder.itemTitle.setText(userItems.get(position).getTitle());
-    holder.itemDescription.setText(userItems.get(position).getDescription());
     holder.itemPoster.setText(userItems.get(position).getUsername());
-    // holder.imageView.setImageBitmap(itemImages.get(position));                   // to be
-    // implemented after authentication, will fail anyways
+    holder.itemDescription.setText(userItems.get(position).getDescription());
+
+    StorageReference imageReference;
+    imageReference =
+        IMAGE_STORAGE_INSTANCE
+            .getReference()
+            .child(
+                "users/"
+                    + userItems.get(position).getEmail()
+                    + "/"
+                    + userItems.get(position).getImageId()
+                    + ".jpg");
+
+    long ONE_MEGABYTE = 1024 * 1024;
+    imageReference
+        .getBytes(ONE_MEGABYTE)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              holder.imageView.setImageBitmap(itemImage);
+            });
   }
 
   @Override
@@ -61,27 +83,26 @@ public class ItemsToTradeRecyclerAdapter
     // this method very very roughly equates to onCreate() from recyclerView
     // sets up image and text views
 
-    ImageView imageView;
+    ShapeableImageView imageView;
     TextView itemTitle, itemDescription, itemPoster;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
 
-      imageView = itemView.findViewById(R.id.image);
+      imageView = itemView.findViewById(R.id.private_item_recycler_card_iamge);
       itemTitle = itemView.findViewById(R.id.ItemName);
-      itemDescription = itemView.findViewById(R.id.description);
       itemPoster = itemView.findViewById(R.id.user);
-
+      itemDescription = itemView.findViewById(R.id.private_item_recycler_card_description);
       itemView.setOnClickListener(
-              view -> {
-                if (recyclerViewInterface != null) {
-                  int pos = getAdapterPosition();
+          view -> {
+            if (recyclerViewInterface != null) {
+              int pos = getAdapterPosition();
 
-                  if (pos != RecyclerView.NO_POSITION) {
-                    recyclerViewInterface.onItemClick(pos);
-                  }
-                }
-              });
+              if (pos != RecyclerView.NO_POSITION) {
+                recyclerViewInterface.onItemClick(pos);
+              }
+            }
+          });
     }
   }
 }

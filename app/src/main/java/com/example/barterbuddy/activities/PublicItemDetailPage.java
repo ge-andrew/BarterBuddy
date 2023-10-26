@@ -153,7 +153,11 @@ public class PublicItemDetailPage extends AppCompatActivity {
 
   private void establishItemReference() {
     itemDocReference =
-        FIRESTORE_INSTANCE.collection("users").document(itemEmail).collection("items").document(itemId);
+        FIRESTORE_INSTANCE
+            .collection("users")
+            .document(itemEmail)
+            .collection("items")
+            .document(itemId);
   }
 
   private void getXmlElements() {

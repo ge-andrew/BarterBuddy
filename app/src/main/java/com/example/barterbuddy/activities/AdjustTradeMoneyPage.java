@@ -48,6 +48,12 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_adjust_trade_money);
 
+    getCurrentUser();
+    if (currentUser == null) {
+      goToLoginPage();
+    }
+    getCurrentUserInfo();
+
     posterItem = (Item) getIntent().getSerializableExtra("posterItem");
     offeringItem = (Item) getIntent().getSerializableExtra("offeringItem");
 
@@ -90,21 +96,21 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
 
     // load in assets, ready text fields
     posterItemImageReference
-            .getBytes(ONE_MEGABYTE)
-            .addOnSuccessListener(
-                    bytes -> {
-                      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                      posterItemImageView.setImageBitmap(itemImage);
-                    })
-            .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image.", e));
+        .getBytes(ONE_MEGABYTE)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              posterItemImageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image.", e));
     offeringItemImageReference
-            .getBytes(ONE_MEGABYTE)
-            .addOnSuccessListener(
-                    bytes -> {
-                      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                      offeringItemImageView.setImageBitmap(itemImage);
-                    })
-            .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
+        .getBytes(ONE_MEGABYTE)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              offeringItemImageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
     posterItemMoneyField.setText("0.00");
@@ -113,12 +119,10 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     // set up listener for button
     // if fields empty, error
     submit_trade_button.setOnClickListener(
-            v -> {
-              Toast toast = Toast.makeText(this, "Mock Success Message!", Toast.LENGTH_LONG);
-              toast.show();
-            }
-    );
-
+        v -> {
+          Toast toast = Toast.makeText(this, "Mock Success Message!", Toast.LENGTH_LONG);
+          toast.show();
+        });
   }
 
   private void getXmlElements() {

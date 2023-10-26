@@ -3,7 +3,6 @@ package com.example.barterbuddy.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,19 +21,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class UserItemsPage extends AppCompatActivity implements RecyclerViewInterface {
 
   private static final String TAG = "UserItemsPage";
-  final long ONE_MEGABYTE = 1024 * 1024;
   private final int REQUEST_CODE = 1002;
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
-  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-  private StorageReference imageReference;
   private FirebaseUser currentUser;
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private ArrayList<Item> items = new ArrayList<>();
@@ -118,21 +112,6 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
                 Log.d(TAG, "Error getting documents: ", task.getException());
               }
               items = newItems;
-
-              for (Item item : items) {
-                imageReference =
-                    IMAGE_STORAGE_INSTANCE
-                        .getReference()
-                        .child("users/" + email + "/" + item.getImageId() + ".jpg");
-                imageReference
-                    .getBytes(ONE_MEGABYTE)
-                    .addOnSuccessListener(
-                        bytes -> {
-                          Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                          ITEM_IMAGES.add(itemImage);
-                        })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
-              }
 
               // set up recyclerView
               RecyclerView recyclerView = findViewById(R.id.recycler_view);
