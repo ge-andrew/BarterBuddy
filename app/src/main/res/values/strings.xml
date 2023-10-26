@@ -19,4 +19,7 @@
     <string name="create_account">Create Account</string>
     <string name="item_details">Item Details</string>
     <string name="save">Save</string>
+    <string name="incoming_offers">Incoming Offers</string>
+    <string name="your_items">Your Items</string>
+    <string name="your_offers">Your Offers</string>
 </resources>

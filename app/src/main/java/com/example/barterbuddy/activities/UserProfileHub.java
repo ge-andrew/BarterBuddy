@@ -23,6 +23,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
+
 import java.util.ArrayList;
 
 public class UserProfileHub extends AppCompatActivity implements RecyclerViewInterface {
@@ -39,8 +41,6 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
     private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
     private final int REQUEST_CODE = 1002;
-    Button add_item_button;
-    Button active_items_button;
     private ArrayList<Item> items = new ArrayList<>();
     private String username;
     private String email;
