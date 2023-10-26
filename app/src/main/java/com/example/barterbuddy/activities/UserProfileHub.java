@@ -25,7 +25,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class userProfileHub extends AppCompatActivity {
+public class UserProfileHub extends AppCompatActivity implements RecyclerViewInterface {
     private Button incoming_offers_button;
     private Button your_offers_button;
     private Button your_items_button;
@@ -56,13 +56,14 @@ public class userProfileHub extends AppCompatActivity {
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button= findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
+    add_item_button = findViewById(R.id.temp_add_item);
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
     //Takes you to userItemsPage
     your_items_button.setOnClickListener(
             v -> {
-                Intent your_items_page = new Intent(userProfileHub.this, UserItemsPage.class);
+                Intent your_items_page = new Intent(UserProfileHub.this, UserItemsPage.class);
 
             }
     );
@@ -70,16 +71,25 @@ public class userProfileHub extends AppCompatActivity {
     //Takes you to your offers
         your_offers_button.setOnClickListener(
                 v -> {
-                    Intent your_offers_page = new Intent(userProfileHub.this, YourOffersPage.class);
+                    Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
                 }
         );
 
         //Take you to your incoming offers
         incoming_offers_button.setOnClickListener(
                 v -> {
-                    Intent incoming_offers_page = new Intent(userProfileHub.this,IncomingOffersPage.class);
+                    Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
                 }
         );
+        add_item_button.setOnClickListener(
+                view -> {
+                    Intent intent = new Intent(UserProfileHub.this, AddNewItemPage.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
+
+                    // allows this page to refresh if an item was added
+                    startActivityForResult(intent, REQUEST_CODE);
+                });
 
 
     // Set up recyclerView
@@ -136,9 +146,9 @@ public class userProfileHub extends AppCompatActivity {
 
     // take position of clicked card in recyclerView to start and send correct data to itemDetailPage
     // activity
-    @Override
+
     public void onItemClick(int position) {
-        Intent intent = new Intent(userProfileHub.this, UserItemDetailPage.class);
+        Intent intent = new Intent(UserProfileHub.this, UserItemDetailPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
         intent.putExtra("username", username);
