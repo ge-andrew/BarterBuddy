@@ -17,15 +17,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
-public class ItemsToTradeRecyclerAdapter
-    extends RecyclerView.Adapter<ItemsToTradeRecyclerAdapter.MyViewHolder> {
+public class PublicItemsRecyclerAdapter
+    extends RecyclerView.Adapter<PublicItemsRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   Context context;
   ArrayList<Item> userItems;
   ArrayList<Bitmap> itemImages;
 
-  public ItemsToTradeRecyclerAdapter(
+  public PublicItemsRecyclerAdapter(
       Context context,
       ArrayList<Item> userItems,
       RecyclerViewInterface recyclerViewInterface,
@@ -38,17 +38,17 @@ public class ItemsToTradeRecyclerAdapter
 
   @NonNull
   @Override
-  public ItemsToTradeRecyclerAdapter.MyViewHolder onCreateViewHolder(
+  public PublicItemsRecyclerAdapter.MyViewHolder onCreateViewHolder(
       @NonNull ViewGroup parent, int viewType) {
     // sets look of item card
     LayoutInflater inflater = LayoutInflater.from(context);
     View view = inflater.inflate(R.layout.public_items_recycler_card, parent, false);
-    return new ItemsToTradeRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
+    return new PublicItemsRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
   @Override
   public void onBindViewHolder(
-      @NonNull ItemsToTradeRecyclerAdapter.MyViewHolder holder, int position) {
+          @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
     holder.itemTitle.setText(userItems.get(position).getTitle());
     holder.itemPoster.setText(userItems.get(position).getUsername());
     holder.itemDescription.setText(userItems.get(position).getDescription());

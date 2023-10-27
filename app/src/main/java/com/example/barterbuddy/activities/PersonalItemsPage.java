@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
@@ -38,6 +40,7 @@ public class PersonalItemsPage extends AppCompatActivity implements RecyclerView
   private String currentUserUsername;
   private String currentUserEmail;
   private RecyclerView personalItemsRecycler;
+  private SwipeRefreshLayout personalItemsSwipeRefreshLayout;
 
   @Override
 
@@ -73,6 +76,11 @@ public class PersonalItemsPage extends AppCompatActivity implements RecyclerView
           Intent intent = new Intent(PersonalItemsPage.this, PublicItemsPage.class);
           startActivity(intent);
         });
+
+    personalItemsSwipeRefreshLayout.setOnRefreshListener(() -> {
+        setUpItems(this);
+        personalItemsSwipeRefreshLayout.setRefreshing(false);
+    });
   }
 
   @Override
@@ -158,6 +166,7 @@ public class PersonalItemsPage extends AppCompatActivity implements RecyclerView
     add_new_personal_item_button = findViewById(R.id.add_new_personal_item_button);
     go_to_public_items_button = findViewById(R.id.active_items_buttons);
     personalItemsRecycler = findViewById(R.id.personal_items_recycler_view);
+    personalItemsSwipeRefreshLayout = findViewById(R.id.personal_items_swipeRefresh);
   }
 
   private CollectionReference establishItemsCollection() {

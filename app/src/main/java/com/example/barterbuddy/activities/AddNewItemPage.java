@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -41,6 +42,7 @@ public class AddNewItemPage extends AppCompatActivity {
   private Button save_button;
   private TextInputEditText titleEditText;
   private TextInputEditText descriptionEditText;
+  private ImageView backArrow;
   private String username;
   private String email;
   private String title;
@@ -67,6 +69,8 @@ public class AddNewItemPage extends AppCompatActivity {
         view -> {
           saveItem();
         });
+
+    backArrow.setOnClickListener(view -> finish());
   }
 
   protected void saveItem() {
@@ -206,6 +210,7 @@ public class AddNewItemPage extends AppCompatActivity {
     titleEditText = findViewById(R.id.title);
     descriptionEditText = findViewById(R.id.description);
     save_button = findViewById(R.id.save_new_item_button);
+    backArrow = findViewById(R.id.back_arrow);
   }
 
   private boolean missingItemData() {

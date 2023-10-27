@@ -6,11 +6,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.ItemsToTradeRecyclerAdapter;
+import com.example.barterbuddy.adapters.PublicItemsRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +32,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private FirebaseUser currentUser;
   private Button user_items_button;
   private RecyclerView publicItemsRecycler;
+  private SwipeRefreshLayout publicItemsSwipeRefreshLayout;
   private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
   private String currentUserUsername;
   private String currentUserEmail;
@@ -56,7 +60,13 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
           Intent intent = new Intent(PublicItemsPage.this, PersonalItemsPage.class);
           startActivity(intent);
         });
+
+    publicItemsSwipeRefreshLayout.setOnRefreshListener(() -> {
+      setUpItems(this);
+      publicItemsSwipeRefreshLayout.setRefreshing(false);
+    });
   }
+
 
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
@@ -81,8 +91,8 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
               }
               itemsFromFirestore = availableItems;
               // set up recyclerView
-              ItemsToTradeRecyclerAdapter adapter =
-                  new ItemsToTradeRecyclerAdapter(
+              PublicItemsRecyclerAdapter adapter =
+                  new PublicItemsRecyclerAdapter(
                       context, availableItems, (RecyclerViewInterface) context, ITEM_IMAGES);
               publicItemsRecycler.setAdapter(adapter);
               publicItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
@@ -119,5 +129,6 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private void getXmlElements() {
     user_items_button = findViewById(R.id.User_Items_Button);
     publicItemsRecycler = findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = findViewById(R.id.public_items_swipeRefresh);
   }
 }

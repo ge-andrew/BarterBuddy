@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingVertical="16dp">
+    android:paddingBottom="16dp">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/menu"
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:text="My Offers"
+        android:text="@string/my_items"
         android:textSize="26sp"
         android:textStyle="bold" />
 
@@ -35,12 +35,18 @@
             android:layout_height="144dp"
             android:src="@drawable/default_profile_face" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/personal_items_recycler_view"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/personal_items_swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="12dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/personal_items_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="12dp" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
             android:id="@+id/add_new_personal_item_button"
@@ -50,7 +56,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             android:padding="12dp"
-            android:text="Add Item"
+            android:text="@string/add_item"
             android:textSize="20sp" />
 
         <Button
@@ -58,7 +64,7 @@
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Public Offers"
+            android:text="@string/public_offers"
             android:textSize="20sp" />
     </LinearLayout>
 

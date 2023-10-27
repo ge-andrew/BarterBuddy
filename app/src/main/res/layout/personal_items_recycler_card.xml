@@ -19,29 +19,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:orientation="horizontal"
             android:layout_margin="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/personal_items_recycler_card_image"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/baseline_insert_photo_24"
                 android:adjustViewBounds="true"
                 android:background="@color/light_gray"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems"/>
+                android:src="@drawable/baseline_insert_photo_24"
+                app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
 
             <TextView
                 android:id="@+id/item_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Item Title Here"
-                android:textSize="22sp"
-                android:textStyle="bold"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="@string/title"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

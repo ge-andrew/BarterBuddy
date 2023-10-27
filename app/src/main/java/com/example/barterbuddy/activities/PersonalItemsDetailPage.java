@@ -39,6 +39,7 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
   private DocumentReference itemDocReference;
   private StorageReference imageReference;
   private FirebaseUser currentUser;
+  private ImageView backArrow;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
     establishItemReference();
 
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     // populate our private fields with data from Firestore
     itemDocReference
@@ -159,5 +162,6 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
     itemDescription = findViewById(R.id.description_text_view);
     set_active_items_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
+    backArrow = findViewById(R.id.back_arrow);
   }
 }

@@ -39,6 +39,7 @@ public class PublicItemsDetailPage extends AppCompatActivity {
   private String currentUserUsername;
   private String currentUserEmail;
   private Item posterItem;
+  private ImageView backArrow;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class PublicItemsDetailPage extends AppCompatActivity {
 
     establishItemReference();
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     // populate our private fields with data from Firestore
     itemDocReference
@@ -166,6 +169,7 @@ public class PublicItemsDetailPage extends AppCompatActivity {
     itemDescription = findViewById(R.id.description_text_view);
     offer_trade_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
+    backArrow = findViewById(R.id.back_arrow);
   }
 
   private void getItemDataFromIntent() {

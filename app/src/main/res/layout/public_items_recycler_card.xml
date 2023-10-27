@@ -26,31 +26,31 @@
                 android:id="@+id/public_items_recycler_card"
                 android:layout_width="match_parent"
                 android:layout_height="340dp"
+                android:layout_marginBottom="16dp"
                 android:adjustViewBounds="true"
                 android:background="@color/light_gray"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/roundimageview"
-                android:layout_marginBottom="16dp"/>
+                app:shapeAppearanceOverlay="@style/roundimageview" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/ItemName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Item title"
-                    android:textStyle="bold"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/title"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="username"
+                    android:text="@string/username"
                     android:textColor="@color/peach"
                     android:textStyle="bold" />
 
@@ -60,10 +60,9 @@
                 android:id="@+id/private_item_recycler_card_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Description"
+                android:ellipsize="end"
                 android:maxLines="3"
-                android:ellipsize="end"/>
-
+                android:text="@string/description" />
 
         </LinearLayout>
 
