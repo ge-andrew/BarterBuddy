@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/private_item_recycler_card_iamge"
+                android:id="@+id/public_items_recycler_card"
                 android:layout_width="match_parent"
                 android:layout_height="340dp"
                 android:adjustViewBounds="true"

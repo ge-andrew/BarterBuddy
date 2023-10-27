@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
+import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,9 +86,9 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
               items = newItems;
 
               // set up recyclerView
-              RecyclerView recyclerView = findViewById(R.id.recycler_view);
-              UserItemsRecyclerViewAdapter adapter =
-                  new UserItemsRecyclerViewAdapter(
+              RecyclerView recyclerView = findViewById(R.id.personal_items_recycler_view);
+              PersonalItemsRecyclerViewAdapter adapter =
+                  new PersonalItemsRecyclerViewAdapter(
                       context, items, (RecyclerViewInterface) context, ITEM_IMAGES);
               recyclerView.setAdapter(adapter);
               recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -123,6 +123,6 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
   }
 
   private void getXmlElements() {
-    add_item_button = findViewById(R.id.add_item_button);
+    add_item_button = findViewById(R.id.add_new_personal_item_button);
   }
 }

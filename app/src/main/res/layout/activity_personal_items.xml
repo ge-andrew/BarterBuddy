@@ -24,7 +24,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -36,14 +36,14 @@
             android:src="@drawable/default_profile_face" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/personal_items_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginBottom="12dp"
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/add_item_button"
+            android:id="@+id/add_new_personal_item_button"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
 

@@ -89,7 +89,7 @@ public class ItemsToTradeRecyclerAdapter
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
 
-      imageView = itemView.findViewById(R.id.private_item_recycler_card_iamge);
+      imageView = itemView.findViewById(R.id.public_items_recycler_card);
       itemTitle = itemView.findViewById(R.id.ItemName);
       itemPoster = itemView.findViewById(R.id.user);
       itemDescription = itemView.findViewById(R.id.private_item_recycler_card_description);

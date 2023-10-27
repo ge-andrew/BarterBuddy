@@ -14,16 +14,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
+import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
-public class UserItemsPage extends AppCompatActivity implements RecyclerViewInterface {
+public class PersonalItemsPage extends AppCompatActivity implements RecyclerViewInterface {
 
   private static final String TAG = "UserItemsPage";
   private final int REQUEST_CODE = 1002;
@@ -32,15 +33,17 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   private FirebaseUser currentUser;
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private ArrayList<Item> items = new ArrayList<>();
-  private Button add_item_button;
-  private Button active_items_button;
-  private String username;
-  private String email;
+  private Button add_new_personal_item_button;
+  private Button go_to_public_items_button;
+  private String currentUserUsername;
+  private String currentUserEmail;
+  private RecyclerView personalItemsRecycler;
 
   @Override
+
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_user_items);
+    setContentView(R.layout.activity_personal_items);
 
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
@@ -51,24 +54,23 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
     }
     getCurrentUserInfo();
 
+    getXmlElements();
+
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
-
     setUpItems(this);
 
-    // Listener for add_item_button
-    add_item_button = findViewById(R.id.add_item_button);
-    add_item_button.setOnClickListener(
+    // allows this page to refresh if an item was added
+    add_new_personal_item_button.setOnClickListener(
         view -> {
-          Intent intent = new Intent(UserItemsPage.this, AddNewItemPage.class);
-          // allows this page to refresh if an item was added
+          Intent intent = new Intent(PersonalItemsPage.this, AddNewItemPage.class);
           startActivityForResult(intent, REQUEST_CODE);
         });
-    active_items_button = findViewById(R.id.active_items_buttons);
-    active_items_button.setOnClickListener(
+
+    go_to_public_items_button.setOnClickListener(
         view -> {
-          Intent intent = new Intent(UserItemsPage.this, ItemsAvailablePage.class);
+          Intent intent = new Intent(PersonalItemsPage.this, PublicItemsPage.class);
           startActivity(intent);
         });
   }
@@ -95,10 +97,9 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems(Context context) {
     // retrieve and insert firebase data into items
-    FIRESTORE_INSTANCE
-        .collection("users")
-        .document(email)
-        .collection("items")
+    CollectionReference userItemsCollection;
+    userItemsCollection = establishItemsCollection();
+    userItemsCollection
         .get()
         .addOnCompleteListener(
             task -> {
@@ -111,35 +112,28 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
               } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
               }
-              items = newItems;
-
               // set up recyclerView
-              RecyclerView recyclerView = findViewById(R.id.recycler_view);
-              UserItemsRecyclerViewAdapter adapter =
-                  new UserItemsRecyclerViewAdapter(
-                      context, items, (RecyclerViewInterface) context, ITEM_IMAGES);
-              recyclerView.setAdapter(adapter);
-              recyclerView.setLayoutManager(new LinearLayoutManager(context));
+              items = newItems;
+              PersonalItemsRecyclerViewAdapter adapter =
+                  new PersonalItemsRecyclerViewAdapter(
+                      context, newItems, (RecyclerViewInterface) context, ITEM_IMAGES);
+              personalItemsRecycler.setAdapter(adapter);
+              personalItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
             });
   }
 
-  // take position of clicked card in recyclerView to start and send correct data to itemDetailPage
-  // activity
+  // detects which item was selected and opens a details page with that item's data
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(UserItemsPage.this, UserItemDetailPage.class);
-
+    Intent intent = new Intent(PersonalItemsPage.this, PersonalItemsDetailPage.class);
     intent.putExtra("itemId", items.get(position).getImageId());
-
     startActivity(intent);
   }
 
-  // refreshes page if an item was added
+  // refreshes page if a new personal item was added
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
     super.onActivityResult(requestCode, resultCode, data);
-
     if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
       setUpItems(this);
     }
@@ -156,7 +150,20 @@ public class UserItemsPage extends AppCompatActivity implements RecyclerViewInte
   }
 
   private void getCurrentUserInfo() {
-    username = currentUser.getDisplayName();
-    email = currentUser.getEmail();
+    currentUserUsername = currentUser.getDisplayName();
+    currentUserEmail = currentUser.getEmail();
+  }
+
+  private void getXmlElements() {
+    add_new_personal_item_button = findViewById(R.id.add_new_personal_item_button);
+    go_to_public_items_button = findViewById(R.id.active_items_buttons);
+    personalItemsRecycler = findViewById(R.id.personal_items_recycler_view);
+  }
+
+  private CollectionReference establishItemsCollection() {
+    return FIRESTORE_INSTANCE
+            .collection("users")
+            .document(currentUserEmail)
+            .collection("items");
   }
 }
