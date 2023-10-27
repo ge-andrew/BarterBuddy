@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.example.barterbuddy.activities.ItemsAvailablePage;
 import com.example.barterbuddy.activities.RegisterAccountPage;
+import com.example.barterbuddy.activities.UserProfileHub;
 
 public class DemoUserPicker extends AppCompatActivity {
 
@@ -49,7 +50,7 @@ public class DemoUserPicker extends AppCompatActivity {
 
     mattButton.setOnClickListener(
         view -> {
-          Intent intent = new Intent(DemoUserPicker.this, ItemsAvailablePage.class);
+          Intent intent = new Intent(DemoUserPicker.this, UserProfileHub.class);
           intent.putExtra("username", MATT);
           intent.putExtra("email", MATT_EMAIL);
           startActivity(intent);
