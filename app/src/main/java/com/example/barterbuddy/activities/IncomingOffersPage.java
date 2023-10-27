@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.barterbuddy.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -19,6 +21,9 @@ public class IncomingOffersPage extends AppCompatActivity{
     private String email;
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+    private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -28,6 +33,14 @@ public class IncomingOffersPage extends AppCompatActivity{
         incoming_offers_button= findViewById(R.id.incoming_offers_button);
         your_items_button = findViewById(R.id.your_items_button);
 
+        //gets user info from login
+        getCurrentUser();
+        if (currentUser == null) {
+            goToLoginPage();
+        }
+        getCurrentUserInfo();
+
+        //ALl button actions
         your_items_button.setOnClickListener(
                 v -> {
                     Intent your_items_page = new Intent(IncomingOffersPage.this, UserItemsPage.class);
@@ -53,10 +66,30 @@ public class IncomingOffersPage extends AppCompatActivity{
                     startActivity(incoming_offers_page);
                 }
         );
+    }
 
-        private void createOffers(Context context){
+    private void setUpTradeCard(){
+        DB.collectionGroup("trades")
+                .whereEqualTo("posterEmail",userEmail)
+                .get()
+                .addOnCompleteListener(
+                        task ->
+                )
+    }
 
-        }
 
+    //Firebase Authentication
+    private void getCurrentUser() {
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    }
+
+    private void goToLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getCurrentUserInfo() {
+        userEmail = currentUser.getEmail();
     }
 }

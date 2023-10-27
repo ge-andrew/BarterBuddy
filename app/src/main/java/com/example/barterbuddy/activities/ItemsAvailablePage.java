@@ -34,13 +34,13 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
     private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
     Button user_items_button;
     private ArrayList<Item> items = new ArrayList<>();
-    private String username;
-    private String email;
     // private CollectionReference collectionReference;
     private StorageReference imageReference;
-    private FirebaseAuth AUTHENICATION_INSTANCW = FirebaseAUth.getinsat
-            private FirebaseUser currentUser;
-    priavte string currentEmail;
+    private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
+    private String userEmail;
+    private String username;
+    private String email;
 
 
     @Override
@@ -48,9 +48,13 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_layout);
 
-        username = getIntent().getStringExtra("username");
-        email = getIntent().getStringExtra("email");
-        //getCurrentUser()
+        //gets user info from login
+        getCurrentUser();
+        if (currentUser == null) {
+            goToLoginPage();
+        }
+        getCurrentUserInfo();
+
         // Set up recyclerView
         // RecyclerView setup inside this method to prevent late loading of Firebase data from
         // onComplete
@@ -126,7 +130,18 @@ public class ItemsAvailablePage extends AppCompatActivity implements RecyclerVie
 
         startActivity(intent);
     }
+    private void getCurrentUser() {
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    }
 
-    private void getCurrentUSer(){currentUser = AUTHENICATION_INSTANCW.getCurrentUser()}
+    private void goToLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getCurrentUserInfo() {
+        userEmail = currentUser.getEmail();
+    }
 
 }
