@@ -1,9 +1,6 @@
 package com.example.barterbuddy.models;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.Serializable;
 
 // Serializable means it can be put into an Intent with putExtra
@@ -114,13 +111,5 @@ public class Item implements Serializable {
 
   public String getId() {
     return this.getEmail() + "-" + this.getTitle();
-  }
-
-  public DocumentReference getItemDocument() {
-    return getParent().document(this.getId());
-  }
-
-  public CollectionReference getParent() {
-    return db.collection("users").document(this.getEmail()).collection("items");
   }
 }

@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/personal_items_recycler_view"
         android:layout_width="409dp"
         android:layout_height="646dp"
         android:layout_marginTop="28dp"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/offer_trade_title" />
 
     <Button
-        android:id="@+id/add_item_button"
+        android:id="@+id/add_new_personal_item_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -34,5 +34,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+        app:layout_constraintTop_toBottomOf="@+id/personal_items_recycler_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

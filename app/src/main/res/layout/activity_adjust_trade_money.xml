@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +22,8 @@
         android:layout_marginTop="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adjustMoneyTitle"
-        app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+        app:srcCompat="@drawable/baseline_add_photo_alternate_24"
+        android:contentDescription="@string/item_you_are_trading"/>
 
     <ImageView
         android:id="@+id/posterItemImage"
@@ -33,7 +33,8 @@
         android:layout_marginTop="72dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forText"
-        app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+        app:srcCompat="@drawable/baseline_add_photo_alternate_24"
+        android:contentDescription="@string/item_you_are_trading_for"/>
 
     <TextView
         android:id="@+id/offeringItemTitle"
@@ -51,8 +52,8 @@
         android:layout_height="30dp"
         android:layout_marginTop="28dp"
         android:ems="10"
-        android:padding="5dp"
         android:inputType="numberDecimal"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.566"
         app:layout_constraintStart_toEndOf="@+id/offeringItemTitle"
@@ -75,8 +76,8 @@
         android:layout_marginStart="68dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:padding="5dp"
         android:inputType="numberDecimal"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/posterItemTitle"
@@ -103,4 +104,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/posterItemImage"
         app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

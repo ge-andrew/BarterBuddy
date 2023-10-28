@@ -6,9 +6,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/barterbuddy"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/barterbuddy"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterBuddy"
         tools:targetApi="31">
@@ -32,16 +32,16 @@
             android:name=".activities.AddNewItemPage"
             android:exported="false" />
         <activity
-            android:name=".activities.UserItemDetailPage"
+            android:name=".activities.PersonalItemsDetailPage"
             android:exported="false" />
         <activity
-            android:name=".activities.PublicItemDetailPage"
+            android:name=".activities.PublicItemsDetailPage"
             android:exported="false" />
         <activity
-            android:name=".activities.UserItemsPage"
+            android:name=".activities.PersonalItemsPage"
             android:exported="false" />
         <activity
-            android:name=".activities.ItemsAvailablePage"
+            android:name=".activities.PublicItemsPage"
             android:exported="false" />
         <activity
             android:name=".activities.ChooseTradeItemPage"

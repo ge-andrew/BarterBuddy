@@ -6,6 +6,7 @@ import com.example.barterbuddy.models.Item;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /** Interface used to make changes to Firestore more convenient */
 public class UpdateItemDocument {
@@ -36,8 +37,11 @@ public class UpdateItemDocument {
   }
 
   private static void setItemFieldToActive(@NonNull Item item) {
+    FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+
     // find the collection for the other items in Firebase
-    CollectionReference userItems = item.getParent();
+    CollectionReference userItems =
+        FIRESTORE_INSTANCE.collection("users").document(item.getEmail()).collection("items");
     // set this user's other items to inactive
     userItems
         .whereNotEqualTo("title", item.getTitle())
@@ -53,23 +57,27 @@ public class UpdateItemDocument {
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Query not resolved"));
-    setItemActiveField(item.getItemDocument(), true);
+    setItemActiveField(userItems.document(item.getId()), true);
   }
 
   private static void setItemActiveField(DocumentReference itemRef, boolean active) {
     itemRef
-            .update("active", active)
-            .addOnSuccessListener(e -> Log.d(TAG, "Active update succeeded"))
-            .addOnFailureListener(e -> Log.w(TAG, "Active update failed"));
+        .update("active", active)
+        .addOnSuccessListener(e -> Log.d(TAG, "Active update succeeded"))
+        .addOnFailureListener(e -> Log.w(TAG, "Active update failed"));
   }
 
   public static void setItemToInactive(@NonNull Item item) {
+    FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+    CollectionReference userItems =
+        FIRESTORE_INSTANCE.collection("users").document(item.getEmail()).collection("items");
+
     ensureTitleAndEmailExist(item);
     if (item.getActive()) {
       // update status in the Item object
       item.setActive(false);
       // update status in Firestore
-      setItemActiveField(item.getItemDocument(), false);
+      setItemActiveField(userItems.document(item.getId()), false);
     }
   }
 }

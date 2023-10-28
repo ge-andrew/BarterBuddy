@@ -8,11 +8,18 @@
     android:padding="16dp"
     tools:context=".activities.LoginPage">
 
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="50dp"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/barterbuddy" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="126dp"
-        android:layout_marginBottom="108dp"
+
         android:text="@string/login"
         android:textSize="26sp"
         android:textStyle="bold" />

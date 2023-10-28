@@ -9,26 +9,41 @@
     android:padding="16dp"
     tools:context=".activities.AddNewItemPage">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="@string/item_details"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="@string/back_arrow"
+                android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp"
+                android:text="@string/item_details"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/item_image_view"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:layout_marginBottom="12dp"
         android:layout_weight="0"
-        android:adjustViewBounds="true"
         android:background="@color/light_gray"
         android:scaleType="center"
         android:src="@drawable/baseline_add_photo_alternate_24"
         app:shapeAppearanceOverlay="@style/roundimageview" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,8 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/title"
-                android:textSize="18sp"
-                android:inputType="textCapSentences"/>
+                android:inputType="textCapSentences"
+                android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,8 +78,8 @@
                 android:layout_weight="1"
                 android:gravity="top|start"
                 android:hint="@string/description"
-                android:textSize="18sp"
-                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect|textMultiLine"/>
+                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect|textMultiLine"
+                android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
