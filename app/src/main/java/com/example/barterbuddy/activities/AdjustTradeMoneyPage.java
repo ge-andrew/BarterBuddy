@@ -6,13 +6,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,12 +31,14 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   private FirebaseUser currentUser;
   private Item offeringItem;
   private Item posterItem;
-  private ImageView offeringItemImageView;
-  private ImageView posterItemImageView;
+  private ShapeableImageView offeringItemImageView;
+  private ShapeableImageView posterItemImageView;
   private TextView offeringItemTitle;
   private TextView posterItemTitle;
-  private EditText offeringItemMoneyField;
-  private EditText posterItemMoneyField;
+  private TextView posterUsername;
+  private ImageView backArrow;
+  private TextInputEditText offeringItemMoneyField;
+  private TextInputEditText posterItemMoneyField;
   private Button submit_trade_button;
   private DocumentReference posterItemDocReference;
   private DocumentReference offeringItemDocReference;
@@ -59,6 +62,8 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
 
     // assign xml variables to elements
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     // establish directories in Firebase
     posterItemDocReference =
@@ -113,8 +118,9 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
-    posterItemMoneyField.setText("0.00");
-    offeringItemMoneyField.setText("0.00");
+    //    posterItemMoneyField.setText("0.00");
+    //    offeringItemMoneyField.setText("0.00");
+    posterUsername.setText(posterItem.getUsername());
 
     // set up listener for button
     // if fields empty, error
@@ -126,13 +132,15 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   }
 
   private void getXmlElements() {
-    offeringItemImageView = findViewById(R.id.offeringItemImage);
-    posterItemImageView = findViewById(R.id.posterItemImage);
-    offeringItemTitle = findViewById(R.id.offeringItemTitle);
-    posterItemTitle = findViewById(R.id.posterItemTitle);
-    offeringItemMoneyField = findViewById(R.id.offeringItemMoneyField);
-    posterItemMoneyField = findViewById(R.id.posterItemMoneyField);
+    offeringItemImageView = findViewById(R.id.personalItemImage);
+    posterItemImageView = findViewById(R.id.publicItemImage);
+    offeringItemTitle = findViewById(R.id.personalItemTitle);
+    posterItemTitle = findViewById(R.id.publicItemTitle);
+    offeringItemMoneyField = findViewById(R.id.personalMoneyField);
+    posterItemMoneyField = findViewById(R.id.publicMoneyField);
     submit_trade_button = findViewById(R.id.submit_trade_button);
+    posterUsername = findViewById(R.id.posterUsernameTextView);
+    backArrow = findViewById(R.id.back_arrow);
   }
 
   private void goToLoginPage() {
