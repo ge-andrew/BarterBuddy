@@ -44,6 +44,9 @@
             android:exported="false" />
         <activity android:name=".activities.UserProfileHub"
             android:exported="false"/>
+        <activity android:name=".activities.IncomingOffersPage"
+            android:exported="false"
+            />
     </application>
 
 </manifest>

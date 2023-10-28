@@ -1,34 +1,34 @@
 package com.example.barterbuddy.models;
 
 public class TradeCard {
-    private String offeringImage;
-    private String posterImage;
+    private String offeringImageUrl;
+    private String posterImageUrl;
     private String poster;
     private String offerer;
     private float money;
 
     public TradeCard(String offeringImage, String posterImage, String poster, String offerer, float money) {
-        this.offeringImage = offeringImage;
-        this.posterImage = posterImage;
+        this.offeringImageUrl = offeringImage;
+        this.posterImageUrl = posterImage;
         this.poster = poster;
         this.offerer = offerer;
         this.money = money;
     }
 
-    public String getOfferingImage() {
-        return offeringImage;
+    public String getOfferingImageUrl() {
+        return offeringImageUrl;
     }
 
-    public void setOfferingImage(String offeringImage) {
-        this.offeringImage = offeringImage;
+    public void setOfferingImageUrl(String offeringImageUrl) {
+        this.offeringImageUrl = offeringImageUrl;
     }
 
-    public String getPosterImage() {
-        return posterImage;
+    public String getPosterImageUrl() {
+        return posterImageUrl;
     }
 
-    public void setPosterImage(String posterImage) {
-        this.posterImage = posterImage;
+    public void setPosterImageUrl(String posterImageUrl) {
+        this.posterImageUrl = posterImageUrl;
     }
 
     public String getPoster() {

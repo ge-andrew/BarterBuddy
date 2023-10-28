@@ -18,6 +18,8 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,6 +48,9 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     private String username;
     private String email;
     private StorageReference imageReference;
+    private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
+    private String currentEmail;
     // This page initally just shows a recycler upon hitting your items button it pulls up orginial page
 //    with ability to add post new item
 
@@ -86,6 +91,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
                     Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
                     incoming_offers_page.putExtra("username", username);
                     incoming_offers_page  .putExtra("email", email);
+                    startActivity(incoming_offers_page);
                 }
         );
         add_item_button.setOnClickListener(
@@ -173,6 +179,21 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             setUpItems(this);
         }
+    }
+    // Firebase Authentication
+    private void getCurrentUser() {
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    }
+
+//    private void goToLoginPage() {
+//        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+//        startActivity(intent);
+//        finish();
+//    }
+
+    private void getCurrentUserInfo() {
+        username = currentUser.getDisplayName();
+        email = currentUser.getEmail();
     }
 
 

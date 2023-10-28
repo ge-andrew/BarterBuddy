@@ -66,7 +66,7 @@ public class DemoUserPicker extends AppCompatActivity {
 
     danielButton.setOnClickListener(
         view -> {
-          Intent intent = new Intent(DemoUserPicker.this, ItemsAvailablePage.class);
+          Intent intent = new Intent(DemoUserPicker.this, UserProfileHub.class);
           intent.putExtra("username", DANIEL);
           intent.putExtra("email", DANIEL_EMAIL);
           startActivity(intent);
