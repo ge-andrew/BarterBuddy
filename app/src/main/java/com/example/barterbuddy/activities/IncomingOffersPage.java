@@ -28,6 +28,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 import java.util.ArrayList;
 
 public class IncomingOffersPage extends AppCompatActivity {
@@ -78,10 +80,12 @@ public class IncomingOffersPage extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
+        currentEmail = getCurrentUser();
         // Decline Button
         decline_button.setOnClickListener(
                 v -> {
                     //Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, currentEmail, Toast.LENGTH_LONG).show();
                     moveToNextCard();
 
                 }
@@ -122,12 +126,19 @@ public class IncomingOffersPage extends AppCompatActivity {
         // Set up recyclerView
         // RecyclerView setup inside this method to prevent late loading of Firebase data from
         // onComplete
-
+        Log.d(TAG,"Before database query");
         setUpCard(this);
+        Log.d(TAG,"After data base query");
     }
     //Firebase Authentication
-    private void getCurrentUser() {
+    private String getCurrentUser() {
+
         currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getEmail();
+        } else {
+            return null; // Handle the case where the user is not signed in.
+        }
     }
 
 //    private void goToLoginPage() {
@@ -140,17 +151,23 @@ public class IncomingOffersPage extends AppCompatActivity {
     }
     private void setUpCard(Context context){
         //Firebase query
+        Log.d(TAG,"Start query");
+
         DB.collection("items")
                 .whereEqualTo("posterEmail", currentEmail)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d(TAG,"query success ");
+
                         for (QueryDocumentSnapshot itemDoc : task.getResult()) {
                             // Part 2: Retrieve referenced documents and their "stringId" fields
                             DocumentReference offeringItemRef = itemDoc.getDocumentReference("offeringItem");
                             DocumentReference posterItemRef = itemDoc.getDocumentReference("posterItem");
 
                             // Fetch the "offeringItem" document
+                            Log.d(TAG,"Load offering image url");
+
                             offeringItemRef.get().addOnCompleteListener(offeringTask -> {
                                 if (offeringTask.isSuccessful()) {
                                     DocumentSnapshot offeringItemDoc = offeringTask.getResult();
@@ -170,10 +187,15 @@ public class IncomingOffersPage extends AppCompatActivity {
                                     Log.e(TAG, "Error fetching offeringItem: " + offeringTask.getException());
                                 }
                             });
+                            Log.d(TAG,"offering image done loading");
+
 
                             // Fetch the "posterItem" document
+                            Log.d(TAG,"Being loading posterItem");
+
                             posterItemRef.get().addOnCompleteListener(posterTask -> {
                                 if (posterTask.isSuccessful()) {
+                                    Log.d(TAG,"refrence succesfully located for poster item ");
                                     DocumentSnapshot posterItemDoc = posterTask.getResult();
                                     if (posterItemDoc.exists()) {
                                         posterItemId = posterItemDoc.getString("imageId");
@@ -191,6 +213,7 @@ public class IncomingOffersPage extends AppCompatActivity {
                                     Log.e(TAG, "Error fetching postingItem: " + posterTask.getException());
                                 }
                             });
+                            Log.d(TAG,"Loading of poster image complete ");
                         }
                     }
                 });
