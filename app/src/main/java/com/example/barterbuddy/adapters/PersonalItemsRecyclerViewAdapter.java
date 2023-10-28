@@ -2,6 +2,7 @@ package com.example.barterbuddy.adapters;
 
 import android.content.Context; // If errors, this import may be wrong
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 // This class is mainly standard setup for recyclerView
 
-public class UserItemsRecyclerViewAdapter
-    extends RecyclerView.Adapter<UserItemsRecyclerViewAdapter.MyViewHolder> {
+public class PersonalItemsRecyclerViewAdapter
+    extends RecyclerView.Adapter<PersonalItemsRecyclerViewAdapter.MyViewHolder> {
+  private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final RecyclerViewInterface recyclerViewInterface;
   Context context;
   ArrayList<Item> userItems;
   ArrayList<Bitmap> itemImages;
 
   // constructor
-  public UserItemsRecyclerViewAdapter(
+  public PersonalItemsRecyclerViewAdapter(
       Context context,
       ArrayList<Item> userItems,
       RecyclerViewInterface recyclerViewInterface,
@@ -37,25 +41,42 @@ public class UserItemsRecyclerViewAdapter
 
   @NonNull
   @Override
-  public UserItemsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(
+  public PersonalItemsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(
       @NonNull ViewGroup parent, int viewType) {
     // Inflate layout and give look to each row
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.recycler_view_row, parent, false);
-    return new UserItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
+    View view = inflater.inflate(R.layout.personal_items_recycler_card, parent, false);
+    return new PersonalItemsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
   @Override
   public void onBindViewHolder(
-      @NonNull UserItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
+      @NonNull PersonalItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
     // assigning values to each of the views as they are recycled back onto the screen
     // values from recycler_view_row.xml layout file
     // based on position of recycler view
 
     holder.itemTitle.setText(userItems.get(position).getTitle());
-    if (itemImages.size() != 0 && itemImages.size() == userItems.size()) {
-      holder.imageView.setImageBitmap(itemImages.get(position));
-    }
+
+    StorageReference imageReference;
+    imageReference =
+        IMAGE_STORAGE_INSTANCE
+            .getReference()
+            .child(
+                "users/"
+                    + userItems.get(position).getEmail()
+                    + "/"
+                    + userItems.get(position).getImageId()
+                    + ".jpg");
+
+    long FIVE_MEGABYTES = 1024 * 1024 * 5;
+    imageReference
+        .getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              holder.imageView.setImageBitmap(itemImage);
+            });
   }
 
   @Override
@@ -73,19 +94,19 @@ public class UserItemsRecyclerViewAdapter
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
 
-      imageView = itemView.findViewById(R.id.image_view);
+      imageView = itemView.findViewById(R.id.personal_items_recycler_card_image);
       itemTitle = itemView.findViewById(R.id.item_title);
 
       itemView.setOnClickListener(
-              view -> {
-                if (recyclerViewInterface != null) {
-                  int pos = getAdapterPosition();
+          view -> {
+            if (recyclerViewInterface != null) {
+              int pos = getAdapterPosition();
 
-                  if (pos != RecyclerView.NO_POSITION) {
-                    recyclerViewInterface.onItemClick(pos);
-                  }
-                }
-              });
+              if (pos != RecyclerView.NO_POSITION) {
+                recyclerViewInterface.onItemClick(pos);
+              }
+            }
+          });
     }
   }
 }
