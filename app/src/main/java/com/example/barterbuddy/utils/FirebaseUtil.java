@@ -1,14 +1,19 @@
 package com.example.barterbuddy.utils;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.barterbuddy.models.User;
 
 /** Utilities class with many helpful features for simplifying common Firebase functions */
 public class FirebaseUtil {
   /*
      Citation: The idea for this class comes from Easy Tuto on YouTube: https://youtu.be/fx_WtPtT6gY?feature=shared
   */
+
+  private static final String TAG = "Firebase Util";
 
   /** Get a document reference to a Chatroom saved in Firestore */
   public static DocumentReference getChatroomReference(String chatroomId) {
@@ -35,5 +40,10 @@ public class FirebaseUtil {
     } else {
       return userId2 + "_" + userId1;
     }
+  }
+
+  public static DocumentReference getUserReference(String userId) {
+    final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+    return FIRESTORE_INSTANCE.collection("users").document(userId);
   }
 }

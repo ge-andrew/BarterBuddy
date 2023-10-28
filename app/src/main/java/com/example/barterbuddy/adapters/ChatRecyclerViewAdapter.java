@@ -18,12 +18,12 @@ public class ChatRecyclerViewAdapter
         ChatMessageModel, ChatRecyclerViewAdapter.ChatModelViewHolder> {
   final String TAG = "ChatRecyclerViewAdapter";
   FirestoreRecyclerOptions<ChatMessageModel> chatMessages;
-  // TODO: Explicit user id is temporary
-  String currentUserId = "me@gmail.com";
+  String currentUserId;
 
-  public ChatRecyclerViewAdapter(FirestoreRecyclerOptions<ChatMessageModel> chatMessages) {
+  public ChatRecyclerViewAdapter(FirestoreRecyclerOptions<ChatMessageModel> chatMessages, String currentUserId) {
     super(chatMessages);
     this.chatMessages = chatMessages;
+    this.currentUserId = currentUserId;
   }
 
   @NonNull
