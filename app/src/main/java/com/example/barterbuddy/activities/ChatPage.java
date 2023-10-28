@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,12 +14,10 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
-import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.User;
 import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -36,11 +33,11 @@ public class ChatPage extends AppCompatActivity {
   String chatroomId;
   String currentUserId;
   User otherUser;
-  Trade currentTrade;
   ChatroomModel chatroomModel;
 
   EditText messageInput;
   ImageButton sendMessageButton;
+  ImageButton backArrow;
   RecyclerView chatRecyclerView;
 
   @Override
@@ -48,18 +45,17 @@ public class ChatPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat_page);
 
-
-
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
-    // TODO: get the current trade from an intent
-    currentTrade = new Trade("you@google.com", null, currentUserId, null, 3.25);
-    setOtherUsernameDisplay(currentUserId, currentTrade);
-    // TODO: Try doing this by getting the other user's id from the intent as well
+    otherUser = (User) getIntent().getSerializableExtra("otherUser");
+    setOtherChatterName(otherUser.getUsername());
     chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
 
     messageInput = findViewById(R.id.chat_edit_text);
     sendMessageButton = findViewById(R.id.send_button);
     chatRecyclerView = findViewById(R.id.chat_recycler_view);
+    backArrow = findViewById(R.id.back_arrow);
+
+    backArrow.setOnClickListener(view -> finish());
 
     sendMessageButton.setOnClickListener(
         v -> {
@@ -70,30 +66,6 @@ public class ChatPage extends AppCompatActivity {
 
     getOrCreateChatroomModel();
     setupChatRecyclerView();
-  }
-
-  private void setOtherUsernameDisplay(String currentUserId, Trade currentTrade) {
-    String otherUsername;
-    if (currentTrade.getOfferingEmail() == currentUserId) {
-      otherUsername = currentTrade.getPosterEmail();
-    } else {
-      otherUsername = currentTrade.getOfferingEmail();
-    }
-    DocumentReference userDocRef = FirebaseUtil.getUserReference(otherUsername);
-    userDocRef
-            .get()
-            .addOnSuccessListener(
-                    userDocSnapshot -> {
-                      User user;
-                      if (userDocSnapshot.exists()) {
-                        user = userDocSnapshot.toObject(User.class);
-                        Log.d(TAG, "User information: " + user);
-
-                        setOtherChatterName(user.getUsername());
-                      } else {
-                        throw new NullPointerException("User object is null");
-                      }
-                    });
   }
 
   private void setOtherChatterName(String otherChatterName) {

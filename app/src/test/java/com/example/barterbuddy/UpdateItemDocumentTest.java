@@ -1,23 +1,18 @@
 package com.example.barterbuddy;
 
 import com.example.barterbuddy.network.UpdateItemDocument;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.barterbuddy.models.Item;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateItemDocumentTest {
-
-  // Since we don't have access to Firestore we must mock it and pass it into the functions we test
-  @Mock FirebaseFirestore mockDb;
 
   private Item testItem;
 
@@ -30,13 +25,12 @@ public class UpdateItemDocumentTest {
             "test@google.com",
             true,
             "TestUser",
-            "test@google.com",
-            mockDb);
+            "test@google.com");
   }
 
   @Test
   public void setActive_emailFieldNull_throwsException() {
-    testItem.setEmail(null);
+    testItem.setOwnerEmail(null);
     assertThrows(
         NullPointerException.class, () -> UpdateItemDocument.setAsTheActiveItem(testItem));
   }

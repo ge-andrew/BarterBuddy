@@ -66,9 +66,7 @@ public class AddNewItemPage extends AppCompatActivity {
 
     itemImageView.setOnClickListener(view -> showCustomDialog());
     save_button.setOnClickListener(
-        view -> {
-          saveItem();
-        });
+        view -> saveItem());
 
     backArrow.setOnClickListener(view -> finish());
   }
@@ -243,9 +241,9 @@ public class AddNewItemPage extends AppCompatActivity {
     itemId = email + "-" + title;
     newItem.setTitle(title);
     newItem.setDescription(description);
-    newItem.setUsername(username);
+    newItem.setOwnerUsername(username);
     newItem.setImageId(itemId);
-    newItem.setEmail(email);
+    newItem.setOwnerEmail(email);
     newItem.setActive(false);
   }
 }

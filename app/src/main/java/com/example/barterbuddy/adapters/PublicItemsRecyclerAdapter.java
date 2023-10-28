@@ -50,7 +50,7 @@ public class PublicItemsRecyclerAdapter
   public void onBindViewHolder(
       @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
     holder.itemTitle.setText(userItems.get(position).getTitle());
-    holder.itemPoster.setText(userItems.get(position).getUsername());
+    holder.itemPoster.setText(userItems.get(position).getOwnerUsername());
     holder.itemDescription.setText(userItems.get(position).getDescription());
 
     StorageReference imageReference;
@@ -59,7 +59,7 @@ public class PublicItemsRecyclerAdapter
             .getReference()
             .child(
                 "users/"
-                    + userItems.get(position).getEmail()
+                    + userItems.get(position).getOwnerEmail()
                     + "/"
                     + userItems.get(position).getImageId()
                     + ".jpg");

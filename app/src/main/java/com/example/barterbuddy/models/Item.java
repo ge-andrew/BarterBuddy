@@ -1,6 +1,5 @@
 package com.example.barterbuddy.models;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.Serializable;
 
 // Serializable means it can be put into an Intent with putExtra
@@ -9,25 +8,15 @@ import java.io.Serializable;
  * Users collection.
  */
 public class Item implements Serializable {
-  /** the title of the item */
   private String title;
-
-  /** the description of the item */
   private String description;
 
   /** the uri of the item's image in Firebase Cloud Storage */
   private String imageId;
-
   /** true if the item is the active item for trade and false if not */
   private boolean isActive;
-
-  /** username of person who owns this item */
-  private String username;
-
-  /** email of user who owns this item */
-  private String email;
-
-  private FirebaseFirestore db;
+  private String ownerUsername;
+  private String ownerEmail;
 
   // default constructor
   public Item(
@@ -35,27 +24,14 @@ public class Item implements Serializable {
       String description,
       String imageId,
       boolean isActive,
-      String username,
-      String email) {
-    this(title, description, imageId, isActive, username, email, FirebaseFirestore.getInstance());
-  }
-
-  // constructor accepting a database reference for mocking in testing
-  public Item(
-      String title,
-      String description,
-      String imageId,
-      boolean isActive,
-      String username,
-      String email,
-      FirebaseFirestore database) {
+      String ownerUsername,
+      String ownerEmail) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
-    this.username = username;
-    this.email = email;
-    this.db = database;
+    this.ownerUsername = ownerUsername;
+    this.ownerEmail = ownerEmail;
   }
 
   // empty constructor necessary for Firebase
@@ -93,23 +69,23 @@ public class Item implements Serializable {
     this.isActive = active;
   }
 
-  public String getUsername() {
-    return username;
+  public String getOwnerUsername() {
+    return ownerUsername;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setOwnerUsername(String ownerUsername) {
+    this.ownerUsername = ownerUsername;
   }
 
-  public String getEmail() {
-    return email;
+  public String getOwnerEmail() {
+    return ownerEmail;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setOwnerEmail(String ownerEmail) {
+    this.ownerEmail = ownerEmail;
   }
 
   public String getId() {
-    return this.getEmail() + "-" + this.getTitle();
+    return this.getOwnerEmail() + "-" + this.getTitle();
   }
 }

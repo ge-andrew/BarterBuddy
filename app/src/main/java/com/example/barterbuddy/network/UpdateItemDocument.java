@@ -29,7 +29,7 @@ public class UpdateItemDocument {
   }
 
   private static void ensureTitleAndEmailExist(@NonNull Item item) {
-    if (item.getEmail() == null) {
+    if (item.getOwnerEmail() == null) {
       throw new NullPointerException("email not found in item");
     } else if (item.getTitle() == null) {
       throw new NullPointerException("title not found in item");
@@ -41,7 +41,7 @@ public class UpdateItemDocument {
 
     // find the collection for the other items in Firebase
     CollectionReference userItems =
-        FIRESTORE_INSTANCE.collection("users").document(item.getEmail()).collection("items");
+        FIRESTORE_INSTANCE.collection("users").document(item.getOwnerEmail()).collection("items");
     // set this user's other items to inactive
     userItems
         .whereNotEqualTo("title", item.getTitle())
@@ -70,7 +70,7 @@ public class UpdateItemDocument {
   public static void setItemToInactive(@NonNull Item item) {
     FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
     CollectionReference userItems =
-        FIRESTORE_INSTANCE.collection("users").document(item.getEmail()).collection("items");
+        FIRESTORE_INSTANCE.collection("users").document(item.getOwnerEmail()).collection("items");
 
     ensureTitleAndEmailExist(item);
     if (item.getActive()) {

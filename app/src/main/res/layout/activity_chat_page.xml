@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <!-- Back arrow -->
-    <ImageView
+    <ImageButton
         android:id="@+id/back_arrow"
         android:layout_width="36dp"
         android:layout_height="36dp"
