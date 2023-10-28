@@ -51,7 +51,7 @@ public class PersonalItemsRecyclerViewAdapter
 
   @Override
   public void onBindViewHolder(
-          @NonNull PersonalItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
+      @NonNull PersonalItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
     // assigning values to each of the views as they are recycled back onto the screen
     // values from recycler_view_row.xml layout file
     // based on position of recycler view
@@ -69,9 +69,9 @@ public class PersonalItemsRecyclerViewAdapter
                     + userItems.get(position).getImageId()
                     + ".jpg");
 
-    long ONE_MEGABYTE = 1024 * 1024 * 5;
+    long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReference
-        .getBytes(ONE_MEGABYTE)
+        .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

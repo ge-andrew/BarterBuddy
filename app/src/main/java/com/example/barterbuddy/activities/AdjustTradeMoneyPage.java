@@ -23,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 public class AdjustTradeMoneyPage extends AppCompatActivity {
 
   private static final String TAG = "AdjustTradeMoneyPage";
-  final long ONE_MEGABYTE = 1024 * 1024;
+  final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
@@ -96,7 +96,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
 
     // load in assets, ready text fields
     posterItemImageReference
-        .getBytes(ONE_MEGABYTE)
+        .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -104,7 +104,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image.", e));
     offeringItemImageReference
-        .getBytes(ONE_MEGABYTE)
+        .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

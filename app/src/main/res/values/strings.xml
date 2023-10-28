@@ -32,4 +32,5 @@
     <string name="my_items">My Items</string>
     <string name="add_item">Add Item</string>
     <string name="set_active">Set Active</string>
+    <string name="logo">logo</string>
 </resources>

@@ -48,7 +48,7 @@ public class PublicItemsRecyclerAdapter
 
   @Override
   public void onBindViewHolder(
-          @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
+      @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
     holder.itemTitle.setText(userItems.get(position).getTitle());
     holder.itemPoster.setText(userItems.get(position).getUsername());
     holder.itemDescription.setText(userItems.get(position).getDescription());
@@ -64,9 +64,9 @@ public class PublicItemsRecyclerAdapter
                     + userItems.get(position).getImageId()
                     + ".jpg");
 
-    long ONE_MEGABYTE = 1024 * 1024 * 5;
+    long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReference
-        .getBytes(ONE_MEGABYTE)
+        .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
