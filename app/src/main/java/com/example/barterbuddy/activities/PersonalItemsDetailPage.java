@@ -1,5 +1,7 @@
 package com.example.barterbuddy.activities;
 
+import static com.example.barterbuddy.network.UpdateItemDocument.setAsTheActiveItem;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
@@ -19,45 +22,46 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class PublicItemDetailPage extends AppCompatActivity {
+public class PersonalItemsDetailPage extends AppCompatActivity {
 
   private static final String TAG = "ItemDetailPage"; // for logging from this activity
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private TextView itemTitle;
-  private TextView usernameTextView;
   private TextView itemDescription;
   private ImageView imageView;
-  private Button offer_trade_button;
+  private Button set_active_items_button;
   private String itemId;
-  private String itemUsername;
-  private String itemEmail;
   private String username;
   private String email;
-  private Item posterItem;
+  private Item currentItem;
   private DocumentReference itemDocReference;
   private StorageReference imageReference;
   private FirebaseUser currentUser;
+  private ImageView backArrow;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_public_item_detail_page);
+    setContentView(R.layout.activity_personal_items_detail_page);
 
     getCurrentUser();
     if (currentUser == null) {
       goToLoginPage();
     }
     getCurrentUserInfo();
-    getItemDataFromIntent();
+    itemId = getIntent().getStringExtra("itemId");
 
     Log.d(TAG, "User username is " + username);
     Log.d(TAG, "User email is " + email);
     Log.d(TAG, "Item ID is " + itemId);
 
     establishItemReference();
+
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     // populate our private fields with data from Firestore
     itemDocReference
@@ -66,21 +70,21 @@ public class PublicItemDetailPage extends AppCompatActivity {
             documentSnapshot -> {
               if (documentSnapshot.exists()) {
                 // convert the document data to an Item object
-                posterItem = documentSnapshot.toObject(Item.class);
-                Log.d(TAG, "Item information: " + posterItem);
+                currentItem = documentSnapshot.toObject(Item.class);
+                Log.d(TAG, "Item information: " + currentItem);
 
                 // set the title and description based on information from the object
-                if (posterItem != null) {
-                  itemTitle.setText(posterItem.getTitle());
-                  itemDescription.setText(posterItem.getDescription());
+                if (currentItem != null) {
+                  itemTitle.setText(currentItem.getTitle());
+                  itemDescription.setText(currentItem.getDescription());
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
                       IMAGE_STORAGE_INSTANCE
                           .getReference()
-                          .child("users/" + itemEmail + "/" + itemId + ".jpg");
+                          .child("users/" + email + "/" + itemId + ".jpg");
 
-                  final long ONE_MEGABYTE = 1024 * 1024;
+                  final long ONE_MEGABYTE = 1024 * 1024 * 5;
                   imageReference
                       .getBytes(ONE_MEGABYTE)
                       .addOnSuccessListener(
@@ -106,13 +110,6 @@ public class PublicItemDetailPage extends AppCompatActivity {
                             if (userDocSnapshot.exists()) {
                               user = userDocSnapshot.toObject(User.class);
                               Log.d(TAG, "User information: " + user);
-
-                              // set the username field
-                              if (user != null) {
-                                usernameTextView.setText(user.getUsername());
-                              } else {
-                                Log.w(TAG, "User object is null");
-                              }
                             }
                           })
                       .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
@@ -124,15 +121,19 @@ public class PublicItemDetailPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
 
     // prepare the offer trade button for advancing to the next page
-    offer_trade_button.setOnClickListener(
+    set_active_items_button.setOnClickListener(
         v -> {
-          // creates an intent that switches to the OfferTradePage activity and passes the item
-          // to the new activity
-          Intent intent = new Intent(PublicItemDetailPage.this, ChooseTradeItemPage.class);
-          intent.putExtra("posterItem", posterItem);
-          intent.putExtra("username", username);
-          intent.putExtra("email", email);
-          startActivity(intent);
+          setAsTheActiveItem(
+              new Item(
+                  (String) itemTitle.getText(),
+                  (String) itemDescription.getText(),
+                  itemId,
+                  false,
+                  username,
+                  email));
+
+          Toast toast = Toast.makeText(this, "Set to Active", Toast.LENGTH_LONG);
+          toast.show();
         });
   }
 
@@ -153,20 +154,14 @@ public class PublicItemDetailPage extends AppCompatActivity {
 
   private void establishItemReference() {
     itemDocReference =
-        FIRESTORE_INSTANCE.collection("users").document(itemEmail).collection("items").document(itemId);
+        FIRESTORE_INSTANCE.collection("users").document(email).collection("items").document(itemId);
   }
 
   private void getXmlElements() {
-    usernameTextView = findViewById(R.id.username_text_view);
     itemTitle = findViewById(R.id.item_title_text_view);
     itemDescription = findViewById(R.id.description_text_view);
-    offer_trade_button = findViewById(R.id.offer_trade_button);
+    set_active_items_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
-  }
-
-  private void getItemDataFromIntent() {
-    itemId = getIntent().getStringExtra("itemId");
-    itemUsername = getIntent().getStringExtra("username");
-    itemEmail = getIntent().getStringExtra("email");
+    backArrow = findViewById(R.id.back_arrow);
   }
 }

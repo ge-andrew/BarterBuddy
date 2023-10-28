@@ -1,5 +1,4 @@
 package com.example.barterbuddy.activities;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,9 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -43,6 +42,7 @@ public class AddNewItemPage extends AppCompatActivity {
   private Button save_button;
   private TextInputEditText titleEditText;
   private TextInputEditText descriptionEditText;
+  private ImageView backArrow;
   private String username;
   private String email;
   private String title;
@@ -55,7 +55,7 @@ public class AddNewItemPage extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_add_new_item);
+    setContentView(R.layout.activity_add_new_personal_item);
 
     getCurrentUser();
     if (currentUser == null) {
@@ -69,6 +69,8 @@ public class AddNewItemPage extends AppCompatActivity {
         view -> {
           saveItem();
         });
+
+    backArrow.setOnClickListener(view -> finish());
   }
 
   protected void saveItem() {
@@ -102,7 +104,7 @@ public class AddNewItemPage extends AppCompatActivity {
             .collection("users")
             .document(email)
             .collection("items")
-            .document(newItem.getImageId());
+            .document(itemId);
 
     itemDocumentReference
         .set(newItem)
@@ -160,10 +162,6 @@ public class AddNewItemPage extends AppCompatActivity {
       // setting image view scale type
       itemImageView.setScaleType(ShapeableImageView.ScaleType.CENTER_CROP);
 
-      // setting image view width
-      ViewGroup.LayoutParams layoutParams = itemImageView.getLayoutParams();
-      layoutParams.width = -2;
-
       // setting image view
       itemImageView.setImageBitmap(photoBitmap);
       imageWasChanged = true;
@@ -184,10 +182,6 @@ public class AddNewItemPage extends AppCompatActivity {
 
         // setting image view scale type
         itemImageView.setScaleType(ShapeableImageView.ScaleType.CENTER_CROP);
-
-        // setting image view width
-        ViewGroup.LayoutParams layoutParams = itemImageView.getLayoutParams();
-        layoutParams.width = -2;
 
         // setting image view
         itemImageView.setImageURI(photoUri);
@@ -216,6 +210,7 @@ public class AddNewItemPage extends AppCompatActivity {
     titleEditText = findViewById(R.id.title);
     descriptionEditText = findViewById(R.id.description);
     save_button = findViewById(R.id.save_new_item_button);
+    backArrow = findViewById(R.id.back_arrow);
   }
 
   private boolean missingItemData() {
