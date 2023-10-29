@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.UserItemsRecyclerViewAdapter;
+import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,10 +66,13 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
+    //Firebase query info
+    getCurrentUser();
+    getCurrentUserInfo();
     //Takes you to userItemsPage
     your_items_button.setOnClickListener(
             v -> {
-                Intent your_items_page = new Intent(UserProfileHub.this, UserItemsPage.class);
+                Intent your_items_page = new Intent(UserProfileHub.this, PersonalItemsPage.class);
                 your_items_page.putExtra("username", username);
                 your_items_page.putExtra("email", email);
 
@@ -116,7 +119,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     private void setUpItems(Context context) {
         // retrieve and insert firebase data into items
         DB.collection("users")
-                .document(email)
+                .document(currentEmail)
                 .collection("items")
                 .get()
                 .addOnCompleteListener(
@@ -149,8 +152,8 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
 
                             // set up recyclerView
                             RecyclerView recyclerView = findViewById(R.id.recycler_view);
-                            UserItemsRecyclerViewAdapter adapter =
-                                    new UserItemsRecyclerViewAdapter(
+                            PersonalItemsRecyclerViewAdapter adapter =
+                                    new PersonalItemsRecyclerViewAdapter(
                                             context, items, (RecyclerViewInterface) context, ITEM_IMAGES);
                             recyclerView.setAdapter(adapter);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -161,7 +164,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     // activity
 
     public void onItemClick(int position) {
-        Intent intent = new Intent(UserProfileHub.this, UserItemDetailPage.class);
+        Intent intent = new Intent(UserProfileHub.this, PersonalItemsPage.class);
 
         intent.putExtra("itemId", items.get(position).getImageId());
         intent.putExtra("username", username);
@@ -185,15 +188,23 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
         currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     }
 
-//    private void goToLoginPage() {
-//        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-//        startActivity(intent);
-//        finish();
-//    }
+    private void goToLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void getCurrentUserInfo() {
-        username = currentUser.getDisplayName();
-        email = currentUser.getEmail();
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+        if (currentUser != null) {
+            // The user is signed in, you can access their information
+            username = currentUser.getDisplayName();
+            currentEmail = currentUser.getEmail();
+        } else {
+            // The user is not signed in, handle this case (e.g., prompt the user to sign in)
+            // You might want to implement a sign-in flow here.
+            goToLoginPage();
+        }
     }
 
 

@@ -80,12 +80,14 @@ public class IncomingOffersPage extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
-        currentEmail = getCurrentUser();
+        //Firebase Auth process
+        getCurrentUser();
+        getCurrentUserInfo();
+
         // Decline Button
         decline_button.setOnClickListener(
                 v -> {
                     //Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(this, currentEmail, Toast.LENGTH_LONG).show();
                     moveToNextCard();
 
                 }
@@ -93,7 +95,7 @@ public class IncomingOffersPage extends AppCompatActivity {
         //Takes you to userItemsPage
         your_items_button.setOnClickListener(
                 v -> {
-                    Intent your_items_page = new Intent(IncomingOffersPage.this, UserItemsPage.class);
+                    Intent your_items_page = new Intent(IncomingOffersPage.this, PersonalItemsPage.class);
                     your_items_page.putExtra("username", username);
                     your_items_page.putExtra("email", email);
                     startActivity(your_items_page);
@@ -123,31 +125,38 @@ public class IncomingOffersPage extends AppCompatActivity {
 
 
 
-        // Set up recyclerView
-        // RecyclerView setup inside this method to prevent late loading of Firebase data from
+        // Set up Tradecard
+        //
         // onComplete
         Log.d(TAG,"Before database query");
         setUpCard(this);
         Log.d(TAG,"After data base query");
+        displayCurrentCard();
     }
-    //Firebase Authentication
-    private String getCurrentUser() {
 
+
+    //Firebase Authentication
+    private void getCurrentUser() {
+        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+    }
+
+    private void goToLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getCurrentUserInfo() {
         currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
         if (currentUser != null) {
-            return currentUser.getEmail();
+            // The user is signed in, you can access their information
+            username = currentUser.getDisplayName();
+            currentEmail = currentUser.getEmail();
         } else {
-            return null; // Handle the case where the user is not signed in.
+            // The user is not signed in, handle this case (e.g., prompt the user to sign in)
+            // You might want to implement a sign-in flow here.
+            goToLoginPage();
         }
-    }
-
-//    private void goToLoginPage() {
-//        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-//        startActivity(intent);
-//        finish();
-//    }
-    private void getCurrentUserInfo() {
-        currentEmail = currentUser.getEmail();
     }
     private void setUpCard(Context context){
         //Firebase query
@@ -162,11 +171,16 @@ public class IncomingOffersPage extends AppCompatActivity {
 
                         for (QueryDocumentSnapshot itemDoc : task.getResult()) {
                             // Part 2: Retrieve referenced documents and their "stringId" fields
+                            // Debug
+                            Log.d(TAG,"First step in loading line 172");
+
+
+
                             DocumentReference offeringItemRef = itemDoc.getDocumentReference("offeringItem");
                             DocumentReference posterItemRef = itemDoc.getDocumentReference("posterItem");
 
                             // Fetch the "offeringItem" document
-                            Log.d(TAG,"Load offering image url");
+                            Log.d(TAG,"Load offering image url, line 180");
 
                             offeringItemRef.get().addOnCompleteListener(offeringTask -> {
                                 if (offeringTask.isSuccessful()) {
@@ -226,7 +240,7 @@ public class IncomingOffersPage extends AppCompatActivity {
         } else {
             // Handle when there are no more cards to display.
             // You can reset the index or show a message to the user.
-            //Toast.makeText(this, "No more incoming trades",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No more incoming trades",Toast.LENGTH_SHORT).show();
         }
     }
 
