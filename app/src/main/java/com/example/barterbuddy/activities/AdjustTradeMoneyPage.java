@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,8 +21,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import java.util.HashMap;
+import java.util.Map;
+import android.text.TextWatcher;
 
-public class AdjustTradeMoneyPage extends AppCompatActivity {
+public class AdjustTradeMoneyPage extends AppCompatActivity implements TextWatcher {
 
   private static final String TAG = "AdjustTradeMoneyPage";
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
@@ -118,16 +122,56 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
-    //    posterItemMoneyField.setText("0.00");
-    //    offeringItemMoneyField.setText("0.00");
     posterUsername.setText(posterItem.getUsername());
+    offeringItemMoneyField.setText("0.00");
+    posterItemMoneyField.setText("0.00");
 
     // set up listener for button
-    // if fields empty, error
     submit_trade_button.setOnClickListener(
         v -> {
-          Toast toast = Toast.makeText(this, "Mock Success Message!", Toast.LENGTH_LONG);
-          toast.show();
+          Map<String, Object> tradeData = new HashMap<>();
+
+          tradeData.put(
+              "money",
+              Double.parseDouble(posterItemMoneyField.getText().toString())
+                  - Double.parseDouble(offeringItemMoneyField.getText().toString()));
+          tradeData.put("offeringEmail", offeringItem.getEmail());
+          tradeData.put("posterEmail", posterItem.getEmail());
+          tradeData.put(
+              "offeringItem",
+              "/users/"
+                  + offeringItem.getEmail()
+                  + "/items/"
+                  + offeringItem.getEmail()
+                  + "-"
+                  + offeringItem.getTitle());
+          tradeData.put(
+              "posterITem",
+              "/users/"
+                  + posterItem.getEmail()
+                  + "/items/"
+                  + posterItem.getEmail()
+                  + "-"
+                  + posterItem.getTitle());
+
+          DB.collection("trades")
+              .document(posterItem.getEmail() + "_" + offeringItem.getEmail())
+              .set(tradeData)
+              .addOnSuccessListener(
+                  u -> {
+                    Toast toast = Toast.makeText(this, "Trade submitted!", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    Intent intent = new Intent(AdjustTradeMoneyPage.this, PublicItemsPage.class);
+                    startActivity(intent);
+                    finish();
+                  })
+              .addOnFailureListener(
+                  w -> {
+                    Toast toast =
+                        Toast.makeText(this, "Error submitting trade.", Toast.LENGTH_LONG);
+                    toast.show();
+                  });
         });
   }
 
@@ -157,4 +201,19 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     username = currentUser.getDisplayName();
     email = currentUser.getEmail();
   }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
 }
