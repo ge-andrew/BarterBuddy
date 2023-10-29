@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
   private String email;
   private Button add_item_button;
   private FirebaseUser currentUser;
+  private ImageView backArrow;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
     email = getIntent().getStringExtra("email");
 
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     setUpItems(this);
 
@@ -124,5 +129,6 @@ public class ChooseTradeItemPage extends AppCompatActivity implements RecyclerVi
 
   private void getXmlElements() {
     add_item_button = findViewById(R.id.add_new_personal_item_button);
+    backArrow = findViewById(R.id.back_arrow);
   }
 }

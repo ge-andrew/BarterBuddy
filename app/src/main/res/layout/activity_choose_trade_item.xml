@@ -3,16 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingVertical="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="2dp">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="back_arrow"
+            android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/offer_trade_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="Offer Trade: Choose an Item"
-        app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
+        android:text="Offer Trade: Choose an Item"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,4 +55,5 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/personal_items_recycler_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
