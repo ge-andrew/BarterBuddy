@@ -15,8 +15,8 @@ public class Item implements Serializable {
   private String imageId;
   /** true if the item is the active item for trade and false if not */
   private boolean isActive;
-  private String ownerUsername;
-  private String ownerEmail;
+  private String username;
+  private String email;
 
   // default constructor
   public Item(
@@ -24,14 +24,14 @@ public class Item implements Serializable {
       String description,
       String imageId,
       boolean isActive,
-      String ownerUsername,
+      String username,
       String ownerEmail) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
-    this.ownerUsername = ownerUsername;
-    this.ownerEmail = ownerEmail;
+    this.username = username;
+    this.email = ownerEmail;
   }
 
   // empty constructor necessary for Firebase
@@ -69,23 +69,23 @@ public class Item implements Serializable {
     this.isActive = active;
   }
 
-  public String getOwnerUsername() {
-    return ownerUsername;
+  public String getUsername() {
+    return username;
   }
 
-  public void setOwnerUsername(String ownerUsername) {
-    this.ownerUsername = ownerUsername;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
-  public String getOwnerEmail() {
-    return ownerEmail;
+  public String getEmail() {
+    return email;
   }
 
-  public void setOwnerEmail(String ownerEmail) {
-    this.ownerEmail = ownerEmail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getId() {
-    return this.getOwnerEmail() + "-" + this.getTitle();
+    return this.getEmail() + "-" + this.getTitle();
   }
 }

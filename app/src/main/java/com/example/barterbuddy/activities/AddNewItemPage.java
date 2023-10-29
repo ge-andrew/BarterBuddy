@@ -241,9 +241,9 @@ public class AddNewItemPage extends AppCompatActivity {
     itemId = email + "-" + title;
     newItem.setTitle(title);
     newItem.setDescription(description);
-    newItem.setOwnerUsername(username);
+    newItem.setUsername(username);
     newItem.setImageId(itemId);
-    newItem.setOwnerEmail(email);
+    newItem.setEmail(email);
     newItem.setActive(false);
   }
 }

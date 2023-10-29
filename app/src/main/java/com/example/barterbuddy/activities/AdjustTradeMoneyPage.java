@@ -63,22 +63,22 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     // establish directories in Firebase
     posterItemDocReference =
         DB.collection("users")
-            .document(posterItem.getOwnerEmail())
+            .document(posterItem.getEmail())
             .collection("items")
-            .document(posterItem.getOwnerEmail() + "-" + posterItem.getTitle());
+            .document(posterItem.getEmail() + "-" + posterItem.getTitle());
     offeringItemDocReference =
         DB.collection("users")
-            .document(offeringItem.getOwnerEmail())
+            .document(offeringItem.getEmail())
             .collection("items")
-            .document(offeringItem.getOwnerEmail() + "-" + offeringItem.getTitle());
+            .document(offeringItem.getEmail() + "-" + offeringItem.getTitle());
     posterItemImageReference =
         IMAGE_STORAGE
             .getReference()
             .child(
                 "users/"
-                    + posterItem.getOwnerEmail()
+                    + posterItem.getEmail()
                     + "/"
-                    + posterItem.getOwnerEmail()
+                    + posterItem.getEmail()
                     + "-"
                     + posterItem.getTitle()
                     + ".jpg");
@@ -87,9 +87,9 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
             .getReference()
             .child(
                 "users/"
-                    + offeringItem.getOwnerEmail()
+                    + offeringItem.getEmail()
                     + "/"
-                    + offeringItem.getOwnerEmail()
+                    + offeringItem.getEmail()
                     + "-"
                     + offeringItem.getTitle()
                     + ".jpg");

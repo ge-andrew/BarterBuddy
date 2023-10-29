@@ -64,7 +64,7 @@ public class PersonalItemsRecyclerViewAdapter
             .getReference()
             .child(
                 "users/"
-                    + userItems.get(position).getOwnerEmail()
+                    + userItems.get(position).getEmail()
                     + "/"
                     + userItems.get(position).getImageId()
                     + ".jpg");

@@ -30,7 +30,7 @@ public class UpdateItemDocumentTest {
 
   @Test
   public void setActive_emailFieldNull_throwsException() {
-    testItem.setOwnerEmail(null);
+    testItem.setEmail(null);
     assertThrows(
         NullPointerException.class, () -> UpdateItemDocument.setAsTheActiveItem(testItem));
   }

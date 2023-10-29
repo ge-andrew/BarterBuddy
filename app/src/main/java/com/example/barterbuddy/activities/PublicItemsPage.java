@@ -106,8 +106,8 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   public void onItemClick(int position) {
     Intent intent = new Intent(PublicItemsPage.this, PublicItemsDetailPage.class);
     intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
-    intent.putExtra("username", itemsFromFirestore.get(position).getOwnerUsername());
-    intent.putExtra("email", itemsFromFirestore.get(position).getOwnerEmail());
+    intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
+    intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
     startActivity(intent);
   }
 
