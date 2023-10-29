@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
 import com.example.barterbuddy.models.User;
+import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Query;
@@ -35,6 +37,7 @@ public class ChatPage extends AppCompatActivity {
 
   EditText messageInput;
   ImageButton sendMessageButton;
+  ImageButton backArrow;
   RecyclerView chatRecyclerView;
 
   @Override
@@ -42,14 +45,17 @@ public class ChatPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat_page);
 
-    // TODO: replace these lines with actual user account integration
-    otherUser = new User("you", "you@google.com", "password1");
-    currentUserId = "me@gmail.com";
-    chatroomId = FirebaseUtil.getChatroomId("me@gmail.com", otherUser.getEmail());
+    currentUserId = AuthenticationUtil.getCurrentUserEmail();
+    otherUser = (User) getIntent().getSerializableExtra("otherUser");
+    setOtherChatterName(otherUser.getUsername());
+    chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
 
     messageInput = findViewById(R.id.chat_edit_text);
     sendMessageButton = findViewById(R.id.send_button);
     chatRecyclerView = findViewById(R.id.chat_recycler_view);
+    backArrow = findViewById(R.id.back_arrow);
+
+    backArrow.setOnClickListener(view -> finish());
 
     sendMessageButton.setOnClickListener(
         v -> {
@@ -62,7 +68,12 @@ public class ChatPage extends AppCompatActivity {
     setupChatRecyclerView();
   }
 
-  void setupChatRecyclerView() {
+  private void setOtherChatterName(String otherChatterName) {
+    TextView otherChatterNameView = findViewById(R.id.chat_username);
+    otherChatterNameView.setText(otherChatterName);
+  }
+
+  private void setupChatRecyclerView() {
     Query query =
         FirebaseUtil.getChatroomMessageReference(chatroomId)
             .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -73,7 +84,7 @@ public class ChatPage extends AppCompatActivity {
             .setQuery(query, ChatMessageModel.class)
             .build();
 
-    ChatRecyclerViewAdapter adapter = new ChatRecyclerViewAdapter(options);
+    ChatRecyclerViewAdapter adapter = new ChatRecyclerViewAdapter(options, currentUserId);
     LinearLayoutManager manager = new LinearLayoutManager(this);
     manager.setReverseLayout(true);
     chatRecyclerView.setLayoutManager(manager);
@@ -82,7 +93,7 @@ public class ChatPage extends AppCompatActivity {
     adapter.startListening();
   }
 
-  void sendMessageToUser(String message) {
+  private void sendMessageToUser(String message) {
     // update the chatroom model in Firestore with this new message
     chatroomModel.setLastMessageTimestamp(Timestamp.now());
     chatroomModel.setLastMessageSenderId(currentUserId);
@@ -99,7 +110,7 @@ public class ChatPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Sending chat message failed"));
   }
 
-  void getOrCreateChatroomModel() {
+  private void getOrCreateChatroomModel() {
     FirebaseUtil.getChatroomReference(chatroomId)
         .get()
         .addOnSuccessListener(

@@ -1,6 +1,5 @@
 package com.example.barterbuddy.models;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.Serializable;
 
 // Serializable means it can be put into an Intent with putExtra
@@ -9,25 +8,15 @@ import java.io.Serializable;
  * Users collection.
  */
 public class Item implements Serializable {
-  /** the title of the item */
   private String title;
-
-  /** the description of the item */
   private String description;
 
   /** the uri of the item's image in Firebase Cloud Storage */
   private String imageId;
-
   /** true if the item is the active item for trade and false if not */
   private boolean isActive;
-
-  /** username of person who owns this item */
   private String username;
-
-  /** email of user who owns this item */
   private String email;
-
-  private FirebaseFirestore db;
 
   // default constructor
   public Item(
@@ -36,26 +25,13 @@ public class Item implements Serializable {
       String imageId,
       boolean isActive,
       String username,
-      String email) {
-    this(title, description, imageId, isActive, username, email, FirebaseFirestore.getInstance());
-  }
-
-  // constructor accepting a database reference for mocking in testing
-  public Item(
-      String title,
-      String description,
-      String imageId,
-      boolean isActive,
-      String username,
-      String email,
-      FirebaseFirestore database) {
+      String ownerEmail) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
     this.username = username;
-    this.email = email;
-    this.db = database;
+    this.email = ownerEmail;
   }
 
   // empty constructor necessary for Firebase

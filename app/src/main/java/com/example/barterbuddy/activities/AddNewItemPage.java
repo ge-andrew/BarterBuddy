@@ -66,9 +66,7 @@ public class AddNewItemPage extends AppCompatActivity {
 
     itemImageView.setOnClickListener(view -> showCustomDialog());
     save_button.setOnClickListener(
-        view -> {
-          saveItem();
-        });
+        view -> saveItem());
 
     backArrow.setOnClickListener(view -> finish());
   }
