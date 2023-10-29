@@ -2,9 +2,11 @@ package com.example.barterbuddy.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,9 +26,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import java.util.Arrays;
 
 public class ChatPage extends AppCompatActivity {
-  /*
-      Citation: This activity is modeled after one from EasyTuto on YouTube: https://youtu.be/E7s542TJDE4?feature=shared
-  */
+  // Citation: This activity is modeled after one from EasyTuto on YouTube: https://youtu.be/E7s542TJDE4?feature=shared
 
   private static final String TAG = "ChatPage";
 
@@ -47,8 +47,12 @@ public class ChatPage extends AppCompatActivity {
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUser = (User) getIntent().getSerializableExtra("otherUser");
+    assert otherUser != null;
     setOtherChatterName(otherUser.getUsername());
     chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
+
+    Button completeTradeButton = findViewById(R.id.complete_trade_button);
+    Button cancelTradeButton = findViewById(R.id.cancel_trade_button);
 
     messageInput = findViewById(R.id.chat_edit_text);
     sendMessageButton = findViewById(R.id.send_button);
@@ -56,6 +60,22 @@ public class ChatPage extends AppCompatActivity {
     backArrow = findViewById(R.id.back_arrow);
 
     backArrow.setOnClickListener(view -> finish());
+
+    completeTradeButton.setOnClickListener(
+            v -> {
+              Toast toast = Toast.makeText(this, "Trade completed", Toast.LENGTH_LONG);
+              toast.show();
+              FirebaseUtil.deleteChatroom(chatroomId);
+            }
+    );
+
+    cancelTradeButton.setOnClickListener(
+            v -> {
+              Toast toast = Toast.makeText(this, "Trade canceled", Toast.LENGTH_LONG);
+              toast.show();
+              FirebaseUtil.deleteChatroom(chatroomId);
+            }
+    );
 
     sendMessageButton.setOnClickListener(
         v -> {
