@@ -34,4 +34,7 @@
     <string name="set_active">Set Active</string>
     <string name="logo">logo</string>
     <string name="profile_picture">Profile picture</string>
+    <string name="_0_00">$0.00</string>
+    <string name="down_arrow">down arrow</string>
+    <string name="your_trade_with">"Your trade with "</string>
 </resources>
