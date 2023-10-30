@@ -1,15 +1,15 @@
 package com.example.barterbuddy.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Context;
 import android.widget.Toast;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
-import com.example.barterbuddy.models.TradeCard;
+import com.example.barterbuddy.models.Trade;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,16 +28,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
-
 import java.util.ArrayList;
 
 public class IncomingOffersPage extends AppCompatActivity {
     private Button incoming_offers_button;
     private Button your_offers_button;
     private Button your_items_button;
-    private Button add_item_button;
     private Button decline_button;
+    private Button accept_button;
     private ImageView offeredItemImage;
     private ImageView wantedItemImage;
     private TextView offeredTrade;
@@ -48,7 +46,6 @@ public class IncomingOffersPage extends AppCompatActivity {
     private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
     private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
     private final int REQUEST_CODE = 1002;
-    private ArrayList<Item> items = new ArrayList<>();
     private String username;
     private String email;
     private StorageReference imageReference;
@@ -57,10 +54,9 @@ public class IncomingOffersPage extends AppCompatActivity {
     private String currentEmail;
     private String offeringItemId;
     private String posterItemId;
-    private ArrayList<TradeCard> offeringItemIds = new ArrayList<>();
-    private ArrayList<TradeCard> posterItemIds = new ArrayList<>();
+    private ArrayList<Trade> trades = new ArrayList<>();
     private int currentCardIndex = 0;
-    private TradeCard currentTradeCard = null;
+    private Trade currentTradeCard = null;
 
 
 
@@ -71,11 +67,10 @@ public class IncomingOffersPage extends AppCompatActivity {
         your_offers_button = findViewById(R.id.your_offers_button);
         incoming_offers_button= findViewById(R.id.incoming_offers_button);
         your_items_button = findViewById(R.id.your_items_button);
-        add_item_button = findViewById(R.id.temp_add_item);
         View includedLayout = findViewById(R.id.included_layout);
         ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
         ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
-        Button acceptButton = findViewById(R.id.accept_button);
+        accept_button = findViewById(R.id.accept_button);
         decline_button = findViewById(R.id.decline_button);
 
         username = getIntent().getStringExtra("username");
@@ -87,8 +82,14 @@ public class IncomingOffersPage extends AppCompatActivity {
         // Decline Button
         decline_button.setOnClickListener(
                 v -> {
-                    //Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
-                    moveToNextCard();
+                    Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
+
+                }
+        );
+
+        accept_button.setOnClickListener(
+                v -> {
+                    Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
 
                 }
         );
@@ -131,9 +132,9 @@ public class IncomingOffersPage extends AppCompatActivity {
         Log.d(TAG,"Before database query");
         setUpCard(this);
         Log.d(TAG,"After data base query");
-        displayCurrentCard();
-    }
+        displayTrade(currentTradeCard);
 
+    }
 
     //Firebase Authentication
     private void getCurrentUser() {
@@ -146,145 +147,148 @@ public class IncomingOffersPage extends AppCompatActivity {
         finish();
     }
 
-    private void getCurrentUserInfo() {
+    private String getCurrentUserInfo() {
         currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
         if (currentUser != null) {
             // The user is signed in, you can access their information
             username = currentUser.getDisplayName();
             currentEmail = currentUser.getEmail();
+            Toast.makeText(this, currentEmail,Toast.LENGTH_SHORT).show();
+
         } else {
             // The user is not signed in, handle this case (e.g., prompt the user to sign in)
             // You might want to implement a sign-in flow here.
             goToLoginPage();
-        }
-    }
-    private void setUpCard(Context context){
-        //Firebase query
-        Log.d(TAG,"Start query");
 
-        DB.collection("items")
-                .whereEqualTo("posterEmail", currentEmail)
+        }
+        return currentEmail;
+    }
+    private void setUpCard(Context context) {
+        //Firebase query
+        Log.d(TAG, "Start query");
+
+
+        DB.collectionGroup("trades")
+                .whereEqualTo("posterEmail", "matt@google.com")
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG,"query success ");
 
-                        for (QueryDocumentSnapshot itemDoc : task.getResult()) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "query success ");
+
+                        for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                             // Part 2: Retrieve referenced documents and their "stringId" fields
                             // Debug
-                            Log.d(TAG,"First step in loading line 172");
+                           int docCount = task.getResult().size();
+                            Log.d(TAG, "Number of docs found: " + docCount);
+
+                            Log.d(TAG, "First step in loading line 172");
+
+                            String posterEmail = tradeDoc.getString("posterEmail");
+                            String offeringEmail = tradeDoc.getString("offeringEmail");
+                            double money = tradeDoc.getDouble("money");
+
+                            DocumentReference offeringItemRef = tradeDoc.getDocumentReference("offeringItem");
+                            DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
 
 
-
-                            DocumentReference offeringItemRef = itemDoc.getDocumentReference("offeringItem");
-                            DocumentReference posterItemRef = itemDoc.getDocumentReference("posterItem");
-
-                            // Fetch the "offeringItem" document
-                            Log.d(TAG,"Load offering image url, line 180");
-
-                            offeringItemRef.get().addOnCompleteListener(offeringTask -> {
-                                if (offeringTask.isSuccessful()) {
-                                    DocumentSnapshot offeringItemDoc = offeringTask.getResult();
-                                    if (offeringItemDoc.exists()) {
-                                        offeringItemId = offeringItemDoc.getString("imageId");
-
-                                        Log.d(TAG, "Offering items exist with ID" + offeringItemId);
-                                        // Use offeringItemId as needed
-                                        TradeCard tradeCard = new TradeCard(offeringItemId, null, null, null, 0); // Assuming you have other fields
-                                        offeringItemIds.add(tradeCard);
-                                        //Load image
-                                        displayCard(tradeCard);
-                                    } else {
-                                        Log.d(TAG, "OfferingItem does not exist");
-                                    }
-                                } else {
-                                    Log.e(TAG, "Error fetching offeringItem: " + offeringTask.getException());
-                                }
-                            });
-                            Log.d(TAG,"offering image done loading");
-
-
-                            // Fetch the "posterItem" document
-                            Log.d(TAG,"Being loading posterItem");
-
-                            posterItemRef.get().addOnCompleteListener(posterTask -> {
-                                if (posterTask.isSuccessful()) {
-                                    Log.d(TAG,"refrence succesfully located for poster item ");
-                                    DocumentSnapshot posterItemDoc = posterTask.getResult();
-                                    if (posterItemDoc.exists()) {
-                                        posterItemId = posterItemDoc.getString("imageId");
-
-                                        Log.d(TAG, "posting items exist with ID" + posterItemId);
-                                        // Use posterItemId as needed
-                                        TradeCard tradeCard = new TradeCard(null, posterItemId, null, null, 0); // Assuming you have other fields
-                                        posterItemIds.add(tradeCard);
-                                        // load images
-                                        displayCard(tradeCard);
-                                    } else {
-                                        Log.d(TAG, "POstingItem does not exist");
-                                    }
-                                } else {
-                                    Log.e(TAG, "Error fetching postingItem: " + posterTask.getException());
-                                }
-                            });
-                            Log.d(TAG,"Loading of poster image complete ");
+                            //Load Items
+                            loadItem(posterItemRef, offeringItemRef, posterEmail, offeringEmail, money);
                         }
                     }
                 });
-
-    }
-    private void displayCurrentCard() {
-        if (currentCardIndex >= 0 && currentCardIndex < offeringItemIds.size()) {
-            currentTradeCard = offeringItemIds.get(currentCardIndex);
-            displayCard(currentTradeCard);
-        } else {
-            // Handle when there are no more cards to display.
-            // You can reset the index or show a message to the user.
-            Toast.makeText(this, "No more incoming trades",Toast.LENGTH_SHORT).show();
-        }
     }
 
-    private void displayCard(TradeCard tradeCard) {
-        // Load and display offering image
+    private void loadItem(DocumentReference posterItemRef, DocumentReference offeringItemRef, String posterEmail, String offeringEmail, double money) {
+        // Fetch the "posterItem" document
+        posterItemRef.get().addOnCompleteListener(posterTask -> {
+            if (posterTask.isSuccessful()) {
+                DocumentSnapshot posterItemDoc = posterTask.getResult();
+                if (posterItemDoc.exists()) {
+                    Item posterItem = posterItemDoc.toObject(Item.class);
+
+                    // Fetch the "offeringItem" document
+                    offeringItemRef.get().addOnCompleteListener(offeringTask -> {
+                        if (offeringTask.isSuccessful()) {
+                            DocumentSnapshot offeringItemDoc = offeringTask.getResult();
+                            if (offeringItemDoc.exists()) {
+                                Item offeringItem = offeringItemDoc.toObject(Item.class);
+
+                                Trade trade = new Trade(posterEmail, posterItem, offeringEmail, offeringItem, money);
+                                trades.add(trade);
+
+                                displayTrade(trade);
+                            } else {
+                                Log.d(TAG, "OfferingItem does not exist");
+                            }
+                        } else {
+                            Log.e(TAG, "Error fetching offeringItem: " + offeringTask.getException());
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "PostingItem does not exist");
+                }
+            } else {
+                Log.e(TAG, "Error fetching postingItem: " + posterTask.getException());
+            }
+        });
+    }
+
+
+
+
+    private void displayTrade(Trade trade) {
+        // Access trade details and display them in your UI elements
+        // For example:
+        Log.d(TAG, "start display trade");
+
         View includedLayout = findViewById(R.id.included_layout);
-        if (tradeCard.getOfferingImageUrl() != null && !tradeCard.getOfferingImageUrl().isEmpty()) {
-            ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
-
-            Log.d("File Path", "Offering Image URL: " + tradeCard.getOfferingImageUrl());
-
-            RequestOptions requestOptions = new RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-
-            Glide.with(this)
-                    .load(tradeCard.getOfferingImageUrl())
-                    .apply(requestOptions)
-                    .into(offeringImageView);
-
-        }
-
-        // Load and display poster image
-        if (tradeCard.getPosterImageUrl() != null && !tradeCard.getPosterImageUrl().isEmpty()) {
-            ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
-
-            Log.d("File Path", "Poster Image URL: " + tradeCard.getPosterImageUrl());
-
-            RequestOptions requestOptions = new RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-
-            Glide.with(this)
-                    .load(tradeCard.getPosterImageUrl())
-                    .apply(requestOptions)
-                    .into(posterImageView);
 
 
-        }
+
+        TextView wantedMoneyTextView = includedLayout.findViewById(R.id.wanted_value);
+        TextView offeredMoneyTextView = includedLayout.findViewById((R.id.offered_value));
+
+
+//        if (trade.getMoney() < 0) {
+//            double moneyValue = -trade.getMoney();
+//            String moneyText = String.valueOf(moneyValue);
+//            wantedMoneyTextView.setText(moneyText);
+//        } else {
+//            double moneyValue = trade.getMoney();
+//            String moneyText = String.valueOf(moneyValue);
+//            offeredMoneyTextView.setText(moneyText);
+//        }
+        // Load and display images if needed
+        // Example: Load poster item image
+        ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
+        loadAndDisplayImage(trade.getPosterItem().getImageId(), posterImageView);
+
+        // Load and display offering item image
+        ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
+        loadAndDisplayImage(trade.getOfferingItem().getImageId(), offeringImageView);
     }
+
+    private void loadAndDisplayImage(String imageId, ImageView imageView) {
+        // Load the image using your preferred method (e.g., Glide or the `getBytes` method).
+        // You can adapt the image loading code you've previously used.
+        // Example using Glide:
+
+        Log.d(TAG, "start load and display images");
+
+        String imageUrl = "users/" + email + "/items/"+ imageId; // Update the URL accordingly
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+        Glide.with(this)
+                .load(imageUrl)
+                .apply(requestOptions)
+                .into(imageView);
+    }
+
 
     // When you want to move to the next card, you can call this method.
-    private void moveToNextCard() {
-        currentCardIndex++; // Increment the index to move to the next card.
-        displayCurrentCard();
-    }
+
 
 
 
