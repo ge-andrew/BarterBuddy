@@ -20,10 +20,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
-public class AdjustTradeMoneyPage extends AppCompatActivity {
+public class AdjustTradeMoneyPage extends AppCompatActivity{
 
   private static final String TAG = "AdjustTradeMoneyPage";
+    private static final Locale locale = new Locale("en", "US");
+    private static final DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
@@ -118,16 +125,57 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
         .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
-    //    posterItemMoneyField.setText("0.00");
-    //    offeringItemMoneyField.setText("0.00");
     posterUsername.setText(posterItem.getUsername());
+    offeringItemMoneyField.setText("0.00");
+    posterItemMoneyField.setText("0.00");
 
     // set up listener for button
-    // if fields empty, error
     submit_trade_button.setOnClickListener(
         v -> {
-          Toast toast = Toast.makeText(this, "Mock Success Message!", Toast.LENGTH_LONG);
-          toast.show();
+          Map<String, Object> tradeData = new HashMap<>();
+
+          tradeData.put(
+              "money",
+              Double.parseDouble(posterItemMoneyField.getText().toString())
+                  - Double.parseDouble(offeringItemMoneyField.getText().toString()));
+          tradeData.put("offeringEmail", offeringItem.getEmail());
+          tradeData.put("posterEmail", posterItem.getEmail());
+          tradeData.put(
+              "offeringItem",
+              "/users/"
+                  + offeringItem.getEmail()
+                  + "/items/"
+                  + offeringItem.getEmail()
+                  + "-"
+                  + offeringItem.getTitle());
+          tradeData.put(
+              "posterItem",
+              "/users/"
+                  + posterItem.getEmail()
+                  + "/items/"
+                  + posterItem.getEmail()
+                  + "-"
+                  + posterItem.getTitle());
+          tradeData.put("stateOfCompletion", "IN_PROGRESS");
+
+          DB.collection("trades")
+              .document(posterItem.getEmail() + "_" + offeringItem.getEmail())
+              .set(tradeData)
+              .addOnSuccessListener(
+                  u -> {
+                    Toast toast = Toast.makeText(this, "Trade submitted!", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    Intent intent = new Intent(AdjustTradeMoneyPage.this, PublicItemsPage.class);
+                    startActivity(intent);
+                    finish();
+                  })
+              .addOnFailureListener(
+                  w -> {
+                    Toast toast =
+                        Toast.makeText(this, "Error submitting trade.", Toast.LENGTH_LONG);
+                    toast.show();
+                  });
         });
   }
 
