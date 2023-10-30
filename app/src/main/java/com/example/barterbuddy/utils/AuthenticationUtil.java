@@ -10,7 +10,7 @@ public class AuthenticationUtil {
     }
 
     public static String getCurrentUserEmail() {
-        return getCurrentUser().getDisplayName();
+        return getCurrentUser().getEmail();
     }
 
     private static FirebaseUser getCurrentUser() {

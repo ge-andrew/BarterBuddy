@@ -1,12 +1,16 @@
 package com.example.barterbuddy.activities;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +20,9 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
+import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.User;
+import com.example.barterbuddy.network.UpdateTradeDocument;
 import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
@@ -24,20 +30,26 @@ import com.google.firebase.firestore.Query;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ChatPage extends AppCompatActivity {
-  // Citation: This activity is modeled after one from EasyTuto on YouTube: https://youtu.be/E7s542TJDE4?feature=shared
+  // Citation: This activity is modeled after one from EasyTuto on YouTube:
+  // https://youtu.be/E7s542TJDE4?feature=shared
 
   private static final String TAG = "ChatPage";
 
   String chatroomId;
   String currentUserId;
+  String tradeId;
+  Trade currentTrade;
   User otherUser;
   ChatroomModel chatroomModel;
 
   EditText messageInput;
   ImageButton sendMessageButton;
   ImageButton backArrow;
+  Button completeTradeButton;
+  Button cancelTradeButton;
   RecyclerView chatRecyclerView;
 
   @Override
@@ -50,9 +62,23 @@ public class ChatPage extends AppCompatActivity {
     assert otherUser != null;
     setOtherChatterName(otherUser.getUsername());
     chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
+    tradeId = FirebaseUtil.getTradeId(currentUserId, otherUser.getEmail());
 
-    Button completeTradeButton = findViewById(R.id.complete_trade_button);
-    Button cancelTradeButton = findViewById(R.id.cancel_trade_button);
+    FirebaseUtil.getTradeReference(tradeId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              if (documentSnapshot.exists()) {
+                currentTrade = documentSnapshot.toObject(Trade.class);
+                assert currentTrade != null;
+                if (!Objects.equals(currentTrade.getStateOfCompletion(), "IN_PROGRESS")) {
+                  hideButtons();
+                }
+              }
+            });
+
+    completeTradeButton = findViewById(R.id.complete_trade_button);
+    cancelTradeButton = findViewById(R.id.cancel_trade_button);
 
     messageInput = findViewById(R.id.chat_edit_text);
     sendMessageButton = findViewById(R.id.send_button);
@@ -61,21 +87,9 @@ public class ChatPage extends AppCompatActivity {
 
     backArrow.setOnClickListener(view -> finish());
 
-    completeTradeButton.setOnClickListener(
-            v -> {
-              Toast toast = Toast.makeText(this, "Trade completed", Toast.LENGTH_LONG);
-              toast.show();
-              FirebaseUtil.deleteChatroom(chatroomId);
-            }
-    );
+    completeTradeButton.setOnClickListener(v -> getCompletionConfirmation());
 
-    cancelTradeButton.setOnClickListener(
-            v -> {
-              Toast toast = Toast.makeText(this, "Trade canceled", Toast.LENGTH_LONG);
-              toast.show();
-              FirebaseUtil.deleteChatroom(chatroomId);
-            }
-    );
+    cancelTradeButton.setOnClickListener(v -> getCancellationConfirmation());
 
     sendMessageButton.setOnClickListener(
         v -> {
@@ -152,5 +166,47 @@ public class ChatPage extends AppCompatActivity {
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Chatroom access failed"));
+  }
+
+  private void getCompletionConfirmation() {
+    getConfirmation(
+        "Are you sure you want to close this trade?", "~ Trade has been completed ~", "COMPLETED");
+  }
+
+  private void getCancellationConfirmation() {
+    getConfirmation(
+        "Are you sure you want to cancel this trade?", "~ Trade has been cancelled ~", "CANCELLED");
+  }
+
+  private void getConfirmation(String warningMessage, String confirmationMessage, String newState) {
+    Dialog dialog = new Dialog(this);
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    dialog.setCancelable(true);
+    dialog.setContentView(R.layout.activity_confirmation_dialog_box);
+    if (dialog.getWindow() != null)
+      dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+    TextView message = dialog.findViewById(R.id.warning_message);
+    message.setText(warningMessage);
+    Button confirm = dialog.findViewById(R.id.confirm_button);
+    Button deny = dialog.findViewById(R.id.deny_button);
+
+    confirm.setOnClickListener(
+        v -> {
+          UpdateTradeDocument.setTradeState(currentTrade, newState);
+          sendMessageToUser(confirmationMessage);
+          hideButtons();
+          dialog.dismiss();
+        });
+
+    deny.setOnClickListener(v -> dialog.dismiss());
+    dialog.show();
+  }
+
+  private void hideButtons() {
+    cancelTradeButton.setVisibility(View.GONE);
+    completeTradeButton.setVisibility(View.GONE);
+    messageInput.setVisibility(View.GONE);
+    sendMessageButton.setVisibility(View.GONE);
   }
 }
