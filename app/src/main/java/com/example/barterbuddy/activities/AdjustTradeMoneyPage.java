@@ -156,6 +156,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity{
                   + posterItem.getEmail()
                   + "-"
                   + posterItem.getTitle());
+          tradeData.put("stateOfCompletion", "IN_PROGRESS");
 
           DB.collection("trades")
               .document(posterItem.getEmail() + "_" + offeringItem.getEmail())
