@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +22,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+
 import android.text.TextWatcher;
 
 public class AdjustTradeMoneyPage extends AppCompatActivity implements TextWatcher {
@@ -50,6 +59,11 @@ public class AdjustTradeMoneyPage extends AppCompatActivity implements TextWatch
   private StorageReference offeringItemImageReference;
   private String username;
   private String email;
+
+    private static final Locale locale = new Locale("en", "US");
+    private static final DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+
+
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -146,7 +160,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity implements TextWatch
                   + "-"
                   + offeringItem.getTitle());
           tradeData.put(
-              "posterITem",
+              "posterItem",
               "/users/"
                   + posterItem.getEmail()
                   + "/items/"
@@ -214,6 +228,38 @@ public class AdjustTradeMoneyPage extends AppCompatActivity implements TextWatch
 
     @Override
     public void afterTextChanged(Editable s) {
+        if (offeringItemMoneyField != null || !offeringItemMoneyField.getText().toString().isEmpty()) {
+            offeringItemMoneyField.removeTextChangedListener(this);
 
+            BigDecimal parsed = parseCurrencyValue(offeringItemMoneyField.getText().toString());
+            String formatted = formatter.format(parsed);
+
+            offeringItemMoneyField.setText(formatted);
+            offeringItemMoneyField.setSelection(formatted.length());
+            offeringItemMoneyField.addTextChangedListener(this);
+        }
+        if (posterItemMoneyField != null || !posterItemMoneyField.getText().toString().isEmpty()) {
+            posterItemMoneyField.removeTextChangedListener(this);
+
+            BigDecimal parsed = parseCurrencyValue(posterItemMoneyField.getText().toString());
+            String formatted = formatter.format(parsed);
+
+            posterItemMoneyField.setText(formatted);
+            posterItemMoneyField.setSelection(formatted.length());
+            posterItemMoneyField.addTextChangedListener(this);
+        }
+    }
+
+    public static BigDecimal parseCurrencyValue(String value) {
+        try {
+            String replaceRegex = String.format("[%s,.\\s]",
+                    Objects.requireNonNull(formatter.getCurrency()).getSymbol(locale));
+            String currencyValue = value.replaceAll(replaceRegex, "");
+            currencyValue = "".equals(currencyValue) ? "0" : currencyValue;
+            return new BigDecimal(currencyValue);
+        } catch (Exception e) {
+            // error message here
+        }
+        return BigDecimal.ZERO;
     }
 }
