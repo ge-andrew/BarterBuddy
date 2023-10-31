@@ -153,7 +153,7 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
             // Firebase query
             // retrieve and insert firebase data into items
             DB.collection("trades")
-                    .whereEqualTo("offeringEmail", currentEmail)
+                    .whereEqualTo("offeringEmail", "andrew@google.com")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -195,15 +195,19 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
 
     }
     private void loadItem(DocumentReference itemRef) {
+
         if (itemRef != null) {
             itemRef.get().addOnSuccessListener(
                             documentSnapshot -> {
                                 Item item = documentSnapshot.toObject(Item.class);
                                 if (item != null) {
+                                    email = item.getEmail();
                                     Log.d(TAG, "Loading image for item with image ID: " + item.getImageId());
                                     StorageReference imageReference = IMAGE_STORAGE
                                             .getReference()
                                             .child("users/" + email + "/" + item.getImageId() + ".jpg");
+                                    Log.d(TAG, "Loading image path: " + imageReference);
+
                                     imageReference
                                             .getBytes(ONE_MEGABYTE)
                                             .addOnSuccessListener(
