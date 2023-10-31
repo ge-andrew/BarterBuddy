@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -148,24 +149,26 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
         }
     }
     private void setUpTrades(Context context){
-        //Firebase query
-        // retrieve and insert firebase data into items
-        DB.collection("trades")
-               .whereEqualTo("offeringEmail", "andrew@google.com")
-                .get()
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "Successfully retrieved trades");
-                                Log.d(TAG, "Query results size: " + task.getResult().size());
+        try {
+            // Firebase query
+            // retrieve and insert firebase data into items
+            DB.collection("trades")
+                    .whereEqualTo("offeringEmail", currentEmail)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Successfully retrieved trades");
+                            Log.d(TAG, "Query results size: " + task.getResult().size());
 
+                            if (task.getResult().isEmpty()) {
+                                Toast.makeText(context, "No trades found", Toast.LENGTH_SHORT).show();
+                            } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, "Inside loop");
 
                                     TradeWithRef trade = document.toObject(TradeWithRef.class);
                                     userTrades.add(trade);
                                     Log.d(TAG, "Trade added: " + trade);
-
 
                                     // Load offering item image
                                     Log.d(TAG, "Loading offering item image for trade with offering email: " + trade.getOfferingEmail());
@@ -175,16 +178,21 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
                                     Log.d(TAG, "Loading poster item image for trade with poster email: " + trade.getPosterEmail());
                                     loadItem(trade.getPosterItem());
                                 }
-                            } else {
-                                Log.w(TAG, "Error getting documents: ", task.getException());
                             }
-
-                            // set up recyclerView
-                            tradeCardAdapter = new TradeCardRecyclerAdapter(context, userTrades, YourOffersPage.this);
-                            tradeCardRecyclerView.setAdapter(tradeCardAdapter);
-                            tradeCardAdapter.notifyDataSetChanged(); // Add this to refresh the RecyclerView.
+                        } else {
+                            Log.w(TAG, "Error getting documents: ", task.getException());
                         }
-                );
+
+                        // set up recyclerView
+                        tradeCardAdapter = new TradeCardRecyclerAdapter(context, userTrades, YourOffersPage.this);
+                        tradeCardRecyclerView.setAdapter(tradeCardAdapter);
+                        tradeCardAdapter.notifyDataSetChanged(); // Add this to refresh the RecyclerView.
+                    });
+        } catch (Exception e) {
+            Log.w(TAG, "Error setting up trades: ", e);
+            Toast.makeText(context, "An error occurred while setting up trades", Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void loadItem(DocumentReference itemRef) {
         if (itemRef != null) {
