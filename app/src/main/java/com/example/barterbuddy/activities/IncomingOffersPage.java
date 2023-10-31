@@ -110,6 +110,7 @@ public class IncomingOffersPage extends AppCompatActivity {
                     Intent your_offers_page = new Intent(IncomingOffersPage.this, YourOffersPage.class);
                     your_offers_page.putExtra("username", username);
                     your_offers_page.putExtra("email", email);
+                    startActivity(your_offers_page);
 
                 }
         );

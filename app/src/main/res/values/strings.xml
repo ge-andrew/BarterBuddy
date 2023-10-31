@@ -39,4 +39,7 @@
     <string name="_0_00">$0.00</string>
     <string name="down_arrow">down arrow</string>
     <string name="your_trade_with">"Your trade with "</string>
+    <string name="money">money</string>
+    <string name="money_wanted" />
+    <string name="money_offered">money_offered</string>
 </resources>

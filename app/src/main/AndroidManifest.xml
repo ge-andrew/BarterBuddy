@@ -57,6 +57,8 @@
         <activity
             android:name=".activities.ChatPage"
             android:exported="true" />
+        <activity android:name=".activities.YourOffersPage"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -85,6 +85,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
                     Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
                     your_offers_page.putExtra("username", username);
                     your_offers_page.putExtra("email", email);
+                    startActivity(your_offers_page);
                 }
         );
 
