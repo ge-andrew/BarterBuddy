@@ -27,14 +27,17 @@
     <string name="send_message">Send Message</string>
     <string name="empty_message">Empty Message</string>
     <string name="item_you_are_trading">Item you are trading</string>
-    <string name="item_you_are_trading_for">Item you are trading for</string>
     <string name="public_offers">Public Offers</string>
     <string name="my_items">My Items</string>
     <string name="add_item">Add Item</string>
     <string name="set_active">Set Active</string>
     <string name="logo">logo</string>
     <string name="profile_picture">Profile picture</string>
-    <string name="your_trade_with">Your trade with\ </string>
-    <string name="_0_00">0.00</string>
+    <string name="_0_00">$0.00</string>
     <string name="down_arrow">down arrow</string>
+    <string name="your_trade_with">"Your trade with "</string>
+    <string name="confirm">Confirm</string>
+    <string name="deny">Deny</string>
+    <string name="complete_trade">Complete Trade</string>
+    <string name="cancel_trade">Cancel Trade</string>
 </resources>
