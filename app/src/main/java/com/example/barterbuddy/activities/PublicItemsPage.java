@@ -58,6 +58,8 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
     user_items_button.setOnClickListener(
         view -> {
           Intent intent = new Intent(PublicItemsPage.this, UserProfileHub.class);
+          intent.putExtra("username", currentUserUsername);
+          intent.putExtra("email", currentUserEmail);
           startActivity(intent);
         });
 

@@ -1,6 +1,5 @@
 package com.example.barterbuddy.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -57,18 +56,19 @@ public class IncomingOffersPage extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.incoming_offers_page);
+    setContentView(R.layout.activity_incoming_offers_page);
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button = findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
     View includedLayout = findViewById(R.id.included_layout);
-    ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
-    ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
+    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     accept_button = findViewById(R.id.accept_button);
     decline_button = findViewById(R.id.decline_button);
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
+
     // Firebase Auth process
     getCurrentUser();
     getCurrentUserInfo();
@@ -136,7 +136,6 @@ public class IncomingOffersPage extends AppCompatActivity {
       // The user is signed in, you can access their information
       username = currentUser.getDisplayName();
       currentEmail = currentUser.getEmail();
-      Toast.makeText(this, currentEmail, Toast.LENGTH_SHORT).show();
 
     } else {
       // The user is not signed in, handle this case (e.g., prompt the user to sign in)
@@ -151,7 +150,7 @@ public class IncomingOffersPage extends AppCompatActivity {
     Log.d(TAG, "Start query");
 
     DB.collectionGroup("trades")
-        .whereEqualTo("posterEmail", "andrew2@google.com")
+        //        .whereEqualTo("offeringEmail", "daniel@google.com")
         .get()
         .addOnCompleteListener(
             task -> {
@@ -160,29 +159,22 @@ public class IncomingOffersPage extends AppCompatActivity {
 
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   // Part 2: Retrieve referenced documents and their "stringId" fields
-                  // Debug
-                  int docCount = task.getResult().size();
-                  Log.d(TAG, "Number of docs found: " + docCount);
+                  if(tradeDoc.getString("posterEmail").equals(email)) {
+                    String posterEmail = tradeDoc.getString("posterEmail");
+                    String offeringEmail = tradeDoc.getString("offeringEmail");
+                    double money = tradeDoc.getDouble("money");
 
-                  Log.d(TAG, "First step in loading line 172");
-
-                  String posterEmail = tradeDoc.getString("posterEmail");
-                  String offeringEmail = tradeDoc.getString("offeringEmail");
-                  double money = tradeDoc.getDouble("money");
-
-                  DocumentReference offeringItemRef = tradeDoc.getDocumentReference("offeringItem");
-                  DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
-
-                  // Load Items
-                  loadItem(posterItemRef, offeringItemRef, posterEmail, offeringEmail, money);
+                    DocumentReference offeringItemRef =
+                        tradeDoc.getDocumentReference("offeringItem");
+                    DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
+                  }
                 }
               }
             })
-            .addOnFailureListener(
-                    task -> {
-                      Log.d(TAG, "Error getting documents. ");
-                    }
-            );
+        .addOnFailureListener(
+            task -> {
+              Log.d(TAG, "Error getting documents. ");
+            });
   }
 
   private void loadItem(
@@ -246,8 +238,8 @@ public class IncomingOffersPage extends AppCompatActivity {
 
     View includedLayout = findViewById(R.id.included_layout);
 
-    TextView wantedMoneyTextView = includedLayout.findViewById(R.id.wanted_value);
-    TextView offeredMoneyTextView = includedLayout.findViewById((R.id.offered_value));
+    TextView wantedMoneyTextView = includedLayout.findViewById(R.id.poster_trade_money);
+    TextView offeredMoneyTextView = includedLayout.findViewById((R.id.offering_trade_money));
 
     //        if (trade.getMoney() < 0) {
     //            double moneyValue = -trade.getMoney();
@@ -260,11 +252,11 @@ public class IncomingOffersPage extends AppCompatActivity {
     //        }
     // Load and display images if needed
     // Example: Load poster item image
-    ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
+    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     loadAndDisplayImage(trade.getPosterItem().getImageId(), posterImageView);
 
     // Load and display offering item image
-    ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
+    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     loadAndDisplayImage(trade.getOfferingItem().getImageId(), offeringImageView);
   }
 

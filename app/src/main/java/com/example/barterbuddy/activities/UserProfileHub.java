@@ -58,7 +58,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    setContentView(R.layout.user_profile_hub);
+    setContentView(R.layout.activity_user_profile_hub);
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button= findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
@@ -75,7 +75,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
                 Intent your_items_page = new Intent(UserProfileHub.this, PersonalItemsPage.class);
                 your_items_page.putExtra("username", username);
                 your_items_page.putExtra("email", email);
-
+                startActivity(your_items_page);
             }
     );
 
@@ -85,6 +85,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
                     Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
                     your_offers_page.putExtra("username", username);
                     your_offers_page.putExtra("email", email);
+                    startActivity(your_offers_page);
                 }
         );
 

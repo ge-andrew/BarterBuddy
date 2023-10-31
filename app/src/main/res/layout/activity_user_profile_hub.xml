@@ -19,7 +19,7 @@
         android:id="@+id/incoming_offers_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Incoming Offers"
+        android:text="@string/incoming_offers"
         app:layout_constraintEnd_toStartOf="@+id/your_offers_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/your_items_button"
@@ -29,7 +29,7 @@
         android:id="@+id/your_items_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Items"
+        android:text="@string/your_items"
         app:layout_constraintEnd_toStartOf="@+id/incoming_offers_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,29 +39,28 @@
         android:id="@+id/your_offers_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Offers"
+        android:text="@string/your_offers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/incoming_offers_button"
         app:layout_constraintTop_toTopOf="@+id/incoming_offers_button" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="409dp"
+        android:layout_height="535dp"
+        android:layout_marginTop="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incoming_offers_button"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/incoming_offers_button" />
 
-        <include
-            android:id="@+id/included_layout"
-            layout="@layout/trade_offer_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.cardview.widget.CardView>
-
+    <Button
+        android:id="@+id/temp_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add An Item"
+        tools:layout_editor_absoluteX="19dp"
+        tools:layout_editor_absoluteY="22dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
