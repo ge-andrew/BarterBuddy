@@ -13,20 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Trade;
+import com.example.barterbuddy.models.TradeWithRef;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import com.example.barterbuddy.models.Trade;
+
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   Context context;
-  ArrayList<Trade> userTrades;
+  ArrayList<TradeWithRef> userTrades;
 
   public TradeCardRecyclerAdapter(
           Context context,
-          ArrayList<Trade> userTrades,
+          ArrayList<TradeWithRef> userTrades,
           RecyclerViewInterface recyclerViewInterface) {
     this.context = context;
     this.userTrades = userTrades;
@@ -44,7 +45,7 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
   @Override
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-    Trade trade = userTrades.get(position);
+    TradeWithRef trade = userTrades.get(position);
     if (trade.getMoney() < 0){
       double money = trade.getMoney();
       money = -1 * money;
