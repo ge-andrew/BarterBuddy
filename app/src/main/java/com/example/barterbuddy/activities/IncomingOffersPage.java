@@ -83,6 +83,8 @@ public class IncomingOffersPage extends AppCompatActivity {
         decline_button.setOnClickListener(
                 v -> {
                     Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
+                    Intent gotoChat = new Intent(IncomingOffersPage.this, ChatPage.class);
+                    gotoChat.putExtra("poster email", currentEmail);
 
                 }
         );

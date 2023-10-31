@@ -15,14 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.adapters.TradeCardRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
-import com.example.barterbuddy.models.TradeCard;
+import com.example.barterbuddy.models.TradeWithRef;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -53,11 +53,8 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
     private String currentEmail;
     private String offeringItemId;
     private String posterItemId;
-    private ArrayList<Trade> offeringItemIds = new ArrayList<>();
-    private ArrayList<Trade> posterItemIds = new ArrayList<>();
-    private ArrayList<Trade> userTrades = new ArrayList<>();
+    private ArrayList<TradeWithRef> userTrades = new ArrayList<>();
 
-    private TradeCard currentTradeCard = null;
     // Recycler View
     private TradeCardRecyclerAdapter tradeCardAdapter;
     private RecyclerView tradeCardRecyclerView;
@@ -79,6 +76,8 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
         //Firebase Auth process
         getCurrentUser();
         getCurrentUserInfo();
+
+        //Loads up trade
 
         //Takes you to userItemsPage
         your_items_button.setOnClickListener(
@@ -152,35 +151,32 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
         //Firebase query
         // retrieve and insert firebase data into items
         DB.collection("trades")
-                .whereEqualTo("offeringEmail", currentEmail)
+               .whereEqualTo("offeringEmail", "andrew@google.com")
                 .get()
                 .addOnCompleteListener(
                         task -> {
-                            ArrayList<Item> newItems = new ArrayList<>();
                             if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document :
-                                        task.getResult()) { // add data from each document (1 currently)
-                                    Trade trade = document.toObject(Trade.class);
+                                Log.d(TAG, "Successfully retrieved trades");
+                                Log.d(TAG, "Query results size: " + task.getResult().size());
+
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, "Inside loop");
+
+                                    TradeWithRef trade = document.toObject(TradeWithRef.class);
                                     userTrades.add(trade);
+                                    Log.d(TAG, "Trade added: " + trade);
+
+
+                                    // Load offering item image
+                                    Log.d(TAG, "Loading offering item image for trade with offering email: " + trade.getOfferingEmail());
+                                    loadItem(trade.getOfferingItem());
+
+                                    // Load poster item image
+                                    Log.d(TAG, "Loading poster item image for trade with poster email: " + trade.getPosterEmail());
+                                    loadItem(trade.getPosterItem());
                                 }
                             } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                            items = newItems;
-
-                            for (Item item : items) {
-                                imageReference =
-                                        IMAGE_STORAGE
-                                                .getReference()
-                                                .child("users/" + email + "/" + item.getImageId() + ".jpg");
-                                imageReference
-                                        .getBytes(ONE_MEGABYTE)
-                                        .addOnSuccessListener(
-                                                bytes -> {
-                                                    Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                                    ITEM_IMAGES.add(itemImage);
-                                                })
-                                        .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+                                Log.w(TAG, "Error getting documents: ", task.getException());
                             }
 
                             // set up recyclerView
@@ -190,18 +186,42 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
                         }
                 );
     }
-    private void loadImage(Item item) {
-        imageReference = IMAGE_STORAGE.getReference()
-                .child("users/" + email + "/" + item.getImageId() + ".jpg");
-        imageReference
-                .getBytes(ONE_MEGABYTE)
-                .addOnSuccessListener(
-                        bytes -> {
-                            Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            ITEM_IMAGES.add(itemImage);
-                            tradeCardAdapter.notifyDataSetChanged();  // Refresh the RecyclerView when an image is loaded.
-                        })
-                .addOnFailureListener(e -> Log.w(TAG, "Error getting image.", e));
+    private void loadItem(DocumentReference itemRef) {
+        if (itemRef != null) {
+            itemRef.get().addOnSuccessListener(
+                            documentSnapshot -> {
+                                Item item = documentSnapshot.toObject(Item.class);
+                                if (item != null) {
+                                    Log.d(TAG, "Loading image for item with image ID: " + item.getImageId());
+                                    StorageReference imageReference = IMAGE_STORAGE
+                                            .getReference()
+                                            .child("users/" + email + "/" + item.getImageId() + ".jpg");
+                                    imageReference
+                                            .getBytes(ONE_MEGABYTE)
+                                            .addOnSuccessListener(
+                                                    bytes -> {
+                                                        Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                        ITEM_IMAGES.add(itemImage);
+                                                        Log.d(TAG, "Successfully loaded image for item with image ID: " + item.getImageId());
+                                                        tradeCardAdapter.notifyDataSetChanged(); // Refresh the RecyclerView after loading the image.
+                                                    })
+                                            .addOnFailureListener(e -> {
+                                                Log.w(TAG, "Error getting image for item with image ID: " + item.getImageId(), e);
+                                            });
+                                } else {
+                                    Log.w(TAG, "Item is null");
+                                }
+                            })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error getting item from reference", e);
+                    });
+        } else {
+            Log.w(TAG, "Item reference is null");
+        }
+    }
+
+    private boolean matchesCriteria(Trade trade, String currentEmail) {
+        return trade.getOfferingEmail().equals(currentEmail);
     }
 
 
