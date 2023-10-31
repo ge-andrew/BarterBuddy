@@ -134,8 +134,8 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   private void getXmlElements() {
     offeringItemImageView = findViewById(R.id.personalItemImage);
     posterItemImageView = findViewById(R.id.publicItemImage);
-    offeringItemTitle = findViewById(R.id.personalItemTitle);
-    posterItemTitle = findViewById(R.id.publicItemTitle);
+    offeringItemTitle = findViewById(R.id.posterItemTitle);
+    posterItemTitle = findViewById(R.id.offeringItemTitle);
     offeringItemMoneyField = findViewById(R.id.personalMoneyField);
     posterItemMoneyField = findViewById(R.id.publicMoneyField);
     submit_trade_button = findViewById(R.id.submit_trade_button);

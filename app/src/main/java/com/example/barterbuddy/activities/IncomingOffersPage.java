@@ -2,6 +2,7 @@ package com.example.barterbuddy.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,12 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
@@ -26,15 +23,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class IncomingOffersPage extends AppCompatActivity {
   private static final String TAG = "UserItemsPage";
   final long ONE_MEGABYTE = 1024 * 1024;
+  final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
@@ -54,10 +52,10 @@ public class IncomingOffersPage extends AppCompatActivity {
   private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
   private String currentEmail;
-  private String offeringItemId;
-  private String posterItemId;
   private ArrayList<Trade> trades = new ArrayList<>();
-  private ArrayList<String> usernames = new ArrayList<>();
+  private int currentTrade = 0;
+  private StorageReference ItemImageReference;
+  private ArrayList<Item> offeringItems = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +81,15 @@ public class IncomingOffersPage extends AppCompatActivity {
     decline_button.setOnClickListener(
         v -> {
           Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
+          currentTrade++;
+          displayNextTrade();
         });
 
     accept_button.setOnClickListener(
         v -> {
           Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
+          currentTrade++;
+          displayNextTrade();
         });
     // Takes you to userItemsPage
     your_items_button.setOnClickListener(
@@ -107,6 +109,7 @@ public class IncomingOffersPage extends AppCompatActivity {
         });
 
     setUpCard();
+
     Log.d(TAG, "End of onCreate");
   }
 
@@ -136,9 +139,11 @@ public class IncomingOffersPage extends AppCompatActivity {
     return currentEmail;
   }
 
-  private void setUpCard() {
+  private Future<String> setUpCard() {
     // Firebase query
     Log.d(TAG, "Start query");
+
+    CompletableFuture<String> completableFuture = new CompletableFuture<>();
 
     DB.collectionGroup("trades")
         //        .whereEqualTo("offeringEmail", "daniel@google.com")
@@ -167,12 +172,16 @@ public class IncomingOffersPage extends AppCompatActivity {
                   }
                 }
                 loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
+                completableFuture.complete("Hello");
               }
             })
         .addOnFailureListener(
             task -> {
               Log.d(TAG, "Error getting documents. ");
             });
+
+    return completableFuture;
+
   }
 
   private void loadItems(
@@ -198,21 +207,30 @@ public class IncomingOffersPage extends AppCompatActivity {
 
                 for (DocumentReference d : offeringItemDocumentReferences) {
                   d.get()
-                      .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> w) {
-                          if (w.isSuccessful()) {
-                            DocumentSnapshot offeringItemDoc = w.getResult();
-                            if (offeringItemDoc.exists()) {
-                              trades.get(i[0]).setOfferingItem(offeringItemDoc.toObject(Item.class));
-                              i[0]++;
+                      .addOnCompleteListener(
+                          new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> w) {
+                              if (w.isSuccessful()) {
+                                DocumentSnapshot offeringItemDoc = w.getResult();
+                                if (offeringItemDoc.exists()) {
+//                                  trades
+//                                      .get(i[0])
+//                                      .setOfferingItem(offeringItemDoc.toObject(Item.class));
+                                  offeringItems.add(offeringItemDoc.toObject(Item.class));
+                                  i[0]++;
+                                  if(!displayNextTrade()) {
+                                    return;
+                                  }
+                                }
+                              } else {
+                                Log.d(TAG, "Poster Item did not exist at location.");
+                              }
                             }
-                          } else {
-                            Log.d(TAG, "Poster Item did not exist at location.");
-                          }
-                        }
-                      });
+                          });
                 }
+
+                // displayNextTrade();
 
               } else {
                 Log.d(TAG, "Poster Item get failed.");
@@ -223,7 +241,8 @@ public class IncomingOffersPage extends AppCompatActivity {
   }
 
   private boolean displayNextTrade() {
-    if (trades.size() == 0) {
+    if (trades.size() == currentTrade) {
+      Log.d(TAG, "No trades remaining");
       return false;
     }
 
@@ -231,29 +250,48 @@ public class IncomingOffersPage extends AppCompatActivity {
 
     TextView posterMoneyTextView = includedLayout.findViewById(R.id.poster_trade_money);
     TextView offeringMoneyTextView = includedLayout.findViewById((R.id.offering_trade_money));
-    if (trades.get(0).getMoney() < 0) {
-      posterMoneyTextView.setText(-1 * (int) trades.get(0).getMoney());
+
+    double money = trades.get(currentTrade).getMoney();
+
+    if (trades.get(currentTrade).getMoney() < 0) {
+      money *= -1;
+      posterMoneyTextView.setText("$" + money);
+      offeringMoneyTextView.setText("$0.00");
     } else {
-      offeringMoneyTextView.setText((int) trades.get(0).getMoney());
+      offeringMoneyTextView.setText("$" + money);
+      posterMoneyTextView.setText("$0.00");
     }
 
-    //    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    //    loadAndDisplayImage(trades.get(0).getPosterItem().getImageId(), posterImageView);
-    //    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
-    //    loadAndDisplayImage(trades.get(0).getOfferingItem().getImageId(), offeringImageView);
+    TextView posterTitleTextView = includedLayout.findViewById(R.id.posterItemTitle);
+    posterTitleTextView.setText(trades.get(currentTrade).getPosterItem().getTitle());
+    TextView offeringTitleTextView = includedLayout.findViewById(R.id.offeringItemTitle);
+    offeringTitleTextView.setText(offeringItems.get(currentTrade).getTitle());
 
-    trades.remove(0);
+    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+    loadAndDisplayImage(trades.get(currentTrade).getPosterEmail(), trades.get(currentTrade).getPosterItem().getImageId(), posterImageView);
+    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
+    loadAndDisplayImage(offeringItems.get(currentTrade).getEmail(), offeringItems.get(currentTrade).getImageId(), offeringImageView);
 
     return true;
   }
 
-  private void loadAndDisplayImage(String imageId, ImageView imageView) {
+  private void loadAndDisplayImage(String currentEmail, String imageId, ImageView imageView) {
     Log.d(TAG, "start load and display images");
 
-    String imageUrl = "users/" + email + "/items/" + imageId;
-    RequestOptions requestOptions =
-        new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+    String imageUrl = "users/" + currentEmail + "/" +  imageId + ".jpg";
 
-    Glide.with(this).load(imageUrl).apply(requestOptions).into(imageView);
+    ItemImageReference =
+            IMAGE_STORAGE
+                    .getReference()
+                    .child(imageUrl);
+
+    ItemImageReference
+            .getBytes(FIVE_MEGABYTES)
+            .addOnSuccessListener(
+                    bytes -> {
+                      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                      imageView.setImageBitmap(itemImage);
+                    })
+            .addOnFailureListener(e -> Log.w(TAG, "Error getting item image.", e));
   }
 }
