@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -16,15 +18,19 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class IncomingOffersPage extends AppCompatActivity {
   private static final String TAG = "UserItemsPage";
@@ -51,7 +57,7 @@ public class IncomingOffersPage extends AppCompatActivity {
   private String offeringItemId;
   private String posterItemId;
   private ArrayList<Trade> trades = new ArrayList<>();
-  private int currentCardIndex = 0;
+  private ArrayList<String> usernames = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -100,23 +106,8 @@ public class IncomingOffersPage extends AppCompatActivity {
           your_offers_page.putExtra("email", email);
         });
 
-    // Take you to your incoming offers
-    incoming_offers_button.setOnClickListener(
-        v -> {
-          Intent incoming_offers_page =
-              new Intent(IncomingOffersPage.this, IncomingOffersPage.class);
-          incoming_offers_page.putExtra("username", username);
-          incoming_offers_page.putExtra("email", email);
-          startActivity(incoming_offers_page);
-        });
-
-    // Set up Tradecard
-    //
-    // onComplete
-    Log.d(TAG, "Before database query");
     setUpCard();
-    Log.d(TAG, "After data base query");
-
+    Log.d(TAG, "End of onCreate");
   }
 
   // Firebase Authentication
@@ -157,18 +148,25 @@ public class IncomingOffersPage extends AppCompatActivity {
               if (task.isSuccessful()) {
                 Log.d(TAG, "query success ");
 
+                ArrayList<DocumentReference> offeringItemDocumentReferences = new ArrayList<>();
+                DocumentReference posterItemDocumentReference = null;
+
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
-                  // Part 2: Retrieve referenced documents and their "stringId" fields
-                  if(tradeDoc.getString("posterEmail").equals(email)) {
+                  // TODO: make name of documents poster_sender consistent, find way to import
+                  // document directly into Trade object
+                  if (tradeDoc.getString("posterEmail").equals(email)) {
                     String posterEmail = tradeDoc.getString("posterEmail");
                     String offeringEmail = tradeDoc.getString("offeringEmail");
                     double money = tradeDoc.getDouble("money");
 
-                    DocumentReference offeringItemRef =
-                        tradeDoc.getDocumentReference("offeringItem");
-                    DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
+                    trades.add(new Trade(posterEmail, null, offeringEmail, null, money));
+
+                    offeringItemDocumentReferences.add(
+                        tradeDoc.getDocumentReference("offeringItem"));
+                    posterItemDocumentReference = tradeDoc.getDocumentReference("posterItem");
                   }
                 }
+                loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
               }
             })
         .addOnFailureListener(
@@ -177,103 +175,85 @@ public class IncomingOffersPage extends AppCompatActivity {
             });
   }
 
-  private void loadItem(
-      DocumentReference posterItemRef,
-      DocumentReference offeringItemRef,
-      String posterEmail,
-      String offeringEmail,
-      double money) {
+  private void loadItems(
+      ArrayList<DocumentReference> offeringItemDocumentReferences,
+      DocumentReference posterItemDocumentReference) {
     // Fetch the "posterItem" document
-    posterItemRef
+
+    posterItemDocumentReference
         .get()
         .addOnCompleteListener(
-            posterTask -> {
-              if (posterTask.isSuccessful()) {
-                DocumentSnapshot posterItemDoc = posterTask.getResult();
+            v -> {
+              if (v.isSuccessful()) {
+                DocumentSnapshot posterItemDoc = v.getResult();
                 if (posterItemDoc.exists()) {
-                  Item posterItem = posterItemDoc.toObject(Item.class);
-
-                  // Fetch the "offeringItem" document
-                  offeringItemRef
-                      .get()
-                      .addOnCompleteListener(
-                          offeringTask -> {
-                            if (offeringTask.isSuccessful()) {
-                              DocumentSnapshot offeringItemDoc = offeringTask.getResult();
-                              if (offeringItemDoc.exists()) {
-                                Item offeringItem = offeringItemDoc.toObject(Item.class);
-
-                                Trade trade =
-                                    new Trade(
-                                        posterEmail,
-                                        posterItem,
-                                        offeringEmail,
-                                        offeringItem,
-                                        money);
-                                trades.add(trade);
-
-                                displayTrade(trade);
-                              } else {
-                                Log.d(TAG, "OfferingItem does not exist");
-                              }
-                            } else {
-                              Log.e(
-                                  TAG,
-                                  "Error fetching offeringItem: " + offeringTask.getException());
-                            }
-                          });
+                  for (Trade t : trades) {
+                    t.setPosterItem(posterItemDoc.toObject(Item.class));
+                  }
                 } else {
-                  Log.d(TAG, "PostingItem does not exist");
+                  Log.d(TAG, "Poster Item did not exist at location.");
                 }
+
+                final int[] i = {0};
+
+                for (DocumentReference d : offeringItemDocumentReferences) {
+                  d.get()
+                      .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> w) {
+                          if (w.isSuccessful()) {
+                            DocumentSnapshot offeringItemDoc = w.getResult();
+                            if (offeringItemDoc.exists()) {
+                              trades.get(i[0]).setOfferingItem(offeringItemDoc.toObject(Item.class));
+                              i[0]++;
+                            }
+                          } else {
+                            Log.d(TAG, "Poster Item did not exist at location.");
+                          }
+                        }
+                      });
+                }
+
               } else {
-                Log.e(TAG, "Error fetching postingItem: " + posterTask.getException());
+                Log.d(TAG, "Poster Item get failed.");
               }
             });
+
+    Log.d(TAG, "End of loadItems reached");
   }
 
-  private void displayTrade(Trade trade) {
-    // Access trade details and display them in your UI elements
-    // For example:
-    Log.d(TAG, "start display trade");
+  private boolean displayNextTrade() {
+    if (trades.size() == 0) {
+      return false;
+    }
 
     View includedLayout = findViewById(R.id.included_layout);
 
-    TextView wantedMoneyTextView = includedLayout.findViewById(R.id.poster_trade_money);
-    TextView offeredMoneyTextView = includedLayout.findViewById((R.id.offering_trade_money));
+    TextView posterMoneyTextView = includedLayout.findViewById(R.id.poster_trade_money);
+    TextView offeringMoneyTextView = includedLayout.findViewById((R.id.offering_trade_money));
+    if (trades.get(0).getMoney() < 0) {
+      posterMoneyTextView.setText(-1 * (int) trades.get(0).getMoney());
+    } else {
+      offeringMoneyTextView.setText((int) trades.get(0).getMoney());
+    }
 
-    //        if (trade.getMoney() < 0) {
-    //            double moneyValue = -trade.getMoney();
-    //            String moneyText = String.valueOf(moneyValue);
-    //            wantedMoneyTextView.setText(moneyText);
-    //        } else {
-    //            double moneyValue = trade.getMoney();
-    //            String moneyText = String.valueOf(moneyValue);
-    //            offeredMoneyTextView.setText(moneyText);
-    //        }
-    // Load and display images if needed
-    // Example: Load poster item image
-    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    loadAndDisplayImage(trade.getPosterItem().getImageId(), posterImageView);
+    //    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+    //    loadAndDisplayImage(trades.get(0).getPosterItem().getImageId(), posterImageView);
+    //    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
+    //    loadAndDisplayImage(trades.get(0).getOfferingItem().getImageId(), offeringImageView);
 
-    // Load and display offering item image
-    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
-    loadAndDisplayImage(trade.getOfferingItem().getImageId(), offeringImageView);
+    trades.remove(0);
+
+    return true;
   }
 
   private void loadAndDisplayImage(String imageId, ImageView imageView) {
-    // Load the image using your preferred method (e.g., Glide or the `getBytes` method).
-    // You can adapt the image loading code you've previously used.
-    // Example using Glide:
-
     Log.d(TAG, "start load and display images");
 
-    String imageUrl = "users/" + email + "/items/" + imageId; // Update the URL accordingly
+    String imageUrl = "users/" + email + "/items/" + imageId;
     RequestOptions requestOptions =
         new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
     Glide.with(this).load(imageUrl).apply(requestOptions).into(imageView);
   }
-
-  // When you want to move to the next card, you can call this method.
-
 }
