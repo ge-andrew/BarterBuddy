@@ -1,13 +1,15 @@
 package com.example.barterbuddy.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.Serializable;
 
 public class Trade implements Serializable {
 
   private String posterEmail;
-  private Item posterItem;
+  private DocumentReference posterItem;
   private String offeringEmail;
-  private Item offeringItem;
+  private DocumentReference offeringItem;
   // Money indicates the additional funds the offering user is giving
   // Negative money values indicates the offering user wants to be paid for the trade
   private double money;
@@ -15,9 +17,9 @@ public class Trade implements Serializable {
 
   public Trade(
       String posterEmail,
-      Item posterItem,
+      DocumentReference posterItem,
       String offeringEmail,
-      Item offeringItem,
+      DocumentReference offeringItem,
       double money,
       String stateOfCompletion) {
     this.posterEmail = posterEmail;
@@ -34,7 +36,7 @@ public class Trade implements Serializable {
     return posterEmail;
   }
 
-  public Item getPosterItem() {
+  public DocumentReference getPosterItem() {
     return posterItem;
   }
 
@@ -42,7 +44,7 @@ public class Trade implements Serializable {
     return offeringEmail;
   }
 
-  public Item getOfferingItem() {
+  public DocumentReference getOfferingItem() {
     return offeringItem;
   }
 
@@ -58,7 +60,7 @@ public class Trade implements Serializable {
     this.posterEmail = posterEmail;
   }
 
-  public void setPosterItem(Item posterItem) {
+  public void setPosterItem(DocumentReference posterItem) {
     this.posterItem = posterItem;
   }
 
@@ -66,7 +68,7 @@ public class Trade implements Serializable {
     this.offeringEmail = offeringEmail;
   }
 
-  public void setOfferingItem(Item offeringItem) {
+  public void setOfferingItem(DocumentReference offeringItem) {
     this.offeringItem = offeringItem;
   }
 
