@@ -156,7 +156,6 @@ public class IncomingOffersPage extends AppCompatActivity {
             // The user is signed in, you can access their information
             username = currentUser.getDisplayName();
             currentEmail = currentUser.getEmail();
-            Toast.makeText(this, currentEmail,Toast.LENGTH_SHORT).show();
 
         } else {
             // The user is not signed in, handle this case (e.g., prompt the user to sign in)
@@ -168,38 +167,43 @@ public class IncomingOffersPage extends AppCompatActivity {
     }
     private void setUpCard(Context context) {
         //Firebase query
-        Log.d(TAG, "Start query");
+        try {
+            Log.d(TAG, "Start query");
 
+            DB.collectionGroup("trades")
+                    .whereEqualTo("posterEmail", "matt@google.com")
+                    .get()
+                    .addOnCompleteListener(task -> {
 
-        DB.collectionGroup("trades")
-                .whereEqualTo("posterEmail", "matt@google.com")
-                .get()
-                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "query success ");
 
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "query success ");
+                            for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
+                                // Part 2: Retrieve referenced documents and their "stringId" fields
+                                // Debug
+                                int docCount = task.getResult().size();
+                                Log.d(TAG, "Number of docs found: " + docCount);
 
-                        for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
-                            // Part 2: Retrieve referenced documents and their "stringId" fields
-                            // Debug
-                           int docCount = task.getResult().size();
-                            Log.d(TAG, "Number of docs found: " + docCount);
+                                Log.d(TAG, "First step in loading line 172");
 
-                            Log.d(TAG, "First step in loading line 172");
+                                String posterEmail = tradeDoc.getString("posterEmail");
+                                String offeringEmail = tradeDoc.getString("offeringEmail");
+                                double money = tradeDoc.getDouble("money");
 
-                            String posterEmail = tradeDoc.getString("posterEmail");
-                            String offeringEmail = tradeDoc.getString("offeringEmail");
-                            double money = tradeDoc.getDouble("money");
+                                DocumentReference offeringItemRef = tradeDoc.getDocumentReference("offeringItem");
+                                DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
 
-                            DocumentReference offeringItemRef = tradeDoc.getDocumentReference("offeringItem");
-                            DocumentReference posterItemRef = tradeDoc.getDocumentReference("posterItem");
-
-
-                            //Load Items
-                            loadItem(posterItemRef, offeringItemRef, posterEmail, offeringEmail, money);
+                                //Load Items
+                                loadItem(posterItemRef, offeringItemRef, posterEmail, offeringEmail, money);
+                            }
+                        } else {
+                            Log.w(TAG, "Query failed", task.getException());
+                            Toast.makeText(this, "No trades available", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            Toast.makeText(this, "No trades available", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadItem(DocumentReference posterItemRef, DocumentReference offeringItemRef, String posterEmail, String offeringEmail, double money) {
@@ -242,34 +246,46 @@ public class IncomingOffersPage extends AppCompatActivity {
 
     private void displayTrade(Trade trade) {
         // Access trade details and display them in your UI elements
-        // For example:
+// For example:
         Log.d(TAG, "start display trade");
 
         View includedLayout = findViewById(R.id.included_layout);
 
-
-
         TextView wantedMoneyTextView = includedLayout.findViewById(R.id.wanted_value);
         TextView offeredMoneyTextView = includedLayout.findViewById((R.id.offered_value));
 
+// Check if trade is not null before accessing its properties
+        if (trade != null) {
+            if (trade.getMoney() < 0) {
+                double moneyValue = -trade.getMoney();
+                String moneyText = String.valueOf(moneyValue);
+                wantedMoneyTextView.setText(moneyText);
+            } else {
+                double moneyValue = trade.getMoney();
+                String moneyText = String.valueOf(moneyValue);
+                offeredMoneyTextView.setText(moneyText);
+            }
+            // Load and display images if needed
+            // Example: Load poster item image
+            ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
+            // Check if poster item is not null before accessing its properties
+            if (trade.getPosterItem() != null) {
+                loadAndDisplayImage(trade.getPosterItem().getImageId(), posterImageView);
+            } else {
+                Log.d(TAG, "Poster item is null");
+            }
 
-//        if (trade.getMoney() < 0) {
-//            double moneyValue = -trade.getMoney();
-//            String moneyText = String.valueOf(moneyValue);
-//            wantedMoneyTextView.setText(moneyText);
-//        } else {
-//            double moneyValue = trade.getMoney();
-//            String moneyText = String.valueOf(moneyValue);
-//            offeredMoneyTextView.setText(moneyText);
-//        }
-        // Load and display images if needed
-        // Example: Load poster item image
-        ImageView posterImageView = includedLayout.findViewById(R.id.wanted_item_image);
-        loadAndDisplayImage(trade.getPosterItem().getImageId(), posterImageView);
-
-        // Load and display offering item image
-        ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
-        loadAndDisplayImage(trade.getOfferingItem().getImageId(), offeringImageView);
+            // Load and display offering item image
+            ImageView offeringImageView = includedLayout.findViewById(R.id.offered_item_image);
+            // Check if offering item is not null before accessing its properties
+            if (trade.getOfferingItem() != null) {
+                loadAndDisplayImage(trade.getOfferingItem().getImageId(), offeringImageView);
+            } else {
+                Log.d(TAG, "Offering item is null");
+            }
+        } else {
+            Log.d(TAG, "Trade is null");
+        }
     }
 
     private void loadAndDisplayImage(String imageId, ImageView imageView) {
