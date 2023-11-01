@@ -153,7 +153,7 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
             // Firebase query
             // retrieve and insert firebase data into items
             DB.collection("trades")
-                    .whereEqualTo("offeringEmail", "andrew@google.com")
+                    .whereEqualTo("offeringEmail", "daniel@google.com")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {

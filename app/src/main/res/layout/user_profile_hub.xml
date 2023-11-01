@@ -59,7 +59,7 @@
         android:id="@+id/temp_add_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="temp add"
+        android:text="Add Item"
         tools:layout_editor_absoluteX="19dp"
         tools:layout_editor_absoluteY="22dp" />
 
