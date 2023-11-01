@@ -26,11 +26,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class AdjustTradeMoneyPage extends AppCompatActivity{
+public class AdjustTradeMoneyPage extends AppCompatActivity {
 
   private static final String TAG = "AdjustTradeMoneyPage";
-    private static final Locale locale = new Locale("en", "US");
-    private static final DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+  private static final Locale locale = new Locale("en", "US");
+  private static final DecimalFormat formatter =
+      (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
@@ -142,20 +143,22 @@ public class AdjustTradeMoneyPage extends AppCompatActivity{
           tradeData.put("posterEmail", posterItem.getEmail());
           tradeData.put(
               "offeringItem",
-              "/users/"
-                  + offeringItem.getEmail()
-                  + "/items/"
-                  + offeringItem.getEmail()
-                  + "-"
-                  + offeringItem.getTitle());
+              DB.document(
+                  "users/"
+                      + offeringItem.getEmail()
+                      + "/items/"
+                      + offeringItem.getEmail()
+                      + "-"
+                      + offeringItem.getTitle()));
           tradeData.put(
               "posterItem",
-              "/users/"
-                  + posterItem.getEmail()
-                  + "/items/"
-                  + posterItem.getEmail()
-                  + "-"
-                  + posterItem.getTitle());
+              DB.document(
+                  "/users/"
+                      + posterItem.getEmail()
+                      + "/items/"
+                      + posterItem.getEmail()
+                      + "-"
+                      + posterItem.getTitle()));
           tradeData.put("stateOfCompletion", "IN_PROGRESS");
 
           DB.collection("trades")
