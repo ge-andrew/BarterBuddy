@@ -31,7 +31,7 @@
     <TextView
         android:id="@+id/chat_username"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chat_profile_picture" />
@@ -40,6 +40,7 @@
         android:id="@+id/buttons_parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:layout_constraintTop_toBottomOf="@+id/chat_username"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -66,43 +67,61 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Main text view -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_recycler_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttons_parent_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/chat_edit_text"
-        />
-
-    <!-- Type messages -->
-    <EditText
-        android:id="@+id/chat_edit_text"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/write_message_here"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send_button"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp"
-        android:inputType="textShortMessage"
-        android:autofillHints="string" />
-
-    <!-- Send messages -->
-    <ImageButton
-        android:id="@+id/send_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/baseline_send_24"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/chat_edit_text"
-        app:tint="@color/peach"
-        android:contentDescription="@string/send_message" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttons_parent_layout">
+
+        <!-- Main text view -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/typing_parent_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/typing_parent_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Type messages -->
+            <EditText
+                android:id="@+id/chat_edit_text"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:autofillHints="string"
+                android:hint="@string/write_message_here"
+                android:inputType="textMultiLine"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/send_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Send messages -->
+            <ImageButton
+                android:id="@+id/send_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginVertical="10dp"
+                android:contentDescription="@string/send_message"
+                android:src="@drawable/baseline_send_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toEndOf="@+id/chat_edit_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/peach" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
