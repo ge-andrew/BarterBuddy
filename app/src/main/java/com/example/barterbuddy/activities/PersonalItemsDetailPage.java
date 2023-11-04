@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private TextView itemTitle;
   private TextView itemDescription;
+  private TextView itemPerceivedValue;
   private ImageView imageView;
   private Button set_active_items_button;
   private String itemId;
@@ -75,8 +77,13 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
 
                 // set the title and description based on information from the object
                 if (currentItem != null) {
+                  String tempString = currentItem.getPerceivedValue();
                   itemTitle.setText(currentItem.getTitle());
                   itemDescription.setText(currentItem.getDescription());
+                  if (!TextUtils.isEmpty(tempString)) {
+                    tempString = "$" + tempString;
+                    itemPerceivedValue.setText(tempString);
+                  }
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
@@ -120,7 +127,6 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting item document.", e));
 
-    // prepare the offer trade button for advancing to the next page
     set_active_items_button.setOnClickListener(
         v -> {
           setAsTheActiveItem(
@@ -130,7 +136,8 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
                   itemId,
                   false,
                   username,
-                  email));
+                  email,
+                  (String) itemPerceivedValue.getText()));
 
           Toast toast = Toast.makeText(this, "Set to Active", Toast.LENGTH_LONG);
           toast.show();
@@ -163,5 +170,6 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
     set_active_items_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
     backArrow = findViewById(R.id.back_arrow);
+    itemPerceivedValue = findViewById(R.id.perceivedValue);
   }
 }

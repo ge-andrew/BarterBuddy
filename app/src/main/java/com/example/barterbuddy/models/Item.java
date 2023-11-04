@@ -13,10 +13,13 @@ public class Item implements Serializable {
 
   /** the uri of the item's image in Firebase Cloud Storage */
   private String imageId;
+
   /** true if the item is the active item for trade and false if not */
   private boolean isActive;
+
   private String username;
   private String email;
+  private String perceivedValue;
 
   // default constructor
   public Item(
@@ -25,13 +28,14 @@ public class Item implements Serializable {
       String imageId,
       boolean isActive,
       String username,
-      String ownerEmail) {
+      String ownerEmail, String perceivedValue) {
     this.title = title;
     this.description = description;
     this.imageId = imageId;
     this.isActive = isActive;
     this.username = username;
     this.email = ownerEmail;
+    this.perceivedValue = perceivedValue;
   }
 
   // empty constructor necessary for Firebase
@@ -88,4 +92,10 @@ public class Item implements Serializable {
   public String getId() {
     return this.getEmail() + "-" + this.getTitle();
   }
+
+  public String getPerceivedValue() {
+    return perceivedValue;
+  }
+
+  public void setPerceivedValue(String perceivedValue) {this.perceivedValue = perceivedValue;}
 }
