@@ -18,6 +18,7 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 public class UserProfileHub extends AppCompatActivity implements RecyclerViewInterface {
     private Button incoming_offers_button;
     private Button your_offers_button;
+    private FloatingActionButton add_item_button;
     private Button your_items_button;
-    private Button add_item_button;
     private ImageView offeredItemImage;
     private ImageView wantedItemImage;
     private TextView offeredTrade;
@@ -62,7 +63,7 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button= findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
-    add_item_button = findViewById(R.id.temp_add_item);
+    add_item_button = findViewById(R.id.add_item_button);
 
     username = getIntent().getStringExtra("username");
     email = getIntent().getStringExtra("email");
@@ -79,25 +80,25 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
             }
     );
 
-    //Takes you to your offers
-        your_offers_button.setOnClickListener(
-                v -> {
-                    Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
-                    your_offers_page.putExtra("username", username);
-                    your_offers_page.putExtra("email", email);
-                    startActivity(your_offers_page);
-                }
-        );
-
-        //Take you to your incoming offers
-        incoming_offers_button.setOnClickListener(
-                v -> {
-                    Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
-                    incoming_offers_page.putExtra("username", username);
-                    incoming_offers_page  .putExtra("email", email);
-                    startActivity(incoming_offers_page);
-                }
-        );
+//    //Takes you to your offers
+//        your_offers_button.setOnClickListener(
+//                v -> {
+//                    Intent your_offers_page = new Intent(UserProfileHub.this, YourOffersPage.class);
+//                    your_offers_page.putExtra("username", username);
+//                    your_offers_page.putExtra("email", email);
+//                    startActivity(your_offers_page);
+//                }
+//        );
+//
+//        //Take you to your incoming offers
+//        incoming_offers_button.setOnClickListener(
+//                v -> {
+//                    Intent incoming_offers_page = new Intent(UserProfileHub.this,IncomingOffersPage.class);
+//                    incoming_offers_page.putExtra("username", username);
+//                    incoming_offers_page  .putExtra("email", email);
+//                    startActivity(incoming_offers_page);
+//                }
+//        );
         add_item_button.setOnClickListener(
                 view -> {
                     Intent intent = new Intent(UserProfileHub.this, AddNewItemPage.class);
@@ -113,6 +114,8 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
 
+    getCurrentUser();
+    getCurrentUserInfo();
     setUpItems(this);
 }
 
