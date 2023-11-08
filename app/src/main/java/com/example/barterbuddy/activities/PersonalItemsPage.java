@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
+import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,7 +74,7 @@ public class PersonalItemsPage extends AppCompatActivity implements RecyclerView
 
     go_to_public_items_button.setOnClickListener(
         view -> {
-          Intent intent = new Intent(PersonalItemsPage.this, PublicItemsPage.class);
+          Intent intent = new Intent(PersonalItemsPage.this, PublicItemsPageFragment.class);
           startActivity(intent);
         });
 

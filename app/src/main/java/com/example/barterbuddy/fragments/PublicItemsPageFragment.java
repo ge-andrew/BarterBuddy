@@ -1,18 +1,23 @@
-package com.example.barterbuddy.activities;
+package com.example.barterbuddy.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.activities.LoginPage;
+import com.example.barterbuddy.activities.PersonalItemsPage;
+import com.example.barterbuddy.activities.PublicItemsDetailPage;
 import com.example.barterbuddy.adapters.PublicItemsRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
@@ -23,7 +28,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class PublicItemsPage extends AppCompatActivity implements RecyclerViewInterface {
+public class PublicItemsPageFragment extends Fragment implements RecyclerViewInterface {
 
   private static final String TAG = "ItemsAvailable";
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
@@ -37,10 +42,13 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private String currentUserUsername;
   private String currentUserEmail;
 
+  public PublicItemsPageFragment() {
+    super(R.layout.fragment_public_items);
+  }
+
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_public_items);
+  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
     getCurrentUser();
     if (currentUser == null) {
@@ -53,16 +61,16 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
-    setUpItems(this);
+    setUpItems(getActivity());
 
     user_items_button.setOnClickListener(
-        view -> {
-          Intent intent = new Intent(PublicItemsPage.this, PersonalItemsPage.class);
+        buttonView -> {
+          Intent intent = new Intent(getActivity(), PersonalItemsPage.class);
           startActivity(intent);
         });
 
     publicItemsSwipeRefreshLayout.setOnRefreshListener(() -> {
-      setUpItems(this);
+      setUpItems(getActivity());
       publicItemsSwipeRefreshLayout.setRefreshing(false);
     });
   }
@@ -93,7 +101,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
               // set up recyclerView
               PublicItemsRecyclerAdapter adapter =
                   new PublicItemsRecyclerAdapter(
-                      context, availableItems, (RecyclerViewInterface) context, ITEM_IMAGES);
+                      context, availableItems, this, ITEM_IMAGES);
               publicItemsRecycler.setAdapter(adapter);
               publicItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
             });
@@ -104,7 +112,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(PublicItemsPage.this, PublicItemsDetailPage.class);
+    Intent intent = new Intent(getActivity(), PublicItemsDetailPage.class);
     intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
     intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
     intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
@@ -116,9 +124,9 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   private void goToLoginPage() {
-    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    Intent intent = new Intent(getActivity().getApplicationContext(), LoginPage.class);
     startActivity(intent);
-    finish();
+    getActivity().finish();
   }
 
   private void getCurrentUserInfo() {
@@ -127,8 +135,8 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   private void getXmlElements() {
-    user_items_button = findViewById(R.id.User_Items_Button);
-    publicItemsRecycler = findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = findViewById(R.id.public_items_swipeRefresh);
+    user_items_button = getActivity().findViewById(R.id.User_Items_Button);
+    publicItemsRecycler = getActivity().findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = getActivity().findViewById(R.id.public_items_swipeRefresh);
   }
 }

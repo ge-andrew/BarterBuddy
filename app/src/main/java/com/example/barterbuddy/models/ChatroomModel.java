@@ -4,9 +4,6 @@ import java.util.List;
 import com.google.firebase.Timestamp;
 
 public class ChatroomModel {
-    /*
-        Citation: This model is adapted from one by EasyTuto on YouTube: https://www.youtube.com/watch?v=Yte9eC_VzSw
-    */
 
     String chatroomId;
     List<String> userIds;

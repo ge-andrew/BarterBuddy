@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.example.barterbuddy.models.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,7 +46,7 @@ public class CreateAccountPage extends AppCompatActivity {
     super.onStart();
     FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
-      Intent intent = new Intent(getApplicationContext(), PublicItemsPage.class);
+      Intent intent = new Intent(getApplicationContext(), PublicItemsPageFragment.class);
       startActivity(intent);
       finish();
     }

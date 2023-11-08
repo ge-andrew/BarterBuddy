@@ -8,9 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 /** Utilities class with many helpful features for simplifying common Firebase functions */
 public class FirebaseUtil {
-  /*
-     Citation: The idea for this class comes from Easy Tuto on YouTube: https://youtu.be/fx_WtPtT6gY?feature=shared
-  */
 
   private static final String TAG = "Firebase Util";
 

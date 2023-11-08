@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.example.barterbuddy.models.Item;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -169,7 +170,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
                     Toast toast = Toast.makeText(this, "Trade submitted!", Toast.LENGTH_LONG);
                     toast.show();
 
-                    Intent intent = new Intent(AdjustTradeMoneyPage.this, PublicItemsPage.class);
+                    Intent intent = new Intent(AdjustTradeMoneyPage.this, PublicItemsPageFragment.class);
                     startActivity(intent);
                     finish();
                   })
