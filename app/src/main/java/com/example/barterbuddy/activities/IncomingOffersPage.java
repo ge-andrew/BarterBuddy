@@ -26,8 +26,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 public class IncomingOffersPage extends AppCompatActivity {
   private static final String TAG = "UserItemsPage";
@@ -80,16 +78,26 @@ public class IncomingOffersPage extends AppCompatActivity {
     // Decline Button
     decline_button.setOnClickListener(
         v -> {
-          Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
-          currentTrade++;
-          displayNextTrade();
+          if (currentTrade < trades.size()) {
+            Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
+            currentTrade++;
+            if(!displayNextTrade()) {
+              //includedLayout.findViewById(R.id.cardView).setVisibility(View.GONE);
+              //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
+            }
+          }
         });
 
     accept_button.setOnClickListener(
         v -> {
-          Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
-          currentTrade++;
-          displayNextTrade();
+          if(currentTrade < trades.size()) {
+            Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
+            currentTrade++;
+            if(displayNextTrade()) {
+              //includedLayout.findViewById(R.id.cardView).setVisibility(View.GONE);
+              //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
+            }
+          }
         });
     // Takes you to userItemsPage
     your_items_button.setOnClickListener(
@@ -139,11 +147,9 @@ public class IncomingOffersPage extends AppCompatActivity {
     return currentEmail;
   }
 
-  private Future<String> setUpCard() {
+  private void setUpCard() {
     // Firebase query
     Log.d(TAG, "Start query");
-
-    CompletableFuture<String> completableFuture = new CompletableFuture<>();
 
     DB.collectionGroup("trades")
         //        .whereEqualTo("offeringEmail", "daniel@google.com")
@@ -172,15 +178,12 @@ public class IncomingOffersPage extends AppCompatActivity {
                   }
                 }
                 loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
-                completableFuture.complete("Hello");
               }
             })
         .addOnFailureListener(
             task -> {
               Log.d(TAG, "Error getting documents. ");
             });
-
-    return completableFuture;
 
   }
 
@@ -241,7 +244,7 @@ public class IncomingOffersPage extends AppCompatActivity {
   }
 
   private boolean displayNextTrade() {
-    if (trades.size() == currentTrade) {
+    if (trades.size() <= currentTrade) {
       Log.d(TAG, "No trades remaining");
       return false;
     }

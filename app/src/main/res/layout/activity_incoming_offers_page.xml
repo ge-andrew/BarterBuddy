@@ -45,7 +45,21 @@
         app:layout_constraintStart_toEndOf="@+id/incoming_offers_button"
         app:layout_constraintTop_toTopOf="@+id/incoming_offers_button" />
 
+    <TextView
+        android:id="@+id/noTradesMessage"
+        android:layout_width="416dp"
+        android:layout_height="556dp"
+        android:text="No Trades Remaining"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/incoming_offers_button" />
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +74,7 @@
             layout="@layout/trade_offer_card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp" />
 
     </androidx.cardview.widget.CardView>
 
