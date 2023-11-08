@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class PublicItemsDetailPage extends AppCompatActivity {
   private TextView itemTitle;
   private TextView usernameTextView;
   private TextView itemDescription;
+  private TextView itemPerceivedValue;
   private ImageView imageView;
   private Button offer_trade_button;
   private String itemId;
@@ -74,8 +76,15 @@ public class PublicItemsDetailPage extends AppCompatActivity {
 
                 // set the title and description based on information from the object
                 if (posterItem != null) {
+                  String tempString = posterItem.getPerceivedValue();
                   itemTitle.setText(posterItem.getTitle());
                   itemDescription.setText(posterItem.getDescription());
+                  if(!TextUtils.isEmpty(tempString))
+                  {
+                    tempString = "$" + tempString;
+                    itemPerceivedValue.setText(tempString);
+                  }
+
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
@@ -170,6 +179,7 @@ public class PublicItemsDetailPage extends AppCompatActivity {
     offer_trade_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
     backArrow = findViewById(R.id.back_arrow);
+    itemPerceivedValue = findViewById(R.id.perceivedValue);
   }
 
   private void getItemDataFromIntent() {
