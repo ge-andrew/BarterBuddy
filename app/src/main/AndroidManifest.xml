@@ -48,6 +48,11 @@
         <activity
             android:name=".fragments.PublicItemsPageFragment"
             android:exported="false" />
+        <activity android:name=".activities.UserProfileHub"
+            android:exported="false"/>
+        <activity android:name=".activities.IncomingOffersPage"
+            android:exported="false"
+            />
         <activity
             android:name=".activities.ChooseTradeItemPage"
             android:exported="false" />
@@ -60,6 +65,9 @@
         <activity
             android:name=".activities.TestChatPageClass"
             android:exported="true" />
+        <activity android:name=".activities.YourOffersPage"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

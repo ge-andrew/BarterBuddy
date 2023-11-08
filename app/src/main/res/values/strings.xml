@@ -19,6 +19,9 @@
     <string name="create_account">Create Account</string>
     <string name="item_details">Item Details</string>
     <string name="save">Save</string>
+    <string name="incoming_offers">Incoming Offers</string>
+    <string name="your_items">Your Items</string>
+    <string name="your_offers">Your Offers</string>
     <string name="invalid_email_or_password">Invalid email or password</string>
     <string name="don_t_have_an_account">Don\'t have an account?\ </string>
     <string name="sign_up">Sign up</string>
@@ -36,6 +39,9 @@
     <string name="_0_00">$0.00</string>
     <string name="down_arrow">down arrow</string>
     <string name="your_trade_with">"Your trade with "</string>
+    <string name="money">money</string>
+    <string name="money_wanted" />
+    <string name="money_offered">money_offered</string>
     <string name="confirm">Confirm</string>
     <string name="deny">Deny</string>
     <string name="complete_trade">Complete Trade</string>
