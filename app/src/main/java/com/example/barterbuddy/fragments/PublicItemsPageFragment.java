@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,7 +15,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
-import com.example.barterbuddy.activities.PersonalItemsPage;
 import com.example.barterbuddy.activities.PublicItemsDetailPage;
 import com.example.barterbuddy.adapters.PublicItemsRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
@@ -35,7 +33,6 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
-  private Button user_items_button;
   private RecyclerView publicItemsRecycler;
   private SwipeRefreshLayout publicItemsSwipeRefreshLayout;
   private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
@@ -62,12 +59,6 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
     setUpItems(getActivity());
-
-    user_items_button.setOnClickListener(
-        buttonView -> {
-          Intent intent = new Intent(getActivity(), PersonalItemsPage.class);
-          startActivity(intent);
-        });
 
     publicItemsSwipeRefreshLayout.setOnRefreshListener(() -> {
       setUpItems(getActivity());
@@ -135,7 +126,6 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   }
 
   private void getXmlElements() {
-    user_items_button = getActivity().findViewById(R.id.User_Items_Button);
     publicItemsRecycler = getActivity().findViewById(R.id.PublicItemsRecyclerView);
     publicItemsSwipeRefreshLayout = getActivity().findViewById(R.id.public_items_swipeRefresh);
   }
