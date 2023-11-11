@@ -51,6 +51,10 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     // Cloud storage library
     implementation("com.google.firebase:firebase-storage")
+    //Glide for image loading
+    implementation   ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
     // FirebaseUI (for chat message recycler)
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
 }
