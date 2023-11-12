@@ -10,3 +10,5 @@ Youtube series from EasyTuto:
 - Firebase utilities class: https://youtu.be/fx_WtPtT6gY?feature=shared
 - Chatroom Model: https://www.youtube.com/watch?v=Yte9eC_VzSw
 - Chat Message Model: https://www.youtube.com/watch?v=Ia6BBS-Jvkw
+
+Assistance throughout from StackOverflow and ChatGPT
