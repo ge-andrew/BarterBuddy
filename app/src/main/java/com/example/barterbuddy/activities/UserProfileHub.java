@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,10 +33,6 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     private Button your_offers_button;
     private FloatingActionButton add_item_button;
     private Button your_items_button;
-    private ImageView offeredItemImage;
-    private ImageView wantedItemImage;
-    private TextView offeredTrade;
-    private TextView wantedTrade;
     private static final String TAG = "UserItemsPage";
     final long ONE_MEGABYTE = 1024 * 1024;
     private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
@@ -59,10 +53,9 @@ public class UserProfileHub extends AppCompatActivity implements RecyclerViewInt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    setContentView(R.layout.user_profile_hub);
+    setContentView(R.layout.fragment_user_items);
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button= findViewById(R.id.incoming_offers_button);
-    your_items_button = findViewById(R.id.your_items_button);
     add_item_button = findViewById(R.id.add_item_button);
 
     username = getIntent().getStringExtra("username");

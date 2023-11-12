@@ -131,6 +131,7 @@ public class PersonalItemsDetailPage extends AppCompatActivity {
         v -> {
           setAsTheActiveItem(
               new Item(
+                  itemId,
                   (String) itemTitle.getText(),
                   (String) itemDescription.getText(),
                   itemId,

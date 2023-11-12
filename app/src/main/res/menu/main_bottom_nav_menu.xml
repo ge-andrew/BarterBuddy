@@ -3,18 +3,18 @@
 
     <!-- Clickable menu items -->
     <item
-        android:id="@+id/menu_item_public_items"
-        android:title="@string/public_items"
+        android:id="@+id/menu_item_market"
+        android:title="@string/market"
         android:icon="@drawable/icon_home" />
 
     <item
-        android:id="@+id/menu_item_add_item"
-        android:title="@string/menu_add_item"
+        android:id="@+id/menu_item_items"
+        android:title="@string/menu_items"
         android:icon="@drawable/icon_add_circle" />
 
     <item
-        android:id="@+id/menu_item_profile"
-        android:title="@string/profile"
+        android:id="@+id/menu_item_offers"
+        android:title="@string/offers"
         android:icon="@drawable/default_profile_face" />
 
 </menu>

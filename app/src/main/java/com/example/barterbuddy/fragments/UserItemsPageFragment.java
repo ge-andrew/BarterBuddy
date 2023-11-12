@@ -1,5 +1,6 @@
 package com.example.barterbuddy.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,35 +20,40 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.activities.PublicItemsDetailPage;
-import com.example.barterbuddy.adapters.PublicItemsRecyclerAdapter;
+import com.example.barterbuddy.adapters.PersonalItemsRecyclerViewAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class PublicItemsPageFragment extends Fragment implements RecyclerViewInterface {
+public class UserItemsPageFragment extends Fragment implements RecyclerViewInterface {
 
-  private static final String TAG = "ItemsAvailable";
-  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
+  private static final String TAG = "UserItems";
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
-  private RecyclerView publicItemsRecycler;
-  private SwipeRefreshLayout publicItemsSwipeRefreshLayout;
-  private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
-  private String currentUserUsername;
   private String currentUserEmail;
-
-  private MutableLiveData<ArrayList<Item>> itemsLiveData = new MutableLiveData<>(new ArrayList<>());
-  private PublicItemsRecyclerAdapter adapter;
+  private String currentUserUsername;
+  private PersonalItemsRecyclerViewAdapter adapter;
+  private RecyclerView personalItemsRecycler;
+  private SwipeRefreshLayout personalItemsSwipeRefreshLayout;
+  private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
+  private final MutableLiveData<ArrayList<Item>> itemsLiveData = new MutableLiveData<>(new ArrayList<>());
+  private Context parentContext;
+  private Activity parentActivity;
+  // This page initally just shows a recycler upon hitting your items button it pulls up orginial page
+//    with ability to add post new item
 
   @Nullable
   @Override
@@ -52,15 +61,18 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_public_items, container, false);
+    View view = inflater.inflate(R.layout.fragment_user_items, container, false);
+
+    parentContext = requireContext();
+    parentActivity = requireActivity();
 
     // Initialize RecyclerView and Adapter
-    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
+    personalItemsRecycler = view.findViewById(R.id.recycler_view);
+    personalItemsSwipeRefreshLayout = view.findViewById(R.id.user_items_swipeRefresh);
     adapter =
-        new PublicItemsRecyclerAdapter(requireActivity(), new ArrayList<>(), this, ITEM_IMAGES);
-    publicItemsRecycler.setAdapter(adapter);
-    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        new PersonalItemsRecyclerViewAdapter(parentContext, new ArrayList<>(), this, ITEM_IMAGES);
+    personalItemsRecycler.setAdapter(adapter);
+    personalItemsRecycler.setLayoutManager(new LinearLayoutManager(parentContext));
 
     // Observe changes in the LiveData and update the adapter
     itemsLiveData.observe(
@@ -88,17 +100,18 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
-    setUpItems();
+    setUpItems(parentActivity);
 
-    publicItemsSwipeRefreshLayout.setOnRefreshListener(
+    personalItemsSwipeRefreshLayout.setOnRefreshListener(
         () -> {
-          setUpItems();
-          publicItemsSwipeRefreshLayout.setRefreshing(false);
+          setUpItems(parentActivity);
+          personalItemsSwipeRefreshLayout.setRefreshing(false);
         });
   }
 
   // Take arraylist of items to load recyclerView of user's items
-  private void setUpItems() {
+  private void setUpItems(Context context) {
+    // TODO: This should show the user's items, not the items from other people
     // retrieve and insert firebase data into items
     FIRESTORE_INSTANCE
         .collectionGroup("items")
@@ -129,7 +142,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(getActivity(), PublicItemsDetailPage.class);
+    Intent intent = new Intent(parentContext, PublicItemsDetailPage.class);
     intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
     intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
     intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
@@ -141,9 +154,9 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   }
 
   private void goToLoginPage() {
-    Intent intent = new Intent(getActivity().getApplicationContext(), LoginPage.class);
+    Intent intent = new Intent(parentContext.getApplicationContext(), LoginPage.class);
     startActivity(intent);
-    getActivity().finish();
+    parentActivity.finish();
   }
 
   private void getCurrentUserInfo() {
@@ -152,7 +165,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   }
 
   private void getXmlElements() {
-    publicItemsRecycler = getActivity().findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = getActivity().findViewById(R.id.public_items_swipeRefresh);
+    personalItemsRecycler = parentActivity.findViewById(R.id.recycler_view);
+    personalItemsSwipeRefreshLayout = parentActivity.findViewById(R.id.user_items_swipeRefresh);
   }
 }
