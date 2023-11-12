@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +33,7 @@ public class LoginPage extends AppCompatActivity {
     super.onStart();
     FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
-      Intent intent = new Intent(getApplicationContext(), PublicItemsPageFragment.class);
+      Intent intent = new Intent(getApplicationContext(), MainActivity.class);
       startActivity(intent);
       finish();
     }
@@ -126,7 +125,7 @@ public class LoginPage extends AppCompatActivity {
 
                 Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(getApplicationContext(), PublicItemsPageFragment.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
 
