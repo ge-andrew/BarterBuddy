@@ -15,24 +15,28 @@ public class Item implements Serializable {
   private String imageId;
 
   /** true if the item is the active item for trade and false if not */
-  private boolean isActive;
+  private boolean active;
 
   private String username;
   private String email;
   private String perceivedValue;
+  private String id;
 
   // default constructor
   public Item(
+      String id,
       String title,
       String description,
       String imageId,
-      boolean isActive,
+      boolean active,
       String username,
-      String ownerEmail, String perceivedValue) {
+      String ownerEmail,
+      String perceivedValue) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.imageId = imageId;
-    this.isActive = isActive;
+    this.active = active;
     this.username = username;
     this.email = ownerEmail;
     this.perceivedValue = perceivedValue;
@@ -40,6 +44,14 @@ public class Item implements Serializable {
 
   // empty constructor necessary for Firebase
   public Item() {}
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getTitle() {
     return title;
@@ -66,11 +78,11 @@ public class Item implements Serializable {
   }
 
   public boolean getActive() {
-    return isActive;
+    return active;
   }
 
   public void setActive(boolean active) {
-    this.isActive = active;
+    this.active = active;
   }
 
   public String getUsername() {
@@ -89,7 +101,7 @@ public class Item implements Serializable {
     this.email = email;
   }
 
-  public String getId() {
+  public String generateId() {
     return this.getEmail() + "-" + this.getTitle();
   }
 
@@ -97,5 +109,7 @@ public class Item implements Serializable {
     return perceivedValue;
   }
 
-  public void setPerceivedValue(String perceivedValue) {this.perceivedValue = perceivedValue;}
+  public void setPerceivedValue(String perceivedValue) {
+    this.perceivedValue = perceivedValue;
+  }
 }
