@@ -34,29 +34,31 @@
         <activity
             android:name=".utils.GetImageDialogBox"
             android:exported="false" />
+
         <activity
             android:name=".activities.AddNewItemPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.PersonalItemsDetailPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.PublicItemsDetailPage"
             android:exported="false" />
-        <activity
-            android:name=".activities.PersonalItemsPage"
-            android:exported="false" />
-        <activity android:name=".activities.UserProfileHub"
-            android:exported="false"/>
+
         <activity
             android:name=".activities.ChooseTradeItemPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.AdjustTradeMoneyPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.ChatPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.TestChatPageClass"
             android:exported="true" />
