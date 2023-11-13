@@ -122,7 +122,6 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
 
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems() {
-    // TODO: This should show the user's items, not the items from other people
     // retrieve and insert firebase data into items
     CollectionReference userItemsCollection = FirebaseUtil.getUserItemsCollection(currentUserEmail);
     userItemsCollection
