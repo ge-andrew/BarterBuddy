@@ -1,6 +1,5 @@
 package com.example.barterbuddy.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -39,11 +37,9 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   private FirebaseUser currentUser;
   private RecyclerView publicItemsRecycler;
   private SwipeRefreshLayout publicItemsSwipeRefreshLayout;
-  private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
+  private ArrayList<Item> availableItems = new ArrayList<>();
   private String currentUserUsername;
   private String currentUserEmail;
-
-  private MutableLiveData<ArrayList<Item>> itemsLiveData = new MutableLiveData<>(new ArrayList<>());
   private PublicItemsRecyclerAdapter adapter;
 
   @Nullable
@@ -52,25 +48,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_public_items, container, false);
-
-    // Initialize RecyclerView and Adapter
-    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
-    adapter =
-        new PublicItemsRecyclerAdapter(requireActivity(), new ArrayList<>(), this, ITEM_IMAGES);
-    publicItemsRecycler.setAdapter(adapter);
-    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-    // Observe changes in the LiveData and update the adapter
-    itemsLiveData.observe(
-        getViewLifecycleOwner(),
-        items -> {
-          adapter.updateItems(items);
-          adapter.notifyDataSetChanged();
-        });
-
-    return view;
+    return inflater.inflate(R.layout.fragment_public_items, container, false);
   }
 
   @Override
@@ -84,6 +62,14 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
     getCurrentUserInfo();
 
     getXmlElements();
+
+    // Initialize RecyclerView and Adapter
+    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
+    adapter =
+            new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
+    publicItemsRecycler.setAdapter(adapter);
+    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
@@ -106,7 +92,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
         .get()
         .addOnCompleteListener(
             task -> {
-              ArrayList<Item> availableItems = new ArrayList<>();
+              availableItems = new ArrayList<>();
               if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                   // don't add item if is user's own item
@@ -116,8 +102,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
                     availableItems.add((document.toObject(Item.class)));
                   }
                 }
-                itemsLiveData.setValue(availableItems);
-                itemsFromFirestore = availableItems;
+                adapter.updateItems(availableItems);
               } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
               }
@@ -130,9 +115,9 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   @Override
   public void onItemClick(int position) {
     Intent intent = new Intent(getActivity(), PublicItemsDetailPage.class);
-    intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
-    intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
-    intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
+    intent.putExtra("itemId", availableItems.get(position).getImageId());
+    intent.putExtra("username", availableItems.get(position).getUsername());
+    intent.putExtra("email", availableItems.get(position).getEmail());
     startActivity(intent);
   }
 

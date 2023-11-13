@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -46,9 +45,7 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
   private PersonalItemsRecyclerViewAdapter adapter;
   private RecyclerView personalItemsRecycler;
   private SwipeRefreshLayout personalItemsSwipeRefreshLayout;
-  private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
-  private final MutableLiveData<ArrayList<Item>> itemsLiveData =
-      new MutableLiveData<>(new ArrayList<>());
+  private ArrayList<Item> userItems;
   private Context parentContext;
   private Activity parentActivity;
 
@@ -66,22 +63,6 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
 
     parentContext = requireContext();
     parentActivity = requireActivity();
-
-    // Initialize RecyclerView and Adapter
-    personalItemsRecycler = view.findViewById(R.id.recycler_view);
-    personalItemsSwipeRefreshLayout = view.findViewById(R.id.user_items_swipeRefresh);
-    adapter =
-        new PersonalItemsRecyclerViewAdapter(parentContext, new ArrayList<>(), this, ITEM_IMAGES);
-    personalItemsRecycler.setAdapter(adapter);
-    personalItemsRecycler.setLayoutManager(new LinearLayoutManager(parentContext));
-
-    // Observe changes in the LiveData and update the adapter
-    itemsLiveData.observe(
-        getViewLifecycleOwner(),
-        items -> {
-          adapter.updateItems(items);
-          adapter.notifyDataSetChanged();
-        });
 
     return view;
   }
@@ -108,6 +89,14 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
               startActivityForResult(intent, REQUEST_CODE);
             });
 
+    // Initialize RecyclerView and Adapter
+    personalItemsRecycler = view.findViewById(R.id.recycler_view);
+    personalItemsSwipeRefreshLayout = view.findViewById(R.id.user_items_swipeRefresh);
+    adapter =
+            new PersonalItemsRecyclerViewAdapter(parentContext, new ArrayList<>(), this, ITEM_IMAGES);
+    personalItemsRecycler.setAdapter(adapter);
+    personalItemsRecycler.setLayoutManager(new LinearLayoutManager(parentContext));
+
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
@@ -128,12 +117,12 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
         .get()
         .addOnSuccessListener(
             task -> {
-              ArrayList<Item> userItems = new ArrayList<>();
+              userItems = new ArrayList<>();
               for (QueryDocumentSnapshot document : task) {
                 userItems.add(document.toObject(Item.class));
               }
-              itemsLiveData.setValue(userItems);
-              itemsFromFirestore = userItems;
+
+              adapter.updateItems(userItems);
             })
         .addOnFailureListener(
             e -> Log.d(TAG, "Error getting documents: ", e));
@@ -145,9 +134,9 @@ public class UserItemsPageFragment extends Fragment implements RecyclerViewInter
   @Override
   public void onItemClick(int position) {
     Intent intent = new Intent(parentContext, PersonalItemsDetailPage.class);
-    intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
-    intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
-    intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
+    intent.putExtra("itemId", userItems.get(position).getImageId());
+    intent.putExtra("username", userItems.get(position).getUsername());
+    intent.putExtra("email", userItems.get(position).getEmail());
     startActivity(intent);
   }
 
