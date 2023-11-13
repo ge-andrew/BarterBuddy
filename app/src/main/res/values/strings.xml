@@ -53,4 +53,10 @@
     <string name="missing_image">Missing image</string>
     <string name="estimated_value">"Estimated value: "</string>
     <string name="descriptionForRecyclerCards">Description:\ </string>
+    <string name="market">Market</string>
+    <string name="menu_items">Items</string>
+    <string name="offers">Offers</string>
+    <string name="add_new_item">Add New Item</string>
+    <string name="offer_trade_choose_an_item">Offer Trade: Choose an Item</string>
+    <string name="add_an_item">Add an Item</string>
 </resources>

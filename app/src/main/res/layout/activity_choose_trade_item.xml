@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingVertical="16dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -19,7 +19,7 @@
             android:id="@+id/back_arrow"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:contentDescription="back_arrow"
+            android:contentDescription="@string/back_arrow"
             android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
 
     </LinearLayout>
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:gravity="center"
-        android:text="Offer Trade: Choose an Item"
+        android:text="@string/offer_trade_choose_an_item"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,17 +43,19 @@
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offer_trade_title" />
+        app:layout_constraintTop_toBottomOf="@+id/offer_trade_title"
+        app:layout_constraintBottom_toTopOf="@id/add_new_personal_item_button"/>
 
     <Button
         android:id="@+id/add_new_personal_item_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Add an Item"
+        android:text="@string/add_an_item"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/personal_items_recycler_view" />
+        app:layout_constraintTop_toBottomOf="@+id/personal_items_recycler_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

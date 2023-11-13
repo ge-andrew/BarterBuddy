@@ -45,7 +45,7 @@ public class CreateAccountPage extends AppCompatActivity {
     super.onStart();
     FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
-      Intent intent = new Intent(getApplicationContext(), PublicItemsPage.class);
+      Intent intent = new Intent(getApplicationContext(), MainActivity.class);
       startActivity(intent);
       finish();
     }

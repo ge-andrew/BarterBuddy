@@ -33,9 +33,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ChatPage extends AppCompatActivity {
-  // Citation: This activity is modeled after one from EasyTuto on YouTube:
-  // https://youtu.be/E7s542TJDE4?feature=shared
-
   private static final String TAG = "ChatPage";
 
   String chatroomId;

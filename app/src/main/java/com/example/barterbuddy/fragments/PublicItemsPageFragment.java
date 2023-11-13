@@ -1,18 +1,23 @@
-package com.example.barterbuddy.activities;
+package com.example.barterbuddy.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.activities.LoginPage;
+import com.example.barterbuddy.activities.PublicItemsDetailPage;
 import com.example.barterbuddy.adapters.PublicItemsRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
@@ -23,24 +28,32 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class PublicItemsPage extends AppCompatActivity implements RecyclerViewInterface {
+public class PublicItemsPageFragment extends Fragment implements RecyclerViewInterface {
 
   private static final String TAG = "ItemsAvailable";
   private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
-  private Button user_items_button;
   private RecyclerView publicItemsRecycler;
   private SwipeRefreshLayout publicItemsSwipeRefreshLayout;
-  private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
+  private ArrayList<Item> availableItems = new ArrayList<>();
   private String currentUserUsername;
   private String currentUserEmail;
+  private PublicItemsRecyclerAdapter adapter;
+
+  @Nullable
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_public_items, container, false);
+  }
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_public_items);
+  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
     getCurrentUser();
     if (currentUser == null) {
@@ -50,26 +63,28 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
 
     getXmlElements();
 
+    // Initialize RecyclerView and Adapter
+    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
+    adapter =
+            new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
+    publicItemsRecycler.setAdapter(adapter);
+    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
     // onComplete
-    setUpItems(this);
+    setUpItems();
 
-    user_items_button.setOnClickListener(
-        view -> {
-          Intent intent = new Intent(PublicItemsPage.this, UserProfileHub.class);
-          startActivity(intent);
+    publicItemsSwipeRefreshLayout.setOnRefreshListener(
+        () -> {
+          setUpItems();
+          publicItemsSwipeRefreshLayout.setRefreshing(false);
         });
-
-    publicItemsSwipeRefreshLayout.setOnRefreshListener(() -> {
-      setUpItems(this);
-      publicItemsSwipeRefreshLayout.setRefreshing(false);
-    });
   }
 
-
   // Take arraylist of items to load recyclerView of user's items
-  private void setUpItems(Context context) {
+  private void setUpItems() {
     // retrieve and insert firebase data into items
     FIRESTORE_INSTANCE
         .collectionGroup("items")
@@ -77,25 +92,20 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
         .get()
         .addOnCompleteListener(
             task -> {
-              ArrayList<Item> availableItems = new ArrayList<>();
+              availableItems = new ArrayList<>();
               if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                   // don't add item if is user's own item
                   if ((document.get("email") != null && document.get("username") != null)
                       && !(document.get("email").equals(currentUserEmail)
-                          && document.get("username").equals(currentUserUsername)))
+                          && document.get("username").equals(currentUserUsername))) {
                     availableItems.add((document.toObject(Item.class)));
+                  }
                 }
+                adapter.updateItems(availableItems);
               } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
               }
-              itemsFromFirestore = availableItems;
-              // set up recyclerView
-              PublicItemsRecyclerAdapter adapter =
-                  new PublicItemsRecyclerAdapter(
-                      context, availableItems, (RecyclerViewInterface) context, ITEM_IMAGES);
-              publicItemsRecycler.setAdapter(adapter);
-              publicItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
             });
   }
 
@@ -104,10 +114,10 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(PublicItemsPage.this, PublicItemsDetailPage.class);
-    intent.putExtra("itemId", itemsFromFirestore.get(position).getImageId());
-    intent.putExtra("username", itemsFromFirestore.get(position).getUsername());
-    intent.putExtra("email", itemsFromFirestore.get(position).getEmail());
+    Intent intent = new Intent(getActivity(), PublicItemsDetailPage.class);
+    intent.putExtra("itemId", availableItems.get(position).getImageId());
+    intent.putExtra("username", availableItems.get(position).getUsername());
+    intent.putExtra("email", availableItems.get(position).getEmail());
     startActivity(intent);
   }
 
@@ -116,9 +126,9 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   private void goToLoginPage() {
-    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+    Intent intent = new Intent(getActivity().getApplicationContext(), LoginPage.class);
     startActivity(intent);
-    finish();
+    getActivity().finish();
   }
 
   private void getCurrentUserInfo() {
@@ -127,8 +137,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   private void getXmlElements() {
-    user_items_button = findViewById(R.id.User_Items_Button);
-    publicItemsRecycler = findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = findViewById(R.id.public_items_swipeRefresh);
+    publicItemsRecycler = getActivity().findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = getActivity().findViewById(R.id.public_items_swipeRefresh);
   }
 }

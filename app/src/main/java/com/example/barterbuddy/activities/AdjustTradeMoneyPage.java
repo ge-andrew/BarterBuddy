@@ -169,7 +169,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
                     Toast toast = Toast.makeText(this, "Trade submitted!", Toast.LENGTH_LONG);
                     toast.show();
 
-                    Intent intent = new Intent(AdjustTradeMoneyPage.this, PublicItemsPage.class);
+                    Intent intent = new Intent(AdjustTradeMoneyPage.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                   })
