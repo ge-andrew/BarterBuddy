@@ -54,6 +54,7 @@ public class IncomingOffersPage extends AppCompatActivity {
   private int currentTrade = 0;
   private StorageReference ItemImageReference;
   private ArrayList<Item> offeringItems = new ArrayList<>();
+  private View includedLayout;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class IncomingOffersPage extends AppCompatActivity {
     your_offers_button = findViewById(R.id.your_offers_button);
     incoming_offers_button = findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
-    View includedLayout = findViewById(R.id.included_layout);
+    includedLayout = findViewById(R.id.included_layout);
     ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     accept_button = findViewById(R.id.accept_button);
@@ -82,8 +83,9 @@ public class IncomingOffersPage extends AppCompatActivity {
             Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
             currentTrade++;
             if(!displayNextTrade()) {
-              //includedLayout.findViewById(R.id.cardView).setVisibility(View.GONE);
+              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
               //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
+              Toast.makeText(this, "No more trades!", Toast.LENGTH_SHORT).show();
             }
           }
         });
@@ -94,8 +96,9 @@ public class IncomingOffersPage extends AppCompatActivity {
             Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
             currentTrade++;
             if(displayNextTrade()) {
-              //includedLayout.findViewById(R.id.cardView).setVisibility(View.GONE);
+              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
               //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
+              Toast.makeText(this, "No more trades!", Toast.LENGTH_SHORT).show();
             }
           }
         });
@@ -177,14 +180,20 @@ public class IncomingOffersPage extends AppCompatActivity {
                     posterItemDocumentReference = tradeDoc.getDocumentReference("posterItem");
                   }
                 }
-                loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
+                if(offeringItemDocumentReferences.size() > 0) {
+                  loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
+                }
+                else {
+                  includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
+                  //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
+                  Toast.makeText(this, "No trades yet!", Toast.LENGTH_SHORT).show();
+                }
               }
             })
         .addOnFailureListener(
             task -> {
               Log.d(TAG, "Error getting documents. ");
             });
-
   }
 
   private void loadItems(
