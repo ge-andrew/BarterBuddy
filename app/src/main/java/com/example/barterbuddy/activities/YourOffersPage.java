@@ -153,7 +153,7 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
             // Firebase query
             // retrieve and insert firebase data into items
             DB.collection("trades")
-                    .whereEqualTo("offeringEmail", "daniel@google.com")
+                    .whereEqualTo("offeringEmail", "bob@google.com")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -204,8 +204,8 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
                                     email = item.getEmail();
                                     Log.d(TAG, "Loading image for item with image ID: " + item.getImageId());
                                     StorageReference imageReference = IMAGE_STORAGE
-                                            .getReference()
-                                            .child("users/" + email + "/" + item.getImageId() + ".jpg");
+                                            .getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/barterbuddy-fb48c.appspot.com/o/users%2Fandrew%40google.com%2Fandrew%40google.com-Scissors.jpg?alt=media&token=017f8897-fb7b-4460-832a-b8ae62d91464");
+                                            //.child("users/" + email + "/" + item.getImageId() + ".jpg");
                                     Log.d(TAG, "Loading image path: " + imageReference);
 
                                     imageReference

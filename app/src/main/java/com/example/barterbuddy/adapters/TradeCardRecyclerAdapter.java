@@ -57,21 +57,20 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       holder.tradeMoneyWanted.setText(String.valueOf(money));
     }
     StorageReference imageReferencePoster = IMAGE_STORAGE_INSTANCE.getReference()
-            .child("users/" + userTrades.get(position).getPosterEmail()
-                    + "/" + userTrades.get(position).getPosterItem() + ".jpg");
-    StorageReference imageReferenceOfferer = IMAGE_STORAGE_INSTANCE.getReference()
-            .child("users/" + userTrades.get(position).getOfferingEmail()
-                    + "/" + userTrades.get(position).getOfferingItem() + ".jpg");
+            .child("https://firebasestorage.googleapis.com/v0/b/barterbuddy-fb48c.appspot.com/o/users%2Fandrew%40google.com%2Fandrew%40google.com-Scissors.jpg?alt=media&token=017f8897-fb7b-4460-832a-b8ae62d91464");
+//    StorageReference imageReferenceOfferer = IMAGE_STORAGE_INSTANCE.getReference()
+//            .child("users/" + userTrades.get(position).getOfferingEmail()
+//                    + "/" + userTrades.get(position).getOfferingItem() + ".jpg");
 
     long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReferencePoster.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
       holder.yourItemImageView.setImageBitmap(itemImage);
     });
-    imageReferenceOfferer.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
-      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-      holder.wantedItemImageView.setImageBitmap(itemImage);
-    });
+//    imageReferenceOfferer.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
+//      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//      holder.wantedItemImageView.setImageBitmap(itemImage);
+//    });
   }
 
   @Override
@@ -96,6 +95,12 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
           int pos = getAdapterPosition();
           if (pos != RecyclerView.NO_POSITION) {
             recyclerViewInterface.onItemClick(pos);
+
+
+
+
+            //users/" + userTrades.get(position).getPosterEmail()
+            //                    + "/" + userTrades.get(position).getPosterItem() + ".jpg
           }
         }
       });
