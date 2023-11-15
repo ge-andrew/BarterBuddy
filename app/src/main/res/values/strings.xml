@@ -53,6 +53,9 @@
     <string name="missing_image">Missing image</string>
     <string name="estimated_value">"Estimated value: "</string>
     <string name="descriptionForRecyclerCards">Description:\ </string>
+    <string name="questionmark">\?</string>
+    <string name="rating_prompt_part1">Rate your trading experience</string>
+    <string name="rating_prompt_part2">"with\ "</string>
     <string name="market">Market</string>
     <string name="menu_items">Items</string>
     <string name="offers">Offers</string>
