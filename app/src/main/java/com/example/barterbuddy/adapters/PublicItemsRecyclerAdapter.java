@@ -80,6 +80,12 @@ public class PublicItemsRecyclerAdapter
             });
   }
 
+  public void updateItems(ArrayList<Item> updatedItems) {
+    this.userItems.clear();
+    this.userItems.addAll(updatedItems);
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getItemCount() {
     return userItems.size();

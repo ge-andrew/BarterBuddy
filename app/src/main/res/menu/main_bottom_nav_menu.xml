@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Clickable menu items -->
+    <item
+        android:id="@+id/menu_item_market"
+        android:title="@string/market"
+        android:icon="@drawable/icon_home" />
+
+    <item
+        android:id="@+id/menu_item_items"
+        android:title="@string/menu_items"
+        android:icon="@drawable/icon_add_circle" />
+
+    <item
+        android:id="@+id/menu_item_offers"
+        android:title="@string/offers"
+        android:icon="@drawable/default_profile_face" />
+
+</menu>
