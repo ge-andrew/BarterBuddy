@@ -79,6 +79,12 @@ public class PublicItemsRecyclerAdapter
     return userItems.size();
   }
 
+  public void updateItemList(ArrayList<Item> newItems) {
+    this.userItems.clear();
+    this.userItems.addAll(newItems);
+    notifyDataSetChanged();
+  }
+
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     // this method very very roughly equates to onCreate() from recyclerView
     // sets up image and text views

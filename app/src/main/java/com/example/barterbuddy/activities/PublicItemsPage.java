@@ -39,6 +39,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private String currentUserEmail;
   private String searchFilter;
   private SearchView searchBar;
+  private boolean search;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +57,14 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
 
       @Override
       public boolean onQueryTextChange(String newText) {
+        search = true;
+        searchFilter = newText;
         filterList(newText);
-        return false;
+        return search;
       }
     });
+
+    //Fire base Auth
     getCurrentUser();
     if (currentUser == null) {
       goToLoginPage();
@@ -86,7 +91,13 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   private void filterList(String newText) {
-    searchFilter = newText;
+    ArrayList<Item> filteredList = new ArrayList<>();
+    for (Item item : itemsFromFirestore) {
+      if (item.getTitle().toLowerCase().contains(newText.toLowerCase())) {
+        filteredList.add(item);
+      }
+    }
+    publicItemsRecycler.updateItemList();
   }
 
 
@@ -118,6 +129,9 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
                       context, availableItems, (RecyclerViewInterface) context, ITEM_IMAGES);
               publicItemsRecycler.setAdapter(adapter);
               publicItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
+              if (search) {
+                  filterList(searchFilter);
+              }
             });
   }
 
