@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,12 +37,29 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
   private String currentUserUsername;
   private String currentUserEmail;
+  private String searchFilter;
+  private SearchView searchBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_public_items);
 
+    //Search bar
+    searchBar = findViewById(R.id.search_bar);
+    searchBar.clearFocus();
+    searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        filterList(newText);
+        return false;
+      }
+    });
     getCurrentUser();
     if (currentUser == null) {
       goToLoginPage();
@@ -65,6 +83,10 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
       setUpItems(this);
       publicItemsSwipeRefreshLayout.setRefreshing(false);
     });
+  }
+
+  private void filterList(String newText) {
+    searchFilter = newText;
   }
 
 
