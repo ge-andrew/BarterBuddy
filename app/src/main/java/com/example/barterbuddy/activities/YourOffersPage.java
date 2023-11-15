@@ -104,10 +104,7 @@ public class YourOffersPage extends AppCompatActivity implements RecyclerViewInt
         //Take you to your incoming offers
         incoming_offers_button.setOnClickListener(
                 v -> {
-                    Intent incoming_offers_page = new Intent(YourOffersPage.this,IncomingOffersPage.class);
-                    incoming_offers_page.putExtra("username", username);
-                    incoming_offers_page  .putExtra("email", email);
-                    startActivity(incoming_offers_page);
+
                 }
         );
 
