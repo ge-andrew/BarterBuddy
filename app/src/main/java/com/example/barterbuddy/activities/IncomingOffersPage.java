@@ -1,5 +1,7 @@
 package com.example.barterbuddy.activities;
 
+import static com.example.barterbuddy.network.UpdateTrades.*;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -84,7 +86,6 @@ public class IncomingOffersPage extends AppCompatActivity {
             currentTrade++;
             if(!displayNextTrade()) {
               includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-              //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
               Toast.makeText(this, "No more trades!", Toast.LENGTH_SHORT).show();
             }
           }
@@ -93,13 +94,12 @@ public class IncomingOffersPage extends AppCompatActivity {
     accept_button.setOnClickListener(
         v -> {
           if(currentTrade < trades.size()) {
-            Toast.makeText(this, "Trade Accepted", Toast.LENGTH_SHORT).show();
-            currentTrade++;
-            if(displayNextTrade()) {
-              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-              //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
-              Toast.makeText(this, "No more trades!", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(this, "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG).show();
+            setTradeNegotiating(trades.get(currentTrade));
+            Intent intent = new Intent(IncomingOffersPage.this, BarterPage.class);
+            intent.putExtra("trade", trades.get(currentTrade));
+            startActivity(intent);
+            finish();
           }
         });
     // Takes you to userItemsPage
@@ -168,12 +168,14 @@ public class IncomingOffersPage extends AppCompatActivity {
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   // TODO: make name of documents poster_sender consistent, find way to import
                   // document directly into Trade object
-                  if (tradeDoc.getString("posterEmail").equals(email)) {
+                  if (tradeDoc.getString("posterEmail").equals(email) ||
+                        tradeDoc.getString("stateOfCompletion").equals("IN-PROGRESS")) {
                     String posterEmail = tradeDoc.getString("posterEmail");
                     String offeringEmail = tradeDoc.getString("offeringEmail");
+                    String stateOfCompletion = tradeDoc.getString("stateOfCompletion");
                     double money = tradeDoc.getDouble("money");
 
-                    trades.add(new Trade(posterEmail, null, offeringEmail, null, money));
+                    trades.add(new Trade(posterEmail, null, offeringEmail, null, money, stateOfCompletion));
 
                     offeringItemDocumentReferences.add(
                         tradeDoc.getDocumentReference("offeringItem"));

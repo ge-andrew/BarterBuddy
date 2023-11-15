@@ -11,13 +11,15 @@ public class Trade implements Serializable{
     // Money indicates the additional funds the offering user is giving
     // Negative money values indicates the offering user wants to be paid for the trade
     private double money;
+    private String stateOfCompletion;
 
-    public Trade(String posterEmail, Item posterItem, String offeringEmail, Item offeringItem, double money) {
+    public Trade(String posterEmail, Item posterItem, String offeringEmail, Item offeringItem, double money, String stateOfCompletion) {
         this.posterEmail = posterEmail;
         this.posterItem = posterItem;
         this.offeringEmail = offeringEmail;
         this.offeringItem = offeringItem;
         this.money = money;
+        this.stateOfCompletion = stateOfCompletion;
     }
 
 
@@ -63,6 +65,25 @@ public class Trade implements Serializable{
 
     public void setMoney(double money) {
         this.money = money;
+    }
+
+    public String getStateOfCompletion() {
+        return stateOfCompletion;
+    }
+
+    public void setStateOfCompletion(String stateOfCompletion) {
+        this.stateOfCompletion = stateOfCompletion;
+    }
+
+    public boolean isNonNull() {
+        if(posterEmail == null ||
+            offeringEmail == null ||
+            posterItem == null ||
+            offeringItem == null ||
+            stateOfCompletion == null) {
+            return false;
+        }
+        return true;
     }
 }
 
