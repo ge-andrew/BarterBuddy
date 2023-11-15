@@ -1,10 +1,12 @@
 package com.example.barterbuddy.models;
 
+import java.io.Serializable;
+
 /*
    This class stores all the data related to a User in a structure identical to
    a document in the Firestore Users collection.
 */
-public class User {
+public class User implements Serializable {
   // the name of the user
   private String username;
   private String email;

@@ -33,7 +33,7 @@ public class LoginPage extends AppCompatActivity {
     super.onStart();
     FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
-      Intent intent = new Intent(getApplicationContext(), PublicItemsPage.class);
+      Intent intent = new Intent(getApplicationContext(), MainActivity.class);
       startActivity(intent);
       finish();
     }
@@ -125,7 +125,7 @@ public class LoginPage extends AppCompatActivity {
 
                 Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(getApplicationContext(), PublicItemsPage.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
 

@@ -3,8 +3,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="peach">#f2886d</color>
-    <color name="light_gray">#E5E5E5 </color>
+    <color name="light_grey">#E5E5E5 </color>
     <color name="red">#fc0303</color>
+    <color name="rating_star_primary">#ffe234</color>
+    <color name="rating_star_secondary">#a6a6a6</color>
+    <color name="background">#FFF6F1</color>
     <color name="green">#00FF00</color>
     <color name="blue">#0000FF</color>
     <color name="yellow">#FFFF00</color>
@@ -12,7 +15,6 @@
     <color name="purple">#800080</color>
     <color name="pink">#FFC0CB</color>
     <color name="cyan">#00FFFF</color>
-
     <color name="chat_color_sender">#1E88E5</color>
     <color name="chat_color_receiver">#7CB342</color>
 </resources>
