@@ -19,10 +19,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="@string/login"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:theme="@style/titleTextStyle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,8 +40,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:textColorHighlight="@color/peach"
-                android:textSize="18sp" />
+                android:theme="@style/editTextStyle" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -58,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textColorHighlight="@color/peach"
-                android:textSize="18sp" />
+                android:theme="@style/editTextStyle" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -75,13 +71,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/invalid_email_or_password"
-                android:textColor="@color/red"
+                android:theme="@style/warningTextStyle"
                 android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/show_password" />
+                android:text="@string/show_password"
+                android:theme="@style/defaultTextStyle" />
 
             <CheckBox
                 android:id="@+id/show_password_checkbox"
@@ -97,10 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:padding="12dp"
             android:text="@string/login"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:theme="@style/primaryButtonStyle"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,16 +108,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/don_t_have_an_account"
-                android:textSize="18sp" />
+                android:theme="@style/defaultTextStyle" />
 
             <TextView
                 android:id="@+id/sign_up_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_up"
-                android:textColor="@color/peach"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:theme="@style/usernameTextStyle" />
 
         </LinearLayout>
 

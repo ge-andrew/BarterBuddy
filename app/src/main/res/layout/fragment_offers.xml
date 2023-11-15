@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="To Be Implemented: In-Progress Offers"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:theme="@style/titleTextStyle"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,4 +59,6 @@
     <string name="add_new_item">Add New Item</string>
     <string name="offer_trade_choose_an_item">Offer Trade: Choose an Item</string>
     <string name="add_an_item">Add an Item</string>
+    <string name="barter">Barter!</string>
+    <string name="pick_an_item_to_offer">Pick an item to offer</string>
 </resources>

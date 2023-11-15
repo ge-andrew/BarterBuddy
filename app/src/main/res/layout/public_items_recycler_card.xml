@@ -44,15 +44,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/title"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/username"
-                    android:textColor="@color/peach"
-                    android:textStyle="bold" />
+                    android:theme="@style/usernameTextStyle" />
 
             </LinearLayout>
 
@@ -66,13 +66,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/estimated_value"
-                    android:textStyle="bold" />
+                    android:theme="@style/defaultBoldedTextStyle"/>
 
                 <TextView
                     android:id="@+id/perceivedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Estimated value" />
+                    android:text="Estimated value"
+                    android:theme="@style/defaultTextStyle"/>
 
             </LinearLayout>
 
@@ -86,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/descriptionForRecyclerCards"
-                    android:textStyle="bold" />
+                    android:theme="@style/defaultBoldedTextStyle" />
 
                 <TextView
                     android:id="@+id/private_item_recycler_card_description"
@@ -94,7 +95,8 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@string/description" />
+                    android:text="@string/description"
+                    android:theme="@style/defaultTextStyle"/>
 
             </LinearLayout>
 
