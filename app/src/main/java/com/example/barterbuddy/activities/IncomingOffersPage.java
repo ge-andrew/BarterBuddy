@@ -31,25 +31,16 @@ import java.util.ArrayList;
 
 public class IncomingOffersPage extends AppCompatActivity {
   private static final String TAG = "UserItemsPage";
-  final long ONE_MEGABYTE = 1024 * 1024;
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
-  private final ArrayList<Bitmap> ITEM_IMAGES = new ArrayList<>();
-  private final int REQUEST_CODE = 1002;
-  private Button incoming_offers_button;
   private Button your_offers_button;
   private Button your_items_button;
   private Button decline_button;
   private Button accept_button;
-  private ImageView offeredItemImage;
-  private ImageView wantedItemImage;
-  private TextView offeredTrade;
-  private TextView wantedTrade;
   private String username;
   private String email;
-  private StorageReference imageReference;
-  private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
   private String currentEmail;
   private ArrayList<Trade> trades = new ArrayList<>();
@@ -63,7 +54,6 @@ public class IncomingOffersPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_incoming_offers_page);
     your_offers_button = findViewById(R.id.your_offers_button);
-    incoming_offers_button = findViewById(R.id.incoming_offers_button);
     your_items_button = findViewById(R.id.your_items_button);
     includedLayout = findViewById(R.id.included_layout);
     ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
@@ -217,8 +207,6 @@ public class IncomingOffersPage extends AppCompatActivity {
                   Log.d(TAG, "Poster Item did not exist at location.");
                 }
 
-                final int[] i = {0};
-
                 for (DocumentReference d : offeringItemDocumentReferences) {
                   d.get()
                       .addOnCompleteListener(
@@ -228,11 +216,7 @@ public class IncomingOffersPage extends AppCompatActivity {
                               if (w.isSuccessful()) {
                                 DocumentSnapshot offeringItemDoc = w.getResult();
                                 if (offeringItemDoc.exists()) {
-//                                  trades
-//                                      .get(i[0])
-//                                      .setOfferingItem(offeringItemDoc.toObject(Item.class));
                                   offeringItems.add(offeringItemDoc.toObject(Item.class));
-                                  i[0]++;
                                   if(!displayNextTrade()) {
                                     return;
                                   }
