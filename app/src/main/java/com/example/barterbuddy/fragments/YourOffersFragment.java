@@ -1,9 +1,13 @@
 package com.example.barterbuddy.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +15,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +39,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class YourOffersFragment extends AppCompatActivity implements RecyclerViewInterface {
+public class YourOffersFragment extends Fragment implements RecyclerViewInterface {
     private Button incoming_offers_button;
     private Button your_offers_button;
     private Button your_items_button;
@@ -56,64 +63,76 @@ public class YourOffersFragment extends AppCompatActivity implements RecyclerVie
     private String offeringItemId;
     private String posterItemId;
     private ArrayList<TradeWithRef> userTrades = new ArrayList<>();
+    private Activity rootActivity;
+    private Context rootContext;
 
     // Recycler View
     private TradeCardRecyclerAdapter tradeCardAdapter;
     private RecyclerView tradeCardRecyclerView;
 
-
-
+    @Nullable
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+            ) {
+        rootActivity = requireActivity();
+        rootContext = requireContext();
+        return inflater.inflate(R.layout.your_offers_page, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.your_offers_page);
-        your_offers_button = findViewById(R.id.your_offers_button);
-        incoming_offers_button= findViewById(R.id.incoming_offers_button);
-        your_items_button = findViewById(R.id.your_items_button);
-        tradeCardRecyclerView = findViewById(R.id.recycler_view);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        username = getIntent().getStringExtra("username");
-        email = getIntent().getStringExtra("email");
-        //Firebase Auth process
-        getCurrentUser();
-        getCurrentUserInfo();
+        rootActivity.setContentView(R.layout.your_offers_page);
+        your_offers_button = rootActivity.findViewById(R.id.your_offers_button);
+        incoming_offers_button= rootActivity.findViewById(R.id.incoming_offers_button);
+        your_items_button = rootActivity.findViewById(R.id.your_items_button);
+        tradeCardRecyclerView = rootActivity.findViewById(R.id.recycler_view);
+
+//        username = getIntent().getStringExtra("username");
+//        email = getIntent().getStringExtra("email");
+//        //Firebase Auth process
+//        getCurrentUser();
+//        getCurrentUserInfo();
 
         // Set up Tradecard
-        tradeCardAdapter = new TradeCardRecyclerAdapter(this, userTrades, this);
+        tradeCardAdapter = new TradeCardRecyclerAdapter(rootContext, userTrades, this);
 
         // onComplete
-        tradeCardRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        tradeCardRecyclerView.setLayoutManager(new LinearLayoutManager(rootContext));
 
         Log.d(TAG,"Before database query");
-        setUpTrades(this);
+        setUpTrades(rootContext);
         Log.d(TAG,"After data base query");
     }
 
 
     //Firebase Authentication
-    private void getCurrentUser() {
-        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
-    }
+//    private void getCurrentUser() {
+//        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+//    }
 
-    private void goToLoginPage() {
-        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-        startActivity(intent);
-        finish();
-    }
+//    private void goToLoginPage() {
+//        Intent intent = new Intent(rootContext.getApplicationContext(), LoginPage.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
-    private void getCurrentUserInfo() {
-        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
-        if (currentUser != null) {
-            // The user is signed in, you can access their information
-            username = currentUser.getDisplayName();
-            currentEmail = currentUser.getEmail();
-        } else {
-            // The user is not signed in, handle this case (e.g., prompt the user to sign in)
-            // You might want to implement a sign-in flow here.
-            goToLoginPage();
-        }
-    }
+//    private void getCurrentUserInfo() {
+//        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
+//        if (currentUser != null) {
+//            // The user is signed in, you can access their information
+//            username = currentUser.getDisplayName();
+//            currentEmail = currentUser.getEmail();
+//        } else {
+//            // The user is not signed in, handle this case (e.g., prompt the user to sign in)
+//            // You might want to implement a sign-in flow here.
+//            goToLoginPage();
+//        }
+//    }
     private void setUpTrades(Context context){
         try {
             // Firebase query
