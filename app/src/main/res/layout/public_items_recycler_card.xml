@@ -44,8 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/title"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:theme="@style/titleTextStyle"/>
 
                 <TextView
                     android:id="@+id/user"
@@ -62,18 +61,18 @@
                 android:layout_marginBottom="4dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/estimated_value"
-                    android:theme="@style/defaultBoldedTextStyle"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/estimated_value"-->
+<!--                    android:theme="@style/defaultBoldedTextStyle"/>-->
 
                 <TextView
                     android:id="@+id/perceivedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estimated value"
-                    android:theme="@style/defaultTextStyle"/>
+                    android:theme="@style/defaultBoldedTextStyle"/>
 
             </LinearLayout>
 
@@ -83,11 +82,11 @@
                 android:layout_marginBottom="12dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/descriptionForRecyclerCards"
-                    android:theme="@style/defaultBoldedTextStyle" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/descriptionForRecyclerCards"-->
+<!--                    android:theme="@style/defaultBoldedTextStyle" />-->
 
                 <TextView
                     android:id="@+id/private_item_recycler_card_description"

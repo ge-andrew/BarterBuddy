@@ -30,6 +30,8 @@
         android:background="@color/white"
         app:itemIconTint="@color/peach"
         app:itemTextColor="@color/peach"
-        app:itemRippleColor= "#fbd9d0"/>
+        app:itemRippleColor= "#fbd9d0"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

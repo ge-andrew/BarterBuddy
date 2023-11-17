@@ -5,16 +5,16 @@
     <item
         android:id="@+id/menu_item_market"
         android:title="@string/market"
-        android:icon="@drawable/icon_home"/>
+        android:icon="@drawable/baseline_shopping_bag_24"/>
 
     <item
         android:id="@+id/menu_item_items"
-        android:title="@string/menu_items"
-        android:icon="@drawable/icon_add_circle" />
+        android:title="@string/my_items"
+        android:icon="@drawable/baseline_inventory_24" />
 
     <item
         android:id="@+id/menu_item_offers"
         android:title="@string/offers"
-        android:icon="@drawable/default_profile_face" />
+        android:icon="@drawable/baseline_handshake_24" />
 
 </menu>
