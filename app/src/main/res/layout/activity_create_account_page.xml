@@ -58,7 +58,7 @@
                 android:id="@+id/username_warning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username is already taken"
+                android:text="@string/username_is_already_taken"
                 android:theme="@style/warningTextStyle"
                 android:visibility="gone" />
 
@@ -87,7 +87,7 @@
                 android:id="@+id/email_warning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="An account with this email already exists"
+                android:text="@string/an_account_with_this_email_already_exists"
                 android:theme="@style/warningTextStyle"
                 android:visibility="gone" />
 
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="@string/create"
-            android:theme="@style/primaryButtonStyle" />
+            android:theme="@style/largerTextButtonStyle" />
 
         <LinearLayout
             android:layout_width="match_parent"

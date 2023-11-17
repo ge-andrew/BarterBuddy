@@ -47,23 +47,25 @@
 
         <Button
             android:id="@+id/complete_trade_button"
-            android:layout_width="150dp"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:text="@string/complete_trade"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/cancel_trade_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/smallerTextButtonStyle"/>
 
         <Button
             android:id="@+id/cancel_trade_button"
-            android:layout_width="150dp"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:text="@string/cancel_trade"
             app:layout_constraintStart_toEndOf="@id/complete_trade_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:theme="@style/smallerTextButtonStyle"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

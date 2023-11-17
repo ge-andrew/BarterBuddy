@@ -38,8 +38,14 @@
         <item name="android:textColor">@color/red</item>
     </style>
 
-    <style name="primaryButtonStyle" parent="">
+    <style name="largerTextButtonStyle" parent="">
         <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="smallerTextButtonStyle" parent="">
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">12dp</item>
     </style>
