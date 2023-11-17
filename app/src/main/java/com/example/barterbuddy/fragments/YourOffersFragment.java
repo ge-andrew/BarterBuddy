@@ -1,14 +1,12 @@
 package com.example.barterbuddy.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
@@ -17,20 +15,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barterbuddy.R;
-import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.adapters.TradeCardRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.TradeWithRef;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,9 +34,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class YourOffersFragment extends Fragment implements RecyclerViewInterface {
-    private Button incoming_offers_button;
-    private Button your_offers_button;
-    private Button your_items_button;
     private ImageView offeredItemImage;
     private ImageView wantedItemImage;
     private TextView offeredTrade;
@@ -57,8 +48,6 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
     private String username;
     private String email;
     private StorageReference imageReference;
-    private FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-    private FirebaseUser currentUser;
     private String currentEmail;
     private String offeringItemId;
     private String posterItemId;
@@ -86,17 +75,7 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rootActivity.setContentView(R.layout.your_offers_page);
-        your_offers_button = rootActivity.findViewById(R.id.your_offers_button);
-        incoming_offers_button= rootActivity.findViewById(R.id.incoming_offers_button);
-        your_items_button = rootActivity.findViewById(R.id.your_items_button);
         tradeCardRecyclerView = rootActivity.findViewById(R.id.recycler_view);
-
-//        username = getIntent().getStringExtra("username");
-//        email = getIntent().getStringExtra("email");
-//        //Firebase Auth process
-//        getCurrentUser();
-//        getCurrentUserInfo();
 
         // Set up Tradecard
         tradeCardAdapter = new TradeCardRecyclerAdapter(rootContext, userTrades, this);
@@ -109,30 +88,6 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
         Log.d(TAG,"After data base query");
     }
 
-
-    //Firebase Authentication
-//    private void getCurrentUser() {
-//        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
-//    }
-
-//    private void goToLoginPage() {
-//        Intent intent = new Intent(rootContext.getApplicationContext(), LoginPage.class);
-//        startActivity(intent);
-//        finish();
-//    }
-
-//    private void getCurrentUserInfo() {
-//        currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
-//        if (currentUser != null) {
-//            // The user is signed in, you can access their information
-//            username = currentUser.getDisplayName();
-//            currentEmail = currentUser.getEmail();
-//        } else {
-//            // The user is not signed in, handle this case (e.g., prompt the user to sign in)
-//            // You might want to implement a sign-in flow here.
-//            goToLoginPage();
-//        }
-//    }
     private void setUpTrades(Context context){
         try {
             // Firebase query
@@ -202,16 +157,12 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
                                                         Log.d(TAG, "Successfully loaded image for item with image ID: " + item.getImageId());
                                                         tradeCardAdapter.notifyDataSetChanged(); // Refresh the RecyclerView after loading the image.
                                                     })
-                                            .addOnFailureListener(e -> {
-                                                Log.w(TAG, "Error getting image for item with image ID: " + item.getImageId(), e);
-                                            });
+                                            .addOnFailureListener(e -> Log.w(TAG, "Error getting image for item with image ID: " + item.getImageId(), e));
                                 } else {
                                     Log.w(TAG, "Item is null");
                                 }
                             })
-                    .addOnFailureListener(e -> {
-                        Log.w(TAG, "Error getting item from reference", e);
-                    });
+                    .addOnFailureListener(e -> Log.w(TAG, "Error getting item from reference", e));
         } else {
             Log.w(TAG, "Item reference is null");
         }

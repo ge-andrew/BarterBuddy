@@ -1,7 +1,6 @@
 package com.example.barterbuddy.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,13 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
-import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class OffersFragment extends Fragment {
   static final String TAG = "OffersFragmentHolder";
 
   private Activity rootActivity;
-  private Context rootContext;
 
   @Nullable
   @Override
@@ -27,9 +25,8 @@ public class OffersFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     rootActivity = requireActivity();
-    rootContext = requireContext();
 
-    return super.onCreateView(inflater, container, savedInstanceState);
+    return inflater.inflate(R.layout.fragment_offers, container, false);
   }
 
   @Override
@@ -40,8 +37,8 @@ public class OffersFragment extends Fragment {
     Fragment incomingOffersFragment = new IncomingOffersFragment();
     setCurrentFragment(yourOffersFragment);
 
-    NavigationView topNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
-    topNavigationView.setNavigationItemSelectedListener(
+    BottomNavigationView bottomNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
+    bottomNavigationView.setOnItemSelectedListener(
         item -> {
           if (item.getItemId() == R.id.menu_item_your_offers) {
             Log.d(TAG, "Menu item opened");
@@ -58,7 +55,7 @@ public class OffersFragment extends Fragment {
   private void setCurrentFragment(Fragment fragment) {
     getChildFragmentManager()
         .beginTransaction()
-        .replace(R.id.fl_fragment_holder, fragment)
+        .replace(R.id.fl_offers_fragments_holder, fragment)
         .commit();
   }
 }
