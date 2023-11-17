@@ -53,6 +53,9 @@
     <string name="missing_image">Missing image</string>
     <string name="estimated_value">"Estimated value: "</string>
     <string name="descriptionForRecyclerCards">Description:\ </string>
+    <string name="questionmark">\?</string>
+    <string name="rating_prompt_part1">Rate your trading experience</string>
+    <string name="rating_prompt_part2">"with\ "</string>
     <string name="market">Market</string>
     <string name="menu_items">Items</string>
     <string name="offers">Offers</string>
@@ -65,4 +68,6 @@
     <string name="username_is_already_taken">Username is already taken</string>
     <string name="an_account_with_this_email_already_exists">An account with this email already exists</string>
     <string name="you_hope_to_receive">You hope to receive:</string>
+    <string name="submit">Submit</string>
+    <string name="skip">Skip</string>
 </resources>
