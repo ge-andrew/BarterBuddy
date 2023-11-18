@@ -33,5 +33,4 @@ public class ProfilePage extends AppCompatActivity {
     emailTextView = findViewById(R.id.email);
     ratingbar = findViewById(R.id.ratingBar);
   }
-
 }

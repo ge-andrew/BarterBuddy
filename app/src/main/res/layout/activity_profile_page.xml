@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF4ED"
     android:orientation="vertical"
     android:paddingVertical="16dp"
-    tools:context=".activities.ProfilePage"
-    android:background="#FFF4ED">
+    tools:context=".activities.ProfilePage">
 
     <LinearLayout
         android:layout_width="match_parent"
