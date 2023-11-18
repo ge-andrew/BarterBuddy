@@ -64,4 +64,5 @@
     <string name="add_an_item">Add an Item</string>
     <string name="submit">Submit</string>
     <string name="skip">Skip</string>
+    <string name="profile">Profile</string>
 </resources>
