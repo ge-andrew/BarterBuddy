@@ -76,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        else if(id == R.id.profile) {
+            Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
+            startActivity(intent);
+        }
+
         return true;
     }
 }

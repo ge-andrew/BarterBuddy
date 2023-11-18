@@ -6,7 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingVertical="16dp"
-    tools:context=".activities.ProfilePage">
+    tools:context=".activities.ProfilePage"
+    android:background="#FFF4ED">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/back_arrow"
+            android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -41,15 +57,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Username: "
+                    android:text="@string/username_profile"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Daniel Peace"
+                    android:text=""
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -66,15 +83,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Email: "
+                    android:text="@string/email_profile"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="danielpeace805@gmail.com"
+                    android:text=""
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -90,11 +108,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Rating: "
+                    android:text="@string/rating_profile"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <RatingBar
+                    android:id="@+id/ratingBar"
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

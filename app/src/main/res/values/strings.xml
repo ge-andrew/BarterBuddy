@@ -65,4 +65,8 @@
     <string name="submit">Submit</string>
     <string name="skip">Skip</string>
     <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="username_profile">Username:</string>
+    <string name="email_profile">Email:</string>
+    <string name="rating_profile">Rating:\ </string>
 </resources>
