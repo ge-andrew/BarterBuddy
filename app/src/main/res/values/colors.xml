@@ -8,6 +8,7 @@
     <color name="red">#fc0303</color>
     <color name="rating_star_primary">#ffe234</color>
     <color name="rating_star_secondary">#a6a6a6</color>
+    <color name="green">#00FF00</color>
 
 
     <color name="chat_color_sender">#1E88E5</color>
