@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
+    toolbar.setElevation(8);
 
     Fragment publicItemsFragment = new PublicItemsPageFragment();
     Fragment userItemsPageFragment = new UserItemsPageFragment();

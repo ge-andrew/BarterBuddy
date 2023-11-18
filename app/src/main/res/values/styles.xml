@@ -1,21 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="roundimageview" parent="">
 
+    <style name="roundimageview" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
         <item name="color">@color/white</item>
     </style>
 
     <style name="roundedImageViewPerosnalItems" parent="">
-
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10dp</item>
         <item name="color">@color/white</item>
+    </style>
+
+    <style name="usernameTextStyle" parent="">
+        <item name="android:textColor">@color/peach</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="titleTextStyle" parent="">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="defaultTextStyle" parent="">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="editTextStyle" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHighlight">@color/peach</item>
+    </style>
+
+    <style name="warningTextStyle" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="largerTextButtonStyle" parent="">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="smallerTextButtonStyle" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="defaultBoldedTextStyle" parent="">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlayExtended" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">40dp</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#fdece8</item>
     </style>
 
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/rating_star_secondary</item>
         <item name="colorControlActivated">@color/rating_star_primary</item>
     </style>
+  
 </resources>
