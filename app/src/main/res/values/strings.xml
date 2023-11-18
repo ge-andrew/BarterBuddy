@@ -62,6 +62,12 @@
     <string name="add_new_item">Add New Item</string>
     <string name="offer_trade_choose_an_item">Offer Trade: Choose an Item</string>
     <string name="add_an_item">Add an Item</string>
+    <string name="barter">Barter!</string>
+    <string name="pick_an_item_to_offer">Pick an item to offer</string>
+    <string name="you_are_offering">You are offering:</string>
+    <string name="username_is_already_taken">Username is already taken</string>
+    <string name="an_account_with_this_email_already_exists">An account with this email already exists</string>
+    <string name="you_hope_to_receive">You hope to receive:</string>
     <string name="submit">Submit</string>
     <string name="skip">Skip</string>
 </resources>
