@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class IncomingOffersPage extends AppCompatActivity {
@@ -34,12 +36,12 @@ public class IncomingOffersPage extends AppCompatActivity {
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
+  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private Button your_offers_button;
   private Button your_items_button;
   private Button decline_button;
   private Button accept_button;
   private String username;
-  private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
   private String currentEmail;
   private ArrayList<Trade> trades = new ArrayList<>();
@@ -47,6 +49,8 @@ public class IncomingOffersPage extends AppCompatActivity {
   private StorageReference ItemImageReference;
   private ArrayList<Item> offeringItems = new ArrayList<>();
   private Item posterItem;
+
+  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   private View includedLayout;
 
   @Override
@@ -253,10 +257,10 @@ public class IncomingOffersPage extends AppCompatActivity {
 
     if (trades.get(currentTrade).getMoney() < 0) {
       money *= -1;
-      posterMoneyTextView.setText("$" + money);
+      posterMoneyTextView.setText("$" + currencyFormat.format(money));
       offeringMoneyTextView.setText("$0.00");
     } else {
-      offeringMoneyTextView.setText("$" + money);
+      offeringMoneyTextView.setText("$" + currencyFormat.format(money));
       posterMoneyTextView.setText("$0.00");
     }
 

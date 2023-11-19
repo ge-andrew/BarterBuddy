@@ -78,12 +78,15 @@ public class Trade implements Serializable {
   public void setStateOfCompletion(String stateOfCompletion) {
     this.stateOfCompletion = stateOfCompletion;
   }
-  
+
   public boolean isNonNull() {
-    if(posterEmail != null || offeringEmail != null || posterItem != null || offeringItem != null || stateOfCompletion != null) {
+    if (posterEmail != null
+        || offeringEmail != null
+        || posterItem != null
+        || offeringItem != null
+        || stateOfCompletion != null) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

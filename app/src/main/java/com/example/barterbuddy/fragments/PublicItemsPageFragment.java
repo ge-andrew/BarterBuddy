@@ -7,14 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.activities.PublicItemsDetailPage;
@@ -25,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 
 public class PublicItemsPageFragment extends Fragment implements RecyclerViewInterface {
@@ -66,8 +63,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
     // Initialize RecyclerView and Adapter
     publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
     publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
-    adapter =
-            new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
+    adapter = new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
     publicItemsRecycler.setAdapter(adapter);
     publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 

@@ -186,104 +186,104 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
         });
 
     // set up listener for offering money text input formatting
-      offeringItemMoneyField.addTextChangedListener(
-              new TextWatcher() {
-                  @Override
-                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    offeringItemMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                  @Override
-                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                  @Override
-                  public void afterTextChanged(Editable s) {
-                      String tempString = "";
-                      offeringItemMoney = String.valueOf(offeringItemMoneyField.getText());
-                      int positionOfDecimal = offeringItemMoney.indexOf('.');
-                      int lengthOfValue = offeringItemMoney.length();
-                      boolean isLeadingZero;
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            offeringItemMoney = String.valueOf(offeringItemMoneyField.getText());
+            int positionOfDecimal = offeringItemMoney.indexOf('.');
+            int lengthOfValue = offeringItemMoney.length();
+            boolean isLeadingZero;
 
-                      if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
-                          isLeadingZero = true;
-                          for (int index = 0; index < offeringItemMoney.length(); index++) {
-                              if (offeringItemMoney.charAt(index) != '0' && offeringItemMoney.charAt(index) != '.') {
-                                  tempString = tempString + offeringItemMoney.charAt(index);
-                                  isLeadingZero = false;
-                              } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
-                                  tempString = tempString + offeringItemMoney.charAt(index);
-                              }
-                          }
+            if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < offeringItemMoney.length(); index++) {
+                if (offeringItemMoney.charAt(index) != '0'
+                    && offeringItemMoney.charAt(index) != '.') {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                }
+              }
 
-                          int lengthOfTempString = tempString.length();
-                          if (lengthOfTempString < 3) {
-                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
-                                  tempString = '0' + tempString;
-                              }
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
 
-                              String firstHalf = tempString.substring(0, 1);
-                              String secondHalf = tempString.substring(1, 3);
-                              tempString = firstHalf + '.' + secondHalf;
-                          } else {
-                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
-                              String secondHalf =
-                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
-                              tempString = firstHalf + '.' + secondHalf;
-                          }
-                          lengthOfTempString = tempString.length();
-                          offeringItemMoneyField.setText(tempString);
-                          offeringItemMoneyField.setSelection(lengthOfTempString);
-                      }
-                  }
-              });
-      // set up listener for poster money text input formatting
-      posterItemMoneyField.addTextChangedListener(
-              new TextWatcher() {
-                  @Override
-                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              offeringItemMoneyField.setText(tempString);
+              offeringItemMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
+    // set up listener for poster money text input formatting
+    posterItemMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                  @Override
-                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                  @Override
-                  public void afterTextChanged(Editable s) {
-                      String tempString = "";
-                      posterItemMoney = String.valueOf(posterItemMoneyField.getText());
-                      int positionOfDecimal = posterItemMoney.indexOf('.');
-                      int lengthOfValue = posterItemMoney.length();
-                      boolean isLeadingZero;
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            posterItemMoney = String.valueOf(posterItemMoneyField.getText());
+            int positionOfDecimal = posterItemMoney.indexOf('.');
+            int lengthOfValue = posterItemMoney.length();
+            boolean isLeadingZero;
 
-                      if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
-                          isLeadingZero = true;
-                          for (int index = 0; index < posterItemMoney.length(); index++) {
-                              if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
-                                  tempString = tempString + posterItemMoney.charAt(index);
-                                  isLeadingZero = false;
-                              } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
-                                  tempString = tempString + posterItemMoney.charAt(index);
-                              }
-                          }
+            if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < posterItemMoney.length(); index++) {
+                if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                }
+              }
 
-                          int lengthOfTempString = tempString.length();
-                          if (lengthOfTempString < 3) {
-                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
-                                  tempString = '0' + tempString;
-                              }
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
 
-                              String firstHalf = tempString.substring(0, 1);
-                              String secondHalf = tempString.substring(1, 3);
-                              tempString = firstHalf + '.' + secondHalf;
-                          } else {
-                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
-                              String secondHalf =
-                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
-                              tempString = firstHalf + '.' + secondHalf;
-                          }
-                          lengthOfTempString = tempString.length();
-                          posterItemMoneyField.setText(tempString);
-                          posterItemMoneyField.setSelection(lengthOfTempString);
-                      }
-                  }
-              });
-
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              posterItemMoneyField.setText(tempString);
+              posterItemMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
   }
 
   private void getXmlElements() {
