@@ -39,7 +39,6 @@ public class IncomingOffersPage extends AppCompatActivity {
   private Button decline_button;
   private Button accept_button;
   private String username;
-  private String email;
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private FirebaseUser currentUser;
   private String currentEmail;
@@ -47,6 +46,7 @@ public class IncomingOffersPage extends AppCompatActivity {
   private int currentTrade = 0;
   private StorageReference ItemImageReference;
   private ArrayList<Item> offeringItems = new ArrayList<>();
+  private Item posterItem;
   private View includedLayout;
 
   @Override
@@ -60,9 +60,6 @@ public class IncomingOffersPage extends AppCompatActivity {
     ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     accept_button = findViewById(R.id.accept_button);
     decline_button = findViewById(R.id.decline_button);
-
-    username = getIntent().getStringExtra("username");
-    email = getIntent().getStringExtra("email");
 
     // Firebase Auth process
     getCurrentUser();
@@ -93,21 +90,21 @@ public class IncomingOffersPage extends AppCompatActivity {
           }
         });
     // Takes you to userItemsPage
-    your_items_button.setOnClickListener(
-        v -> {
-          Intent your_items_page = new Intent(IncomingOffersPage.this, PersonalItemsPage.class);
-          your_items_page.putExtra("username", username);
-          your_items_page.putExtra("email", email);
-          startActivity(your_items_page);
-        });
+//    your_items_button.setOnClickListener(
+//        v -> {
+//          Intent your_items_page = new Intent(IncomingOffersPage.this, PersonalItemsPage.class);
+//          your_items_page.putExtra("username", username);
+//          your_items_page.putExtra("email", currentEmail);
+//          startActivity(your_items_page);
+//        });
 
     // Takes you to your offers
-    your_offers_button.setOnClickListener(
-        v -> {
-          Intent your_offers_page = new Intent(IncomingOffersPage.this, YourOffersPage.class);
-          your_offers_page.putExtra("username", username);
-          your_offers_page.putExtra("email", email);
-        });
+//    your_offers_button.setOnClickListener(
+//        v -> {
+//          Intent your_offers_page = new Intent(IncomingOffersPage.this, YourOffersPage.class);
+//          your_offers_page.putExtra("username", username);
+//          your_offers_page.putExtra("email", currentEmail);
+//        });
 
     setUpCard();
 
@@ -145,7 +142,6 @@ public class IncomingOffersPage extends AppCompatActivity {
     Log.d(TAG, "Start query");
 
     DB.collectionGroup("trades")
-        //        .whereEqualTo("offeringEmail", "daniel@google.com")
         .get()
         .addOnCompleteListener(
             task -> {
@@ -158,7 +154,7 @@ public class IncomingOffersPage extends AppCompatActivity {
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   // TODO: make name of documents poster_sender consistent, find way to import
                   // document directly into Trade object
-                  if (tradeDoc.getString("posterEmail").equals(email) ||
+                  if (tradeDoc.getString("posterEmail").equals(currentEmail) ||
                         tradeDoc.getString("stateOfCompletion").equals("IN-PROGRESS")) {
                     String posterEmail = tradeDoc.getString("posterEmail");
                     String offeringEmail = tradeDoc.getString("offeringEmail");
@@ -178,7 +174,7 @@ public class IncomingOffersPage extends AppCompatActivity {
                 else {
                   includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
                   //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
-                  Toast.makeText(this, "No trades yet!", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(this, "No new trades yet!", Toast.LENGTH_SHORT).show();
                 }
               }
             })
@@ -200,9 +196,13 @@ public class IncomingOffersPage extends AppCompatActivity {
               if (v.isSuccessful()) {
                 DocumentSnapshot posterItemDoc = v.getResult();
                 if (posterItemDoc.exists()) {
-                  for (Trade t : trades) {
-                    t.setPosterItem(posterItemDoc.toObject(Item.class));
-                  }
+//                  for (Trade t : trades) {
+//                    t.setPosterItem(posterItemDoc.toObject(Item.class));       // Changed from Item.class
+//                  }
+//                  for (Item i : offeringItems) {
+//                    offeringItems.add(posterItemDoc.toObject(Item.class));
+//                  }
+                  posterItem = posterItemDoc.toObject(Item.class);
                 } else {
                   Log.d(TAG, "Poster Item did not exist at location.");
                 }
@@ -261,12 +261,12 @@ public class IncomingOffersPage extends AppCompatActivity {
     }
 
     TextView posterTitleTextView = includedLayout.findViewById(R.id.posterItemTitle);
-    posterTitleTextView.setText(trades.get(currentTrade).getPosterItem().getTitle());
+    posterTitleTextView.setText(posterItem.getTitle());
     TextView offeringTitleTextView = includedLayout.findViewById(R.id.offeringItemTitle);
     offeringTitleTextView.setText(offeringItems.get(currentTrade).getTitle());
 
     ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    loadAndDisplayImage(trades.get(currentTrade).getPosterEmail(), trades.get(currentTrade).getPosterItem().getImageId(), posterImageView);
+    loadAndDisplayImage(trades.get(currentTrade).getPosterEmail(), posterItem.getImageId(), posterImageView);
     ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     loadAndDisplayImage(offeringItems.get(currentTrade).getEmail(), offeringItems.get(currentTrade).getImageId(), offeringImageView);
 
