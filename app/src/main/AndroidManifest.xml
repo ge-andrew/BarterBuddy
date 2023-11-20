@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <application
         android:allowBackup="true"
@@ -11,8 +11,10 @@
         android:roundIcon="@drawable/barterbuddy"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterBuddy"
-        tools:targetApi="31">
-
+        tools:targetApi="31" >
+        <activity
+            android:name=".activities.ProfilePage"
+            android:exported="false" />
         <activity
             android:name=".activities.RateUserPage"
             android:exported="true" />
@@ -21,50 +23,40 @@
             android:exported="true" />
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true">
-          
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.CreateAccountPage"
             android:exported="false" />
         <activity
             android:name=".utils.GetImageDialogBox"
             android:exported="false" />
-
         <activity
             android:name=".activities.AddNewItemPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.PersonalItemsDetailPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.PublicItemsDetailPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.ChooseTradeItemPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.AdjustTradeMoneyPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.ChatPage"
             android:exported="false" />
-
         <activity
             android:name=".activities.TestChatPageClass"
             android:exported="true" />
-
     </application>
 
 </manifest>

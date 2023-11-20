@@ -69,6 +69,8 @@ public class LoginPage extends AppCompatActivity {
             // setting password to invisible
             passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
           }
+          String tempString = String.valueOf(passwordEditText.getText());
+          passwordEditText.setSelection(tempString.length());
         });
 
     signUpTextView.setOnClickListener(
