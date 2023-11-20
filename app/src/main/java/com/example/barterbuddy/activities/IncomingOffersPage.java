@@ -1,6 +1,7 @@
 package com.example.barterbuddy.activities;
 
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToBartering;
+import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanceled;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -72,6 +73,7 @@ public class IncomingOffersPage extends AppCompatActivity {
     // Decline Button
     decline_button.setOnClickListener(
         v -> {
+          setStateToCanceled(trades.get(currentTrade));
           if (currentTrade < trades.size()) {
             Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
             currentTrade++;
@@ -93,22 +95,6 @@ public class IncomingOffersPage extends AppCompatActivity {
             finish();
           }
         });
-    // Takes you to userItemsPage
-//    your_items_button.setOnClickListener(
-//        v -> {
-//          Intent your_items_page = new Intent(IncomingOffersPage.this, PersonalItemsPage.class);
-//          your_items_page.putExtra("username", username);
-//          your_items_page.putExtra("email", currentEmail);
-//          startActivity(your_items_page);
-//        });
-
-    // Takes you to your offers
-//    your_offers_button.setOnClickListener(
-//        v -> {
-//          Intent your_offers_page = new Intent(IncomingOffersPage.this, YourOffersPage.class);
-//          your_offers_page.putExtra("username", username);
-//          your_offers_page.putExtra("email", currentEmail);
-//        });
 
     setUpCard();
 
@@ -158,8 +144,8 @@ public class IncomingOffersPage extends AppCompatActivity {
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   // TODO: make name of documents poster_sender consistent, find way to import
                   // document directly into Trade object
-                  if (tradeDoc.getString("posterEmail").equals(currentEmail) ||
-                        tradeDoc.getString("stateOfCompletion").equals("IN-PROGRESS")) {
+                  if (tradeDoc.getString("posterEmail").equals(currentEmail) &&
+                        tradeDoc.getString("stateOfCompletion").equals("IN_PROGRESS")) {
                     String posterEmail = tradeDoc.getString("posterEmail");
                     String offeringEmail = tradeDoc.getString("offeringEmail");
                     String stateOfCompletion = tradeDoc.getString("stateOfCompletion");

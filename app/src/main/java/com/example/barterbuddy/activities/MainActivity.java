@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.fragments.OffersFragment;
 import com.example.barterbuddy.fragments.PublicItemsPageFragment;
@@ -60,22 +58,22 @@ public class MainActivity extends AppCompatActivity {
         .commit();
   }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        return true;
-    }
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.profile_menu, menu);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    return true;
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.logout) {
-            AUTHENTICATION_INSTANCE.signOut();
-            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-            startActivity(intent);
-            finish();
-        }
-        return true;
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      AUTHENTICATION_INSTANCE.signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
     }
+    return true;
+  }
 }
