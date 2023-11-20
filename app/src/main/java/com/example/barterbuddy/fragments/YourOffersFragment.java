@@ -19,7 +19,6 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.adapters.TradeCardRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
-import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.TradeWithRef;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,20 +92,6 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
                     TradeWithRef trade = document.toObject(TradeWithRef.class);
                     userTrades.add(trade);
                     Log.d(TAG, "Trade added: " + trade);
-
-//                    // Load offering item image
-//                    Log.d(
-//                        TAG,
-//                        "Loading offering item image for trade with offering email: "
-//                            + trade.getOfferingEmail());
-//                    loadItem(trade.getOfferingItem());
-//
-//                    // Load poster item image
-//                    Log.d(
-//                        TAG,
-//                        "Loading poster item image for trade with poster email: "
-//                            + trade.getPosterEmail());
-//                    loadItem(trade.getPosterItem());
                   }
                 }
                 tradeCardAdapter.updateTrades(userTrades);
@@ -117,59 +102,6 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
       Toast.makeText(context, "An error occurred while setting up trades", Toast.LENGTH_SHORT)
           .show();
     }
-  }
-
-//  private void loadItem(DocumentReference itemRef) {
-//
-//    if (itemRef != null) {
-//      itemRef
-//          .get()
-//          .addOnSuccessListener(
-//              documentSnapshot -> {
-//                Item item = documentSnapshot.toObject(Item.class);
-//                if (item != null) {
-//                  email = item.getEmail();
-//                  Log.d(TAG, "Loading image for item with image ID: " + item.getImageId());
-//                  StorageReference imageReference =
-//                      IMAGE_STORAGE
-//                          .getReference()
-//                          .child("users/" + email + "/" + item.getImageId() + ".jpg");
-//                  Log.d(TAG, "Loading image path: " + imageReference);
-//
-//                  imageReference
-//                      .getBytes(ONE_MEGABYTE)
-//                      .addOnSuccessListener(
-//                          bytes -> {
-//                            Bitmap itemImage =
-//                                BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                            ITEM_IMAGES.add(itemImage);
-//                            Log.d(
-//                                TAG,
-//                                "Successfully loaded image for item with image ID: "
-//                                    + item.getImageId());
-//                            tradeCardAdapter
-//                                .notifyDataSetChanged(); // Refresh the RecyclerView after loading
-//                            // the image.
-//                          })
-//                      .addOnFailureListener(
-//                          e ->
-//                              Log.w(
-//                                  TAG,
-//                                  "Error getting image for item with image ID: "
-//                                      + item.getImageId(),
-//                                  e));
-//                } else {
-//                  Log.w(TAG, "Item is null");
-//                }
-//              })
-//          .addOnFailureListener(e -> Log.w(TAG, "Error getting item from reference", e));
-//    } else {
-//      Log.w(TAG, "Item reference is null");
-//    }
-//  }
-
-  private boolean matchesCriteria(Trade trade, String currentEmail) {
-    return trade.getOfferingEmail().equals(currentEmail);
   }
 
   private void getCurrentUser() {
