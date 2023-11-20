@@ -38,6 +38,16 @@ public class BarterPage extends AppCompatActivity {
         getCurrentUserInfo();
 
         getXmlElements();
+
+        // listener for abort trade button, closes trade and starts "tinder" activity
+
+        // Check counteroffer # and whose turn it is
+
+        // If not your turn, notify using toast, and disable money fields, counteroffer button, approve button
+
+        // If is your turn, enable money fields, counteroffer button, approve button
+            // if counteroffer button AND money fields are changed, send in counter offer, disable fields
+            // if approve, update firebase, send to chat screen
     }
 
     private void getCurrentUser() {
