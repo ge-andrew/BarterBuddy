@@ -32,7 +32,7 @@ public class UpdateTradeDocument {
         trade.setStateOfCompletion(newState);
         final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
 
-        final String TRADE_ID = trade.getPosterEmail() + "-" + trade.getOfferingEmail();
+        final String TRADE_ID = trade.getPosterEmail() + "_" + trade.getOfferingEmail();
         DocumentReference tradeDocRef =
                 FIRESTORE_INSTANCE.collection("trades").document(TRADE_ID);
         tradeDocRef
