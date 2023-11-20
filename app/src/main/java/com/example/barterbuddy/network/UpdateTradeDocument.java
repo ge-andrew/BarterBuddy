@@ -24,11 +24,15 @@ public class UpdateTradeDocument {
         setTradeState(trade, "CANCELED");
     }
 
+    public static void setStateToBartering(@NonNull Trade trade) {
+        setTradeState(trade, "BARTERING");
+    }
+
     public static void setTradeState(@NonNull Trade trade, String newState) {
         trade.setStateOfCompletion(newState);
         final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
 
-        final String TRADE_ID = FirebaseUtil.getTradeId(trade.getOfferingEmail(), trade.getPosterEmail());
+        final String TRADE_ID = trade.getPosterEmail() + "-" + trade.getOfferingEmail();
         DocumentReference tradeDocRef =
                 FIRESTORE_INSTANCE.collection("trades").document(TRADE_ID);
         tradeDocRef

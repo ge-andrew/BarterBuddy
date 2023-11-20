@@ -1,6 +1,6 @@
 package com.example.barterbuddy.activities;
 
-import static com.example.barterbuddy.network.UpdateTrades.*;
+import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToBartering;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -86,7 +86,7 @@ public class IncomingOffersPage extends AppCompatActivity {
         v -> {
           if(currentTrade < trades.size()) {
             Toast.makeText(this, "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG).show();
-            setTradeNegotiating(trades.get(currentTrade));
+            setStateToBartering(trades.get(currentTrade));
             Intent intent = new Intent(IncomingOffersPage.this, BarterPage.class);
             intent.putExtra("trade", trades.get(currentTrade));
             startActivity(intent);
