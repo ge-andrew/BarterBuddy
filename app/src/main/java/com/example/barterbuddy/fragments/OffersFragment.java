@@ -11,13 +11,10 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.BarterPage;
 import com.example.barterbuddy.activities.IncomingOffersPage;
 import com.example.barterbuddy.activities.LoginPage;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class OffersFragment extends Fragment {
   private static final String TAG = "OfferFragment.java";
@@ -45,8 +42,6 @@ public class OffersFragment extends Fragment {
 
     getXmlElements();
 
-    // setupIncomingTradeButton();
-
     incoming_offers_button.setOnClickListener(
         v -> {
           setupIncomingTradesButton();
@@ -61,24 +56,21 @@ public class OffersFragment extends Fragment {
         .whereEqualTo("stateOfCompletion", "BARTERING")
         .get()
         .addOnCompleteListener(
-            new OnCompleteListener<QuerySnapshot>() {
-              @Override
-              public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                  if (task.getResult().size() == 1) {
-                    Intent intent = new Intent(getActivity(), BarterPage.class);
-                    startActivity(intent);
-                  } else if (task.getResult().size() > 1) {
-                    Log.d(TAG, "ERROR: more than one actively bartering trade exists");
-                    Intent intent = new Intent(getActivity(), BarterPage.class);
-                    startActivity(intent);
-                  } else {
-                    Intent intent = new Intent(getActivity(), IncomingOffersPage.class);
-                    startActivity(intent);
-                  }
+            task -> {
+              if (task.isSuccessful()) {
+                if (task.getResult().size() == 1) {
+                  Intent intent = new Intent(getActivity(), BarterPage.class);
+                  startActivity(intent);
+                } else if (task.getResult().size() > 1) {
+                  Log.d(TAG, "ERROR: more than one actively bartering trade exists");
+                  Intent intent = new Intent(getActivity(), BarterPage.class);
+                  startActivity(intent);
                 } else {
-                  Log.d(TAG, "Error getting documents: ", task.getException());
+                  Intent intent = new Intent(getActivity(), IncomingOffersPage.class);
+                  startActivity(intent);
                 }
+              } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
               }
             });
   }

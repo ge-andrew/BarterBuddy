@@ -22,18 +22,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class AdjustTradeMoneyPage extends AppCompatActivity {
 
   private static final String TAG = "AdjustTradeMoneyPage";
-  private static final Locale locale = new Locale("en", "US");
-  private static final DecimalFormat formatter =
-      (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
   final long FIVE_MEGABYTES = 1024 * 1024 * 5;
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
@@ -72,62 +66,12 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     posterItem = (Item) getIntent().getSerializableExtra("posterItem");
     offeringItem = (Item) getIntent().getSerializableExtra("offeringItem");
 
-    // assign xml variables to elements
     getXmlElements();
 
     backArrow.setOnClickListener(view -> finish());
 
-    // establish directories in Firebase
-    posterItemDocReference =
-        DB.collection("users")
-            .document(posterItem.getEmail())
-            .collection("items")
-            .document(posterItem.getEmail() + "-" + posterItem.getTitle());
-    offeringItemDocReference =
-        DB.collection("users")
-            .document(offeringItem.getEmail())
-            .collection("items")
-            .document(offeringItem.getEmail() + "-" + offeringItem.getTitle());
-    posterItemImageReference =
-        IMAGE_STORAGE
-            .getReference()
-            .child(
-                "users/"
-                    + posterItem.getEmail()
-                    + "/"
-                    + posterItem.getEmail()
-                    + "-"
-                    + posterItem.getTitle()
-                    + ".jpg");
-    offeringItemImageReference =
-        IMAGE_STORAGE
-            .getReference()
-            .child(
-                "users/"
-                    + offeringItem.getEmail()
-                    + "/"
-                    + offeringItem.getEmail()
-                    + "-"
-                    + offeringItem.getTitle()
-                    + ".jpg");
+    establishFirebaseReferences();
 
-    // load in assets, ready text fields
-    posterItemImageReference
-        .getBytes(FIVE_MEGABYTES)
-        .addOnSuccessListener(
-            bytes -> {
-              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-              posterItemImageView.setImageBitmap(itemImage);
-            })
-        .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image.", e));
-    offeringItemImageReference
-        .getBytes(FIVE_MEGABYTES)
-        .addOnSuccessListener(
-            bytes -> {
-              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-              offeringItemImageView.setImageBitmap(itemImage);
-            })
-        .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
     posterUsername.setText(posterItem.getUsername());
@@ -284,6 +228,59 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
             }
           }
         });
+  }
+
+  private void establishFirebaseReferences() {
+    posterItemDocReference =
+        DB.collection("users")
+            .document(posterItem.getEmail())
+            .collection("items")
+            .document(posterItem.getEmail() + "-" + posterItem.getTitle());
+    offeringItemDocReference =
+        DB.collection("users")
+            .document(offeringItem.getEmail())
+            .collection("items")
+            .document(offeringItem.getEmail() + "-" + offeringItem.getTitle());
+    posterItemImageReference =
+        IMAGE_STORAGE
+            .getReference()
+            .child(
+                "users/"
+                    + posterItem.getEmail()
+                    + "/"
+                    + posterItem.getEmail()
+                    + "-"
+                    + posterItem.getTitle()
+                    + ".jpg");
+    offeringItemImageReference =
+        IMAGE_STORAGE
+            .getReference()
+            .child(
+                "users/"
+                    + offeringItem.getEmail()
+                    + "/"
+                    + offeringItem.getEmail()
+                    + "-"
+                    + offeringItem.getTitle()
+                    + ".jpg");
+
+    // load in assets, ready text fields
+    posterItemImageReference
+        .getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              posterItemImageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image.", e));
+    offeringItemImageReference
+        .getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              offeringItemImageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
   }
 
   private void getXmlElements() {

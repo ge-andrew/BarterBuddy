@@ -13,13 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -50,21 +46,14 @@ public class IncomingOffersPage extends AppCompatActivity {
   private StorageReference ItemImageReference;
   private ArrayList<Item> offeringItems = new ArrayList<>();
   private Item posterItem;
-
   private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   private View includedLayout;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_incoming_offers_page);
-    your_offers_button = findViewById(R.id.your_offers_button);
-    your_items_button = findViewById(R.id.your_items_button);
-    includedLayout = findViewById(R.id.included_layout);
-    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
-    accept_button = findViewById(R.id.accept_button);
-    decline_button = findViewById(R.id.decline_button);
+
+    getXmlElements();
 
     // Firebase Auth process
     getCurrentUser();
@@ -77,16 +66,17 @@ public class IncomingOffersPage extends AppCompatActivity {
           if (currentTrade < trades.size()) {
             Toast.makeText(this, "Trade Declined", Toast.LENGTH_SHORT).show();
             currentTrade++;
-            if(!displayNextTrade()) {
+            if (!displayNextTrade()) {
               includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
               Toast.makeText(this, "No more trades!", Toast.LENGTH_SHORT).show();
             }
           }
         });
 
+    // accept button
     accept_button.setOnClickListener(
         v -> {
-          if(currentTrade < trades.size()) {
+          if (currentTrade < trades.size()) {
             Toast.makeText(this, "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG).show();
             setStateToBartering(trades.get(currentTrade));
             Intent intent = new Intent(IncomingOffersPage.this, BarterPage.class);
@@ -101,6 +91,17 @@ public class IncomingOffersPage extends AppCompatActivity {
     Log.d(TAG, "End of onCreate");
   }
 
+  private void getXmlElements() {
+    setContentView(R.layout.activity_incoming_offers_page);
+    your_offers_button = findViewById(R.id.your_offers_button);
+    your_items_button = findViewById(R.id.your_items_button);
+    includedLayout = findViewById(R.id.included_layout);
+    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
+    accept_button = findViewById(R.id.accept_button);
+    decline_button = findViewById(R.id.decline_button);
+  }
+
   // Firebase Authentication
   private void getCurrentUser() {
     currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
@@ -112,7 +113,7 @@ public class IncomingOffersPage extends AppCompatActivity {
     finish();
   }
 
-  private String getCurrentUserInfo() {
+  private void getCurrentUserInfo() {
     currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
       // The user is signed in, you can access their information
@@ -124,11 +125,9 @@ public class IncomingOffersPage extends AppCompatActivity {
       // You might want to implement a sign-in flow here.
       goToLoginPage();
     }
-    return currentEmail;
   }
 
   private void setUpCard() {
-    // Firebase query
     Log.d(TAG, "Start query");
 
     DB.collectionGroup("trades")
@@ -144,26 +143,26 @@ public class IncomingOffersPage extends AppCompatActivity {
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   // TODO: make name of documents poster_sender consistent, find way to import
                   // document directly into Trade object
-                  if (tradeDoc.getString("posterEmail").equals(currentEmail) &&
-                        tradeDoc.getString("stateOfCompletion").equals("IN_PROGRESS")) {
+                  if (tradeDoc.getString("posterEmail").equals(currentEmail)
+                      && tradeDoc.getString("stateOfCompletion").equals("IN_PROGRESS")) {
                     String posterEmail = tradeDoc.getString("posterEmail");
                     String offeringEmail = tradeDoc.getString("offeringEmail");
                     String stateOfCompletion = tradeDoc.getString("stateOfCompletion");
                     double money = tradeDoc.getDouble("money");
 
-                    trades.add(new Trade(posterEmail, null, offeringEmail, null, money, stateOfCompletion));
+                    trades.add(
+                        new Trade(
+                            posterEmail, null, offeringEmail, null, money, stateOfCompletion));
 
                     offeringItemDocumentReferences.add(
                         tradeDoc.getDocumentReference("offeringItem"));
                     posterItemDocumentReference = tradeDoc.getDocumentReference("posterItem");
                   }
                 }
-                if(offeringItemDocumentReferences.size() > 0) {
+                if (offeringItemDocumentReferences.size() > 0) {
                   loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
-                }
-                else {
+                } else {
                   includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-                  //includedLayout.findViewById(R.id.noTradesMessage).bringToFront();
                   Toast.makeText(this, "No new trades yet!", Toast.LENGTH_SHORT).show();
                 }
               }
@@ -177,8 +176,6 @@ public class IncomingOffersPage extends AppCompatActivity {
   private void loadItems(
       ArrayList<DocumentReference> offeringItemDocumentReferences,
       DocumentReference posterItemDocumentReference) {
-    // Fetch the "posterItem" document
-
     posterItemDocumentReference
         .get()
         .addOnCompleteListener(
@@ -186,12 +183,6 @@ public class IncomingOffersPage extends AppCompatActivity {
               if (v.isSuccessful()) {
                 DocumentSnapshot posterItemDoc = v.getResult();
                 if (posterItemDoc.exists()) {
-//                  for (Trade t : trades) {
-//                    t.setPosterItem(posterItemDoc.toObject(Item.class));       // Changed from Item.class
-//                  }
-//                  for (Item i : offeringItems) {
-//                    offeringItems.add(posterItemDoc.toObject(Item.class));
-//                  }
                   posterItem = posterItemDoc.toObject(Item.class);
                 } else {
                   Log.d(TAG, "Poster Item did not exist at location.");
@@ -200,26 +191,20 @@ public class IncomingOffersPage extends AppCompatActivity {
                 for (DocumentReference d : offeringItemDocumentReferences) {
                   d.get()
                       .addOnCompleteListener(
-                          new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> w) {
-                              if (w.isSuccessful()) {
-                                DocumentSnapshot offeringItemDoc = w.getResult();
-                                if (offeringItemDoc.exists()) {
-                                  offeringItems.add(offeringItemDoc.toObject(Item.class));
-                                  if(!displayNextTrade()) {
-                                    return;
-                                  }
+                          w -> {
+                            if (w.isSuccessful()) {
+                              DocumentSnapshot offeringItemDoc = w.getResult();
+                              if (offeringItemDoc.exists()) {
+                                offeringItems.add(offeringItemDoc.toObject(Item.class));
+                                if (!displayNextTrade()) {
+                                  return;
                                 }
-                              } else {
-                                Log.d(TAG, "Poster Item did not exist at location.");
                               }
+                            } else {
+                              Log.d(TAG, "Poster Item did not exist at location.");
                             }
                           });
                 }
-
-                // displayNextTrade();
-
               } else {
                 Log.d(TAG, "Poster Item get failed.");
               }
@@ -256,9 +241,13 @@ public class IncomingOffersPage extends AppCompatActivity {
     offeringTitleTextView.setText(offeringItems.get(currentTrade).getTitle());
 
     ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    loadAndDisplayImage(trades.get(currentTrade).getPosterEmail(), posterItem.getImageId(), posterImageView);
+    loadAndDisplayImage(
+        trades.get(currentTrade).getPosterEmail(), posterItem.getImageId(), posterImageView);
     ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
-    loadAndDisplayImage(offeringItems.get(currentTrade).getEmail(), offeringItems.get(currentTrade).getImageId(), offeringImageView);
+    loadAndDisplayImage(
+        offeringItems.get(currentTrade).getEmail(),
+        offeringItems.get(currentTrade).getImageId(),
+        offeringImageView);
 
     return true;
   }
@@ -266,20 +255,16 @@ public class IncomingOffersPage extends AppCompatActivity {
   private void loadAndDisplayImage(String currentEmail, String imageId, ImageView imageView) {
     Log.d(TAG, "start load and display images");
 
-    String imageUrl = "users/" + currentEmail + "/" +  imageId + ".jpg";
+    String imageUrl = "users/" + currentEmail + "/" + imageId + ".jpg";
 
-    ItemImageReference =
-            IMAGE_STORAGE
-                    .getReference()
-                    .child(imageUrl);
+    ItemImageReference = IMAGE_STORAGE.getReference().child(imageUrl);
 
-    ItemImageReference
-            .getBytes(FIVE_MEGABYTES)
-            .addOnSuccessListener(
-                    bytes -> {
-                      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                      imageView.setImageBitmap(itemImage);
-                    })
-            .addOnFailureListener(e -> Log.w(TAG, "Error getting item image.", e));
+    ItemImageReference.getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              imageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting item image.", e));
   }
 }
