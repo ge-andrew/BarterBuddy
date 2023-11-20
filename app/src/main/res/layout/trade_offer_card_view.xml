@@ -10,8 +10,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$"
-        app:layout_constraintEnd_toEndOf="@+id/wanted_value"
-        app:layout_constraintStart_toStartOf="@+id/wanted_value"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/wanted_item_image"
+        app:layout_constraintEnd_toEndOf="@id/wanted_value"
+        app:layout_constraintStart_toStartOf="@id/wanted_value"
         tools:layout_editor_absoluteY="296dp" />
 
     <LinearLayout
@@ -22,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offered_item_image"
+        app:layout_constraintTop_toBottomOf="@id/offered_item_image"
         app:layout_constraintVertical_bias="1.0">
 
         <Button
@@ -48,7 +50,7 @@
         android:id="@+id/wanted_item_image"
         android:layout_width="273dp"
         android:layout_height="221dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -61,14 +63,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wanted_item_image"
+        app:layout_constraintTop_toBottomOf="@id/wanted_item_image"
         app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="113dp"
+        android:layout_width="80dp"
         android:layout_height="22dp"
-        android:text="      Item Offered"
+        android:text="Item Offered"
         app:layout_constraintBottom_toTopOf="@+id/wanted_item_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +81,8 @@
         android:layout_width="67dp"
         android:layout_height="17dp"
         android:text="Your offer"
+        app:layout_constraintTop_toBottomOf="@id/wanted_item_image"
+        app:layout_constraintBottom_toTopOf="@id/offered_item_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="300dp" />
@@ -89,9 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="29dp"
         android:text="$"
-        app:layout_constraintBottom_toTopOf="@+id/wanted_item_image"
+        app:layout_constraintBottom_toTopOf="@id/offered_item_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/wanted_item_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

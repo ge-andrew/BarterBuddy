@@ -45,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(publicItemsFragment);
           }
           if (item.getItemId() == R.id.menu_item_items) {
+              Log.d(TAG, "Menu item opened");
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
+              Log.d(TAG, "Menu item opened");
             setCurrentFragment(offersFragment);
           }
           return true;

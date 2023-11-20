@@ -63,11 +63,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
 
     getXmlElements();
 
-    // Initialize RecyclerView and Adapter
-    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
-    adapter =
-            new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
+    adapter = new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
     publicItemsRecycler.setAdapter(adapter);
     publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -90,23 +86,20 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
         .collectionGroup("items")
         .whereEqualTo("active", true)
         .get()
-        .addOnCompleteListener(
+        .addOnSuccessListener(
             task -> {
               availableItems = new ArrayList<>();
-              if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                  // don't add item if is user's own item
-                  if ((document.get("email") != null && document.get("username") != null)
-                      && !(document.get("email").equals(currentUserEmail)
-                          && document.get("username").equals(currentUserUsername))) {
-                    availableItems.add((document.toObject(Item.class)));
-                  }
+              for (QueryDocumentSnapshot document : task) {
+                // don't add item if is user's own item
+                if ((document.get("email") != null && document.get("username") != null)
+                    && !(document.get("email").equals(currentUserEmail)
+                        && document.get("username").equals(currentUserUsername))) {
+                  availableItems.add((document.toObject(Item.class)));
                 }
-                adapter.updateItems(availableItems);
-              } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
               }
-            });
+              adapter.updateItems(availableItems);
+            })
+        .addOnFailureListener(e -> Log.d(TAG, "Error getting documents: ", e));
   }
 
   // take position of clicked card in recyclerView to start and send correct data to

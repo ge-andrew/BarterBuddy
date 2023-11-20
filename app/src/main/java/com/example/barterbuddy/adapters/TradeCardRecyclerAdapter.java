@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
-import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.TradeWithRef;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -46,22 +45,23 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   @Override
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
     TradeWithRef trade = userTrades.get(position);
-    if (trade.getMoney() < 0){
-      double money = trade.getMoney();
+    double money = trade.getMoney();
+    if (money < 0){
       money = -1 * money;
       holder.tradeMoneyOffered.setText(String.valueOf(money));
-
     } else {
-      double money = trade.getMoney();
-
       holder.tradeMoneyWanted.setText(String.valueOf(money));
     }
+
+    String posterItemId = userTrades.get(position).getPosterItem().getId();
+    String offeringItemId = userTrades.get(position).getOfferingItem().getId();
+
     StorageReference imageReferencePoster = IMAGE_STORAGE_INSTANCE.getReference()
             .child("users/" + userTrades.get(position).getPosterEmail()
-                    + "/" + userTrades.get(position).getPosterItem() + ".jpg");
+                    + "/" + posterItemId + ".jpg");
     StorageReference imageReferenceOfferer = IMAGE_STORAGE_INSTANCE.getReference()
             .child("users/" + userTrades.get(position).getOfferingEmail()
-                    + "/" + userTrades.get(position).getOfferingItem() + ".jpg");
+                    + "/" + offeringItemId + ".jpg");
 
     long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReferencePoster.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
@@ -72,6 +72,12 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
       holder.wantedItemImageView.setImageBitmap(itemImage);
     });
+  }
+
+  public void updateTrades(ArrayList<TradeWithRef> updatedTrades) {
+    this.userTrades.clear();
+    this.userTrades.addAll(updatedTrades);
+    notifyDataSetChanged();
   }
 
   @Override
