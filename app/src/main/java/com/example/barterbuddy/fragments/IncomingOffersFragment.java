@@ -45,6 +45,8 @@ public class IncomingOffersFragment extends Fragment {
   private Button your_items_button;
   private Button decline_button;
   private Button accept_button;
+  private ImageView posterImageView;
+  private ImageView offeringImageView;
   private String username;
   private FirebaseUser currentUser;
   private String currentEmail;
@@ -58,14 +60,14 @@ public class IncomingOffersFragment extends Fragment {
 
   IncomingOffersFragment() {
     super(R.layout.incoming_offers_page);
-    }
+  }
 
   @Nullable
   @Override
   public View onCreateView(
-          @NonNull LayoutInflater inflater,
-          @Nullable ViewGroup container,
-          @Nullable Bundle savedInstanceState) {
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
     return inflater.inflate(R.layout.incoming_offers_page, container, false);
   }
 
@@ -81,51 +83,49 @@ public class IncomingOffersFragment extends Fragment {
 
     // Decline Button
     decline_button.setOnClickListener(
-            v -> {
-              setStateToCanceled(trades.get(currentTrade));
-              if (currentTrade < trades.size()) {
-                Toast.makeText(requireContext(), "Trade Declined", Toast.LENGTH_SHORT).show();
-                currentTrade++;
-                if (!displayNextTrade()) {
-                  includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-                  Toast.makeText(requireContext(), "No more trades!", Toast.LENGTH_SHORT).show();
-                }
-              }
-            });
+        v -> {
+          setStateToCanceled(trades.get(currentTrade));
+          if (currentTrade < trades.size()) {
+            Toast.makeText(requireContext(), "Trade Declined", Toast.LENGTH_SHORT).show();
+            currentTrade++;
+            if (!displayNextTrade()) {
+              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
+              Toast.makeText(requireContext(), "No more trades!", Toast.LENGTH_SHORT).show();
+            }
+          }
+        });
 
     // accept button
     accept_button.setOnClickListener(
-            v -> {
-              if (currentTrade < trades.size()) {
+        v -> {
+          if (currentTrade < trades.size()) {
 
-                Log.d(TAG, "accept button tapped");
+            Log.d(TAG, "accept button tapped");
 
-                Toast.makeText(requireContext(), "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG).show();
-                 setStateToBartering(trades.get(currentTrade));
-                Intent intent = new Intent(requireContext(), BarterPage.class);
-                 intent.putExtra("trade", trades.get(currentTrade));
-                startActivity(intent);
-              }
-            });
+            Toast.makeText(requireContext(), "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG)
+                .show();
+            setStateToBartering(trades.get(currentTrade));
+            Intent intent = new Intent(requireContext(), BarterPage.class);
+            intent.putExtra("trade", trades.get(currentTrade));
+            startActivity(intent);
+          }
+        });
 
     setUpCard();
 
     Log.d(TAG, "End of onCreate");
   }
 
-
   private void getXmlElements() {
-//    setContentView(R.layout.activity_incoming_offers_page);
     your_offers_button = getActivity().findViewById(R.id.your_offers_button);
     your_items_button = getActivity().findViewById(R.id.your_items_button);
     includedLayout = getActivity().findViewById(R.id.included_layout);
-    ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
+    posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+    offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     accept_button = getActivity().findViewById(R.id.accept_button);
     decline_button = getActivity().findViewById(R.id.decline_button);
   }
 
-  // Firebase Authentication
   private void getCurrentUser() {
     currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
   }
@@ -154,82 +154,82 @@ public class IncomingOffersFragment extends Fragment {
     Log.d(TAG, "Start query");
 
     DB.collectionGroup("trades")
-            .get()
-            .addOnCompleteListener(
-                    task -> {
-                      if (task.isSuccessful()) {
-                        Log.d(TAG, "query success ");
+        .get()
+        .addOnCompleteListener(
+            task -> {
+              if (task.isSuccessful()) {
+                Log.d(TAG, "query success ");
 
-                        ArrayList<DocumentReference> offeringItemDocumentReferences = new ArrayList<>();
-                        DocumentReference posterItemDocumentReference = null;
+                ArrayList<DocumentReference> offeringItemDocumentReferences = new ArrayList<>();
+                DocumentReference posterItemDocumentReference = null;
 
-                        for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
-                          if (tradeDoc.getString("posterEmail").equals(currentEmail)
-                                  && tradeDoc.getString("stateOfCompletion").equals("IN_PROGRESS")) {
-                            String posterEmail = tradeDoc.getString("posterEmail");
-                            String offeringEmail = tradeDoc.getString("offeringEmail");
-                            String stateOfCompletion = tradeDoc.getString("stateOfCompletion");
-                            double money = tradeDoc.getDouble("money");
+                for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
+                  if (tradeDoc.getString("posterEmail").equals(currentEmail)
+                      && tradeDoc.getString("stateOfCompletion").equals("IN_PROGRESS")) {
+                    String posterEmail = tradeDoc.getString("posterEmail");
+                    String offeringEmail = tradeDoc.getString("offeringEmail");
+                    String stateOfCompletion = tradeDoc.getString("stateOfCompletion");
+                    double money = tradeDoc.getDouble("money");
 
-                            trades.add(
-                                    new Trade(
-                                            posterEmail, null, offeringEmail, null, money, stateOfCompletion));
+                    trades.add(
+                        new Trade(
+                            posterEmail, null, offeringEmail, null, money, stateOfCompletion));
 
-                            offeringItemDocumentReferences.add(
-                                    tradeDoc.getDocumentReference("offeringItem"));
-                            posterItemDocumentReference = tradeDoc.getDocumentReference("posterItem");
-                          }
-                        }
-                        if (offeringItemDocumentReferences.size() > 0) {
-                          loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
-                        } else {
-                          includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-                          Toast.makeText(getActivity(), "No new trades yet!", Toast.LENGTH_SHORT).show();
-                        }
-                      }
-                    })
-            .addOnFailureListener(
-                    task -> {
-                      Log.d(TAG, "Error getting documents. ");
-                    });
+                    offeringItemDocumentReferences.add(
+                        tradeDoc.getDocumentReference("offeringItem"));
+                    posterItemDocumentReference = tradeDoc.getDocumentReference("posterItem");
+                  }
+                }
+                if (offeringItemDocumentReferences.size() > 0) {
+                  loadItems(offeringItemDocumentReferences, posterItemDocumentReference);
+                } else {
+                  includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
+                  Toast.makeText(getActivity(), "No new trades yet!", Toast.LENGTH_SHORT).show();
+                }
+              }
+            })
+        .addOnFailureListener(
+            task -> {
+              Log.d(TAG, "Error getting documents. ");
+            });
   }
 
   private void loadItems(
-          ArrayList<DocumentReference> offeringItemDocumentReferences,
-          DocumentReference posterItemDocumentReference) {
+      ArrayList<DocumentReference> offeringItemDocumentReferences,
+      DocumentReference posterItemDocumentReference) {
     posterItemDocumentReference
-            .get()
-            .addOnCompleteListener(
-                    v -> {
-                      if (v.isSuccessful()) {
-                        DocumentSnapshot posterItemDoc = v.getResult();
-                        if (posterItemDoc.exists()) {
-                          posterItem = posterItemDoc.toObject(Item.class);
-                        } else {
-                          Log.d(TAG, "Poster Item did not exist at location.");
-                        }
+        .get()
+        .addOnCompleteListener(
+            v -> {
+              if (v.isSuccessful()) {
+                DocumentSnapshot posterItemDoc = v.getResult();
+                if (posterItemDoc.exists()) {
+                  posterItem = posterItemDoc.toObject(Item.class);
+                } else {
+                  Log.d(TAG, "Poster Item did not exist at location.");
+                }
 
-                        for (DocumentReference d : offeringItemDocumentReferences) {
-                          d.get()
-                                  .addOnCompleteListener(
-                                          w -> {
-                                            if (w.isSuccessful()) {
-                                              DocumentSnapshot offeringItemDoc = w.getResult();
-                                              if (offeringItemDoc.exists()) {
-                                                offeringItems.add(offeringItemDoc.toObject(Item.class));
-                                                if (!displayNextTrade()) {
-                                                  return;
-                                                }
-                                              }
-                                            } else {
-                                              Log.d(TAG, "Poster Item did not exist at location.");
-                                            }
-                                          });
-                        }
-                      } else {
-                        Log.d(TAG, "Poster Item get failed.");
-                      }
-                    });
+                for (DocumentReference d : offeringItemDocumentReferences) {
+                  d.get()
+                      .addOnCompleteListener(
+                          w -> {
+                            if (w.isSuccessful()) {
+                              DocumentSnapshot offeringItemDoc = w.getResult();
+                              if (offeringItemDoc.exists()) {
+                                offeringItems.add(offeringItemDoc.toObject(Item.class));
+                                if (!displayNextTrade()) {
+                                  return;
+                                }
+                              }
+                            } else {
+                              Log.d(TAG, "Poster Item did not exist at location.");
+                            }
+                          });
+                }
+              } else {
+                Log.d(TAG, "Poster Item get failed.");
+              }
+            });
 
     Log.d(TAG, "End of loadItems reached");
   }
@@ -263,12 +263,12 @@ public class IncomingOffersFragment extends Fragment {
 
     ImageView posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     loadAndDisplayImage(
-            trades.get(currentTrade).getPosterEmail(), posterItem.getImageId(), posterImageView);
+        trades.get(currentTrade).getPosterEmail(), posterItem.getImageId(), posterImageView);
     ImageView offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     loadAndDisplayImage(
-            offeringItems.get(currentTrade).getEmail(),
-            offeringItems.get(currentTrade).getImageId(),
-            offeringImageView);
+        offeringItems.get(currentTrade).getEmail(),
+        offeringItems.get(currentTrade).getImageId(),
+        offeringImageView);
 
     return true;
   }
@@ -281,11 +281,11 @@ public class IncomingOffersFragment extends Fragment {
     ItemImageReference = IMAGE_STORAGE.getReference().child(imageUrl);
 
     ItemImageReference.getBytes(FIVE_MEGABYTES)
-            .addOnSuccessListener(
-                    bytes -> {
-                      Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                      imageView.setImageBitmap(itemImage);
-                    })
-            .addOnFailureListener(e -> Log.w(TAG, "Error getting item image.", e));
+        .addOnSuccessListener(
+            bytes -> {
+              Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+              imageView.setImageBitmap(itemImage);
+            })
+        .addOnFailureListener(e -> Log.w(TAG, "Error getting item image.", e));
   }
 }

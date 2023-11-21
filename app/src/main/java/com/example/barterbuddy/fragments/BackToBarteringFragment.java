@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,10 +35,10 @@ public class BackToBarteringFragment extends Fragment {
     getXmlElements();
 
     back_to_bartering.setOnClickListener(
-            v -> {
-              Intent intent = new Intent(requireContext(), BarterPage.class);
-              startActivity(intent);
-            });
+        v -> {
+          Intent intent = new Intent(requireContext(), BarterPage.class);
+          startActivity(intent);
+        });
   }
 
   private void getXmlElements() {

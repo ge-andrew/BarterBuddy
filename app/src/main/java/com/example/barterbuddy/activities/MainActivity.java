@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(publicItemsFragment);
           }
           if (item.getItemId() == R.id.menu_item_items) {
-              Log.d(TAG, "Menu item opened");
+            Log.d(TAG, "Menu item opened");
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
-              Log.d(TAG, "Menu item opened");
-              offersFragment = new OffersFragment();
+            Log.d(TAG, "Menu item opened");
+            offersFragment = new OffersFragment();
             setCurrentFragment(offersFragment);
           }
           return true;
@@ -70,28 +70,27 @@ public class MainActivity extends AppCompatActivity {
     return true;
   }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.logout) {
-            AUTHENTICATION_INSTANCE.signOut();
-            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-            startActivity(intent);
-            finish();
-        }
-        else if(id == R.id.profile) {
-            Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
-            startActivity(intent);
-        }
-
-        return true;
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      AUTHENTICATION_INSTANCE.signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    } else if (id == R.id.profile) {
+      Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
+      startActivity(intent);
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
+    return true;
+  }
 
-        finish();
-        startActivity(getIntent());
-    }
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+
+    finish();
+    startActivity(getIntent());
+  }
 }
