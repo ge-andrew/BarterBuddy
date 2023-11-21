@@ -10,31 +10,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.barterbuddy.activities.BarterPage;
-import com.example.barterbuddy.activities.IncomingOffersPage;
 import com.example.barterbuddy.activities.LoginPage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OffersFragment extends Fragment {
   static final String TAG = "OffersFragmentHolder";
-  private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-  private Button incoming_offers_button;
-  private Button your_offers_button;
   private FirebaseUser currentUser;
   private String currentUserUsername;
   private String currentUserEmail;
+  Fragment yourOffersFragment = new YourOffersFragment();
+  Fragment incomingOffersFragment = new IncomingOffersFragment();
 
   private Activity rootActivity;
 
@@ -59,8 +50,8 @@ public class OffersFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    Fragment yourOffersFragment = new YourOffersFragment();
-    Fragment incomingOffersFragment = new IncomingOffersFragment();
+//    Fragment yourOffersFragment = new YourOffersFragment();
+//    Fragment incomingOffersFragment = new IncomingOffersFragment();
     setCurrentFragment(yourOffersFragment);
 
     BottomNavigationView bottomNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
@@ -76,6 +67,17 @@ public class OffersFragment extends Fragment {
           }
           return true;
         });
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    Log.d(TAG, "onResume invoked.");
+
+    // TODO: fix bug where wrong fragment shows on resume activity
+    // select incoming, go to my items, return to offers
+
   }
 
   private void setCurrentFragment(Fragment fragment) {
