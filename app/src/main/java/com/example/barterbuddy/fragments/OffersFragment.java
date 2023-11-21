@@ -24,8 +24,6 @@ public class OffersFragment extends Fragment {
   private FirebaseUser currentUser;
   private String currentUserUsername;
   private String currentUserEmail;
-  Fragment yourOffersFragment = new YourOffersFragment();
-  Fragment incomingOffersFragment = new IncomingOffersFragment();
 
   private Activity rootActivity;
 
@@ -50,8 +48,8 @@ public class OffersFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-//    Fragment yourOffersFragment = new YourOffersFragment();
-//    Fragment incomingOffersFragment = new IncomingOffersFragment();
+    Fragment yourOffersFragment = new YourOffersFragment();
+    Fragment incomingOffersFragment = new IncomingOffersFragment();
     setCurrentFragment(yourOffersFragment);
 
     BottomNavigationView bottomNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
@@ -77,6 +75,7 @@ public class OffersFragment extends Fragment {
 
     // TODO: fix bug where wrong fragment shows on resume activity
     // select incoming, go to my items, return to offers
+
 
   }
 

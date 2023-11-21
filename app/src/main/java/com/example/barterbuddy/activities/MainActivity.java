@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
   static final String TAG = "MainActivity";
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private Fragment offersFragment;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     Fragment publicItemsFragment = new PublicItemsPageFragment();
     Fragment userItemsPageFragment = new UserItemsPageFragment();
-    Fragment offersFragment = new OffersFragment();
+    offersFragment = new OffersFragment();
 
     setCurrentFragment(publicItemsFragment);
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
           }
           if (item.getItemId() == R.id.menu_item_offers) {
               Log.d(TAG, "Menu item opened");
+              offersFragment = new OffersFragment();
             setCurrentFragment(offersFragment);
           }
           return true;
@@ -83,5 +85,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        finish();
+        startActivity(getIntent());
     }
 }
