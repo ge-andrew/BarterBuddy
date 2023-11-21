@@ -1,5 +1,14 @@
 package com.example.barterbuddy.fragments;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +17,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.barterbuddy.activities.BarterPage;
 import com.example.barterbuddy.activities.IncomingOffersPage;
 import com.example.barterbuddy.activities.LoginPage;
@@ -17,7 +27,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OffersFragment extends Fragment {
-  private static final String TAG = "OfferFragment.java";
+  static final String TAG = "OffersFragmentHolder";
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private Button incoming_offers_button;
@@ -26,13 +36,15 @@ public class OffersFragment extends Fragment {
   private String currentUserUsername;
   private String currentUserEmail;
 
-  public OffersFragment() {
-    super(R.layout.fragment_offers);
-  }
+  private Activity rootActivity;
 
+  @Nullable
   @Override
-  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    rootActivity = requireActivity();
 
     getCurrentUser();
     if (currentUser == null) {
@@ -40,39 +52,37 @@ public class OffersFragment extends Fragment {
     }
     getCurrentUserInfo();
 
-    getXmlElements();
+    return inflater.inflate(R.layout.fragment_offers, container, false);
+  }
 
-    incoming_offers_button.setOnClickListener(
-        v -> {
-          setupIncomingTradesButton();
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    Fragment yourOffersFragment = new YourOffersFragment();
+    Fragment incomingOffersFragment = new IncomingOffersFragment();
+    setCurrentFragment(yourOffersFragment);
+
+    BottomNavigationView bottomNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
+    bottomNavigationView.setOnItemSelectedListener(
+        item -> {
+          if (item.getItemId() == R.id.menu_item_your_offers) {
+            Log.d(TAG, "Menu item opened");
+            setCurrentFragment(yourOffersFragment);
+          }
+          if (item.getItemId() == R.id.menu_item_incoming_offers) {
+            Log.d(TAG, "Menu item opened");
+            setCurrentFragment(incomingOffersFragment);
+          }
+          return true;
         });
   }
 
-  private void setupIncomingTradesButton() {
-    CollectionReference allTrades = FIRESTORE_INSTANCE.collection("trades");
-
-    allTrades
-        .whereEqualTo("posterEmail", currentUserEmail)
-        .whereEqualTo("stateOfCompletion", "BARTERING")
-        .get()
-        .addOnCompleteListener(
-            task -> {
-              if (task.isSuccessful()) {
-                if (task.getResult().size() == 1) {
-                  Intent intent = new Intent(getActivity(), BarterPage.class);
-                  startActivity(intent);
-                } else if (task.getResult().size() > 1) {
-                  Log.d(TAG, "ERROR: more than one actively bartering trade exists");
-                  Intent intent = new Intent(getActivity(), BarterPage.class);
-                  startActivity(intent);
-                } else {
-                  Intent intent = new Intent(getActivity(), IncomingOffersPage.class);
-                  startActivity(intent);
-                }
-              } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
-              }
-            });
+  private void setCurrentFragment(Fragment fragment) {
+    getChildFragmentManager()
+        .beginTransaction()
+        .replace(R.id.fl_offers_fragments_holder, fragment)
+        .commit();
   }
 
   private void getCurrentUser() {
@@ -88,10 +98,5 @@ public class OffersFragment extends Fragment {
   private void getCurrentUserInfo() {
     currentUserUsername = currentUser.getDisplayName();
     currentUserEmail = currentUser.getEmail();
-  }
-
-  private void getXmlElements() {
-    incoming_offers_button = getActivity().findViewById(R.id.incoming_offers_button);
-    your_offers_button = getActivity().findViewById(R.id.your_offers_button);
   }
 }

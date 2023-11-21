@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/offWhite"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingVertical="16dp">
@@ -17,7 +18,7 @@
             android:id="@+id/back_arrow"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:contentDescription="back_arrow"
+            android:contentDescription="@string/back_arrow"
             android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
 
     </LinearLayout>
@@ -41,8 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/your_trade_with"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:theme="@style/titleTextStyle" />
 
             <TextView
                 android:id="@+id/posterUsernameTextView"
@@ -50,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/username"
                 android:textColor="@color/peach"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:theme="@style/titleTextStyle" />
 
         </LinearLayout>
 
@@ -73,9 +72,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="You are offering: "
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:text="@string/you_are_offering"
+                    android:theme="@style/defaultBoldedTextStyle"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
@@ -102,7 +100,7 @@
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:text="@string/title"
-                        android:textStyle="bold" />
+                        android:theme="@style/defaultBoldedTextStyle" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
@@ -117,7 +115,7 @@
                             android:inputType="numberDecimal"
                             android:maxWidth="100dp"
                             android:minWidth="85dp"
-                            android:textSize="16sp" />
+                            android:theme="@style/editTextStyle" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,9 +167,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="You hope to receive:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:text="@string/you_hope_to_receive"
+                    android:theme="@style/defaultBoldedTextStyle"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
@@ -198,7 +195,7 @@
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:text="@string/title"
-                        android:textStyle="bold" />
+                        android:theme="@style/defaultBoldedTextStyle" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
@@ -213,7 +210,7 @@
                             android:inputType="numberDecimal"
                             android:maxWidth="100dp"
                             android:minWidth="85dp"
-                            android:textSize="16sp" />
+                            android:theme="@style/editTextStyle" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -222,20 +219,13 @@
 
         </androidx.cardview.widget.CardView>
 
-
     </LinearLayout>
 
     <Button
         android:id="@+id/submit_trade_button"
         android:layout_width="185dp"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="Barter!"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/publicItemImage"
-        app:layout_constraintVertical_bias="0.0" />
+        android:text="@string/barter"
+        android:theme="@style/largerTextButtonStyle" />
 
 </LinearLayout>

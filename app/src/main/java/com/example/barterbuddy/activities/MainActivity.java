@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
+    toolbar.setElevation(8);
 
     Fragment publicItemsFragment = new PublicItemsPageFragment();
     Fragment userItemsPageFragment = new UserItemsPageFragment();
@@ -42,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(publicItemsFragment);
           }
           if (item.getItemId() == R.id.menu_item_items) {
+              Log.d(TAG, "Menu item opened");
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
+              Log.d(TAG, "Menu item opened");
             setCurrentFragment(offersFragment);
           }
           return true;
@@ -65,15 +68,20 @@ public class MainActivity extends AppCompatActivity {
     return true;
   }
 
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    int id = item.getItemId();
-    if (id == R.id.logout) {
-      AUTHENTICATION_INSTANCE.signOut();
-      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-      startActivity(intent);
-      finish();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logout) {
+            AUTHENTICATION_INSTANCE.signOut();
+            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+            startActivity(intent);
+            finish();
+        }
+        else if(id == R.id.profile) {
+            Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
+            startActivity(intent);
+        }
+
+        return true;
     }
-    return true;
-  }
 }

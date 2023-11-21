@@ -3,20 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Offers"
-    android:layout_marginTop="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/offWhite">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:gravity="center"
-        android:text="@string/public_offers"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:paddingBottom="12dp"
+        android:id="@+id/searchBarParent">
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/search_bar"
+            android:layout_marginTop="12dp"
+            android:hint="search for an item" />
+
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/public_items_swipeRefresh"
@@ -28,7 +38,7 @@
             android:id="@+id/PublicItemsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/searchBarParent"
             tools:layout_editor_absoluteX="1dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

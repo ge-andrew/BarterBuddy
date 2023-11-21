@@ -60,9 +60,6 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
 
     getXmlElements();
 
-    // Initialize RecyclerView and Adapter
-    publicItemsRecycler = view.findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = view.findViewById(R.id.public_items_swipeRefresh);
     adapter = new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
     publicItemsRecycler.setAdapter(adapter);
     publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
