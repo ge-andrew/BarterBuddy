@@ -77,4 +77,6 @@
     <string name="rating_profile">Rating:\ </string>
     <string name="your_offer">Your Offer</string>
     <string name="there_offer">There Offer</string>
+    <string name="your_item">Your Item</string>
+    <string name="their_item">Their Item</string>
 </resources>
