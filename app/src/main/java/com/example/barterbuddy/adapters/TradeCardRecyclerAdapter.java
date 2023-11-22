@@ -6,13 +6,13 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.TradeWithRef;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -86,7 +86,7 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   }
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
-    ImageView yourItemImageView, wantedItemImageView;
+    ShapeableImageView yourItemImageView, wantedItemImageView;
     TextView tradeMoneyWanted,tradeMoneyOffered;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
