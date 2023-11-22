@@ -23,40 +23,58 @@
             android:exported="true" />
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true" >
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.CreateAccountPage"
             android:exported="false" />
         <activity
             android:name=".utils.GetImageDialogBox"
             android:exported="false" />
+
         <activity
             android:name=".activities.AddNewItemPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.PersonalItemsDetailPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.PublicItemsDetailPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.ChooseTradeItemPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.AdjustTradeMoneyPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.ChatPage"
             android:exported="false" />
+
         <activity
             android:name=".activities.TestChatPageClass"
             android:exported="true" />
+
+        <activity
+            android:name=".activities.IncomingOffersPage"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.BarterPage"
+            android:exported="true" />
+
     </application>
 
 </manifest>

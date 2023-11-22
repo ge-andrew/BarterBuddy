@@ -22,7 +22,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class PublicItemsDetailPage extends AppCompatActivity {
 
-  private static final String TAG = "ItemDetailPage"; // for logging from this activity
+  private static final String TAG = "ItemDetailPage";
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
