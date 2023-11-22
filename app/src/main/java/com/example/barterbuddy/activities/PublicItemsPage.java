@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +47,9 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_public_items);
 
-    //Search bar
+
+
+    //Search bar core functions
     searchBar = findViewById(R.id.search_bar);
     searchBar.clearFocus();
     searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -63,6 +66,8 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
         return search;
       }
     });
+
+
 
     //Fire base Auth
     getCurrentUser();
@@ -90,6 +95,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
     });
   }
 
+  //Search Bar Filtering
   private void filterList(String newText) {
     ArrayList<Item> filteredList = new ArrayList<>();
     for (Item item : itemsFromFirestore) {
@@ -97,7 +103,17 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
         filteredList.add(item);
       }
     }
-    publicItemsRecycler.updateItemList();
+
+    // Update the adapter with the filtered list
+    PublicItemsRecyclerAdapter adapter =
+            new PublicItemsRecyclerAdapter(this, filteredList, this, ITEM_IMAGES);
+    publicItemsRecycler.setAdapter(adapter);
+    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+    // If the filtered list is empty, show a Toast message
+    if (filteredList.isEmpty()) {
+      Toast.makeText(this, "No items match your search", Toast.LENGTH_SHORT).show();
+    }
   }
 
 
@@ -129,9 +145,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
                       context, availableItems, (RecyclerViewInterface) context, ITEM_IMAGES);
               publicItemsRecycler.setAdapter(adapter);
               publicItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
-              if (search) {
-                  filterList(searchFilter);
-              }
+
             });
   }
 

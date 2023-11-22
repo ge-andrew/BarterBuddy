@@ -46,6 +46,15 @@ public class PublicItemsRecyclerAdapter
     return new PublicItemsRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
+
+
+
+  public void updateItemList(ArrayList<Item> newItems) {
+    this.userItems.clear(); // Clear current items
+    this.userItems.addAll(newItems); // Add new items
+    notifyDataSetChanged(); // Notify the adapter that the data set has changed
+  }
+
   @Override
   public void onBindViewHolder(
       @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
@@ -79,11 +88,6 @@ public class PublicItemsRecyclerAdapter
     return userItems.size();
   }
 
-  public void updateItemList(ArrayList<Item> newItems) {
-    this.userItems.clear();
-    this.userItems.addAll(newItems);
-    notifyDataSetChanged();
-  }
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     // this method very very roughly equates to onCreate() from recyclerView
