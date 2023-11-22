@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // TODO: Show the rating dialog box if we came here from chat page
+
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
     toolbar.setElevation(8);

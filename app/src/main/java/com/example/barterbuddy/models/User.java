@@ -15,10 +15,17 @@ public class User implements Serializable {
   private int currentAverageRating;
 
   // constructors
-  public User(String username, String email, String password) {
+  public User(
+      String username,
+      String email,
+      String password,
+      int numOfTimesRated,
+      int currentAverageRating) {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.numOfTimesRated = numOfTimesRated;
+    this.currentAverageRating = currentAverageRating;
   }
 
   public User() {}
@@ -35,12 +42,28 @@ public class User implements Serializable {
     return password;
   }
 
+  public int getCurrentAverageRating() {
+    return currentAverageRating;
+  }
+
+  public int getNumOfTimesRated() {
+    return numOfTimesRated;
+  }
+
   public void setUsername(String username) {
     this.username = username;
   }
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public void setCurrentAverageRating(int rating) {
+    this.currentAverageRating = currentAverageRating;
+  }
+
+  public void setNumOfTimesRated(int numOfTimesRated) {
+    this.numOfTimesRated = numOfTimesRated;
   }
 
   public void setPassword(String password) {

@@ -14,7 +14,7 @@ public class TestChatPageClass extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User userToTradeWith = new User("Wadsworth", "wadsworth@google.com", "password");
+        User userToTradeWith = new User("Wadsworth", "wadsworth@google.com", "password", 0, 0);
 
         Intent intent = new Intent(TestChatPageClass.this, ChatPage.class);
         intent.putExtra("otherUser", userToTradeWith);

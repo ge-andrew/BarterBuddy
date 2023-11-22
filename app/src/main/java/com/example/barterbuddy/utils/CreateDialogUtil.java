@@ -7,13 +7,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.network.UpdateUserDocument;
 
 public class CreateDialogUtil {
-  public static void createRateUserDialogBox(Context mainActivityContext, String ratedUserEmail) {
-    Dialog rateUserDialog = new Dialog(mainActivityContext);
+  public static void createRateUserDialogBox(Context activityContext, String ratedUserEmail) {
+    Dialog rateUserDialog = new Dialog(activityContext);
     Window dialogWindow = rateUserDialog.getWindow();
     assert dialogWindow != null;
     dialogWindow.requestFeature(Window.FEATURE_NO_TITLE);
@@ -30,7 +31,8 @@ public class CreateDialogUtil {
         l -> {
           int rating = ratingBar.getNumStars();
           if (rating == 0) {
-            // TODO: Toast "Please select a rating"
+              Toast toast = Toast.makeText(activityContext, "Please select a rating", Toast.LENGTH_LONG);
+              toast.show();
           } else {
             UpdateUserDocument.addRating(ratedUserEmail, rating);
             rateUserDialog.dismiss();
