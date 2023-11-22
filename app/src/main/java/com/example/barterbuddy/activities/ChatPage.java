@@ -41,6 +41,8 @@ public class ChatPage extends AppCompatActivity {
   String tradeId;
   Trade currentTrade;
   User otherUser;
+  String offeringEmail;
+  String posterEmail;
   ChatroomModel chatroomModel;
 
   EditText messageInput;
@@ -55,12 +57,16 @@ public class ChatPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat_page);
 
+    // TODO: uncomment for when passed from counteroffers. This file will fail until this is implemented.
+    // offeringEmail = getIntent().getStringExtra("posterEmail");
+    // posterEmail = getIntent().getStringExtra("posterEmail");
+
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUser = (User) getIntent().getSerializableExtra("otherUser");
     assert otherUser != null;
     setOtherChatterName(otherUser.getUsername());
     chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
-    tradeId = FirebaseUtil.getTradeId(currentUserId, otherUser.getEmail());
+    tradeId = posterEmail + "_" + offeringEmail;    //FirebaseUtil.getTradeId(currentUserId, otherUser.getEmail());
 
     FirebaseUtil.getTradeReference(tradeId)
         .get()
@@ -69,7 +75,7 @@ public class ChatPage extends AppCompatActivity {
               if (documentSnapshot.exists()) {
                 currentTrade = documentSnapshot.toObject(Trade.class);
                 assert currentTrade != null;
-                if (!Objects.equals(currentTrade.getStateOfCompletion(), "IN_PROGRESS")) {
+                if (Objects.equals(currentTrade.getStateOfCompletion(), "COMPLETED") || Objects.equals(currentTrade.getStateOfCompletion(), "CANCELED")) {
                   hideButtons();
                 }
               }
