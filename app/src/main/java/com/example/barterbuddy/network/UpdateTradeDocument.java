@@ -25,6 +25,10 @@ public class UpdateTradeDocument {
     setTradeState(trade, "BARTERING");
   }
 
+  public static void setStateToChatting(@NonNull Trade trade) {
+    setTradeState(trade, "CHATTING");
+  }
+
   public static void setTradeState(@NonNull Trade trade, String newState) {
     trade.setStateOfCompletion(newState);
     final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();

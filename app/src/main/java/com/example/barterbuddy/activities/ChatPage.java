@@ -56,10 +56,6 @@ public class ChatPage extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat_page);
 
-    // TODO: uncomment for when passed from counteroffers. This file will fail until this is implemented.
-    // offeringEmail = getIntent().getStringExtra("posterEmail");
-    // posterEmail = getIntent().getStringExtra("posterEmail");
-
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUser = (User) getIntent().getSerializableExtra("otherUser");
     assert otherUser != null;

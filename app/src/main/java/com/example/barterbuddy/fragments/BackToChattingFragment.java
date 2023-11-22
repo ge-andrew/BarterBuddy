@@ -11,12 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.BarterPage;
+import com.example.barterbuddy.activities.ChatPage;
+import com.example.barterbuddy.models.User;
 
-public class BackToBarteringFragment extends Fragment {
-  private Button back_to_bartering;
+public class BackToChattingFragment extends Fragment {
+  private Button back_to_chatting;
 
-  BackToBarteringFragment() {
-    super(R.layout.back_to_bartering_page);
+  BackToChattingFragment() {
+    super(R.layout.back_to_chatting_page);
   }
 
   @Nullable
@@ -25,7 +27,7 @@ public class BackToBarteringFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.back_to_bartering_page, container, false);
+    return inflater.inflate(R.layout.back_to_chatting_page, container, false);
   }
 
   @Override
@@ -34,15 +36,16 @@ public class BackToBarteringFragment extends Fragment {
 
     getXmlElements();
 
-    back_to_bartering.setOnClickListener(
+    back_to_chatting.setOnClickListener(
         v -> {
-          Intent intent = new Intent(requireContext(), BarterPage.class);
-          intent.putExtra("isPoster", true);
+          Intent intent = new Intent(requireContext(), ChatPage.class);
+          User otherUser = new User();
+          intent.putExtra("otherUser", otherUser);
           startActivity(intent);
         });
   }
 
   private void getXmlElements() {
-    back_to_bartering = getActivity().findViewById(R.id.back_to_chatting);
+    back_to_chatting = getActivity().findViewById(R.id.back_to_chatting);
   }
 }
