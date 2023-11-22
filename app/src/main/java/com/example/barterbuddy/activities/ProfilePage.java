@@ -31,6 +31,6 @@ public class ProfilePage extends AppCompatActivity {
     backArrow = findViewById(R.id.back_arrow);
     usernameTextView = findViewById(R.id.username);
     emailTextView = findViewById(R.id.email);
-    ratingbar = findViewById(R.id.ratingBar);
+    ratingbar = findViewById(R.id.rating_bar);
   }
 }

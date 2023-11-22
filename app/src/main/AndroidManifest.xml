@@ -16,7 +16,7 @@
             android:name=".activities.ProfilePage"
             android:exported="false" />
         <activity
-            android:name=".activities.RateUserPage"
+            android:name=".utils.RateUserDialogBox"
             android:exported="true" />
         <activity
             android:name=".activities.LoginPage"

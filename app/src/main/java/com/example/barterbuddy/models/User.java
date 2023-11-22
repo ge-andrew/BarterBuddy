@@ -11,6 +11,8 @@ public class User implements Serializable {
   private String username;
   private String email;
   private String password;
+  private int numOfTimesRated;
+  private int currentAverageRating;
 
   // constructors
   public User(String username, String email, String password) {

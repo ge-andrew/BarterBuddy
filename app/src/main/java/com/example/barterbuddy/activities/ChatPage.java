@@ -180,8 +180,9 @@ public class ChatPage extends AppCompatActivity {
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
     dialog.setContentView(R.layout.activity_confirmation_dialog_box);
-    if (dialog.getWindow() != null)
+    if (dialog.getWindow() != null) {
       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
 
     TextView message = dialog.findViewById(R.id.warning_message);
     message.setText(warningMessage);
