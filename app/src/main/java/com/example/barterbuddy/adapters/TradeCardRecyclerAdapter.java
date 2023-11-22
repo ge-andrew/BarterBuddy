@@ -16,11 +16,14 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
+
+  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   Context context;
   ArrayList<TradeWithRef> userTrades;
 
@@ -48,9 +51,26 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
     double money = trade.getMoney();
     if (money < 0){
       money = -1 * money;
-      holder.tradeMoneyOffered.setText(String.valueOf(money));
+
+      if(money == 0)
+      {
+        holder.tradeMoneyOffered.setText("");
+      }
+      else
+      {
+        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
+      }
     } else {
-      holder.tradeMoneyWanted.setText(String.valueOf(money));
+
+      if(money == 0)
+      {
+        holder.tradeMoneyWanted.setText("");
+      }
+      else
+      {
+        holder.tradeMoneyWanted.setText("$" + currencyFormat.format(money));
+      }
+
     }
 
     String posterItemId = userTrades.get(position).getPosterItem().getId();
