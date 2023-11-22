@@ -38,9 +38,7 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   private ArrayList<Item> itemsFromFirestore = new ArrayList<>();
   private String currentUserUsername;
   private String currentUserEmail;
-  private String searchFilter;
   private SearchView searchBar;
-  private boolean search;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +57,9 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
       }
 
       @Override
-      public boolean onQueryTextChange(String newText) {
-        search = true;
-        searchFilter = newText;
-        filterList(newText);
-        return search;
+      public boolean onQueryTextChange(String searchFilter) {
+        filterList(searchFilter);
+        return false;
       }
     });
 
@@ -96,10 +92,10 @@ public class PublicItemsPage extends AppCompatActivity implements RecyclerViewIn
   }
 
   //Search Bar Filtering
-  private void filterList(String newText) {
+  private void filterList(String searchFilter) {
     ArrayList<Item> filteredList = new ArrayList<>();
     for (Item item : itemsFromFirestore) {
-      if (item.getTitle().toLowerCase().contains(newText.toLowerCase())) {
+      if (item.getTitle().toLowerCase().contains(searchFilter.toLowerCase())) {
         filteredList.add(item);
       }
     }

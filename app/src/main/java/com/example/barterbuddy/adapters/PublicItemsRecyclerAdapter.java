@@ -49,12 +49,6 @@ public class PublicItemsRecyclerAdapter
 
 
 
-  public void updateItemList(ArrayList<Item> newItems) {
-    this.userItems.clear(); // Clear current items
-    this.userItems.addAll(newItems); // Add new items
-    notifyDataSetChanged(); // Notify the adapter that the data set has changed
-  }
-
   @Override
   public void onBindViewHolder(
       @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
