@@ -11,7 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
 
         <ImageView
             android:id="@+id/back_arrow"
@@ -27,131 +28,123 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="12dp"
             android:text="@string/add_new_item"
             android:theme="@style/titleTextStyle" />
 
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:scrollbars="none">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/item_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_weight="0"
+                android:background="@color/light_grey"
+                android:scaleType="center"
+                android:src="@drawable/baseline_add_photo_alternate_24"
+                app:shapeAppearanceOverlay="@style/roundimageview" />
+
+            <TextView
+                android:id="@+id/missingImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:text="@string/missing_image"
+                android:theme="@style/warningTextStyle"
+                android:visibility="gone" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/item_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:layout_weight="0"
-                    android:background="@color/light_grey"
-                    android:scaleType="center"
-                    android:src="@drawable/baseline_add_photo_alternate_24"
-                    app:shapeAppearanceOverlay="@style/roundimageview" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-                <TextView
-                    android:id="@+id/missingImage"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/missing_image"
-                    android:theme="@style/warningTextStyle"
-                    android:visibility="gone" />
+                    android:hint="@string/title"
+                    android:inputType="textCapSentences"
+                    android:theme="@style/editTextStyle" />
 
-                <com.google.android.material.textfield.TextInputLayout
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/missingTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/missing_title"
+                android:theme="@style/warningTextStyle"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/estimatedValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp">
+                    android:hint="@string/value"
+                    android:inputType="numberDecimal"
+                    android:theme="@style/editTextStyle" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/title"
-                        android:inputType="textCapSentences"
-                        android:theme="@style/editTextStyle" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/missingValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/missing_value"
+                android:theme="@style/warningTextStyle"
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/missingTitle"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:minHeight="100dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/missing_title"
-                    android:theme="@style/warningTextStyle"
-                    android:visibility="gone" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="top|start"
+                    android:hint="@string/description"
+                    android:inputType="textCapSentences|textAutoComplete|textAutoCorrect|textMultiLine"
+                    android:theme="@style/editTextStyle" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp">
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/estimatedValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/value"
-                        android:inputType="numberDecimal"
-                        android:theme="@style/editTextStyle" />
+            <TextView
+                android:id="@+id/missingDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/missing_description"
+                android:theme="@style/warningTextStyle"
+                android:visibility="gone" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/save_new_item_button"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/save"
+                android:theme="@style/largerTextButtonStyle" />
 
-                <TextView
-                    android:id="@+id/missingValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/missing_value"
-                    android:theme="@style/warningTextStyle"
-                    android:visibility="gone" />
+        </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:minHeight="100dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="top|start"
-                        android:hint="@string/description"
-                        android:inputType="textCapSentences|textAutoComplete|textAutoCorrect|textMultiLine"
-                        android:theme="@style/editTextStyle" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/missingDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/missing_description"
-                    android:theme="@style/warningTextStyle"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/save_new_item_button"
-                    android:layout_width="185dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/save"
-                    android:theme="@style/largerTextButtonStyle" />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
