@@ -106,7 +106,7 @@ public class IncomingOffersFragment extends Fragment {
                 .show();
             setStateToBartering(trades.get(currentTrade));
             Intent intent = new Intent(requireContext(), BarterPage.class);
-            intent.putExtra("trade", trades.get(currentTrade));
+            intent.putExtra("isPoster", true);
             startActivity(intent);
           }
         });
