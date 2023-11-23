@@ -8,10 +8,9 @@
     <color name="red">#fc0303</color>
     <color name="rating_star_primary">#ffe234</color>
     <color name="rating_star_secondary">#a6a6a6</color>
-    <color name="green">#00FF00</color>
-
-
-    <color name="chat_color_sender">#1E88E5</color>
-    <color name="chat_color_receiver">#7CB342</color>
+    <color name="green">#80B35E</color>
+    <color name="blue">#00B7EC</color>
     <color name="light_gray">#E5E5E5</color>
+    <color name="chat_color_sender">#497E92</color>
+    <color name="chat_color_receiver">#f0f0f0</color>
 </resources>

@@ -40,8 +40,8 @@
     <string name="down_arrow">down arrow</string>
     <string name="your_trade_with">"Your trade with "</string>
     <string name="money">money</string>
-    <string name="money_wanted" />
-    <string name="money_offered">money_offered</string>
+    <string name="money_wanted">0.00</string>
+    <string name="money_offered">0.00</string>
     <string name="confirm">Confirm</string>
     <string name="deny">Deny</string>
     <string name="complete_trade">Complete Trade</string>
@@ -54,7 +54,7 @@
     <string name="estimated_value">"Estimated value: "</string>
     <string name="descriptionForRecyclerCards">Description:\ </string>
     <string name="questionmark">\?</string>
-    <string name="rating_prompt_part1">Rate your trading experience</string>
+    <string name="rating_prompt_part1">Rate your trading experience with</string>
     <string name="rating_prompt_part2">"with\ "</string>
     <string name="market">Market</string>
     <string name="menu_items">Items</string>
@@ -75,4 +75,8 @@
     <string name="username_profile">Username:\ </string>
     <string name="email_profile">Email:\ </string>
     <string name="rating_profile">Rating:\ </string>
+    <string name="your_offer">Your Offer</string>
+    <string name="there_offer">There Offer</string>
+    <string name="your_item">Your Item</string>
+    <string name="their_item">Their Item</string>
 </resources>

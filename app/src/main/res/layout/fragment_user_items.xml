@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="56dp"
-    android:id="@+id/parent"
-    android:background="@color/offWhite">
+    android:background="@color/offWhite"
+    android:paddingTop="56dp">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/user_items_swipeRefresh"
@@ -19,7 +19,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -27,23 +27,22 @@
         android:id="@+id/add_item_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/peach"
         android:clickable="true"
+        android:contentDescription="@string/add_new_item"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
         app:fabCustomSize="80dp"
-        app:maxImageSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@android:drawable/ic_input_add"
-        android:contentDescription="@string/add_new_item"
-        android:focusable="true"
-        android:backgroundTint="@color/peach"
-        app:tint="@color/white"
-        android:elevation="4dp"
+        app:maxImageSize="40dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayExtended"
-        />
+        app:tint="@color/white" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_center"

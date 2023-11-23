@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,7 +49,7 @@ public class ChatPage extends AppCompatActivity {
 
   EditText messageInput;
   ImageButton sendMessageButton;
-  ImageButton backArrow;
+  ImageView backArrow;
   Button completeTradeButton;
   Button cancelTradeButton;
   RecyclerView chatRecyclerView;
