@@ -41,6 +41,9 @@ public class ChatPage extends AppCompatActivity {
   String tradeId;
   Trade currentTrade;
   String otherUserEmail;
+  User otherUser;
+  String offeringEmail;
+  String posterEmail;
   ChatroomModel chatroomModel;
 
   EditText messageInput;
@@ -63,6 +66,7 @@ public class ChatPage extends AppCompatActivity {
 
     setOtherChatterNameFromEmail(otherUserEmail);
 
+
     FirebaseUtil.getTradeReference(tradeId)
         .get()
         .addOnSuccessListener(
@@ -70,7 +74,7 @@ public class ChatPage extends AppCompatActivity {
               if (documentSnapshot.exists()) {
                 currentTrade = documentSnapshot.toObject(Trade.class);
                 assert currentTrade != null;
-                if (!Objects.equals(currentTrade.getStateOfCompletion(), "IN_PROGRESS")) {
+                if (Objects.equals(currentTrade.getStateOfCompletion(), "COMPLETED") || Objects.equals(currentTrade.getStateOfCompletion(), "CANCELED")) {
                   hideButtons();
                 }
               }

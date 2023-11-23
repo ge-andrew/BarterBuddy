@@ -7,14 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.activities.PublicItemsDetailPage;
@@ -25,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 
 public class PublicItemsPageFragment extends Fragment implements RecyclerViewInterface {
@@ -86,20 +83,23 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
         .collectionGroup("items")
         .whereEqualTo("active", true)
         .get()
-        .addOnSuccessListener(
+        .addOnCompleteListener(
             task -> {
               availableItems = new ArrayList<>();
-              for (QueryDocumentSnapshot document : task) {
-                // don't add item if is user's own item
-                if ((document.get("email") != null && document.get("username") != null)
-                    && !(document.get("email").equals(currentUserEmail)
-                        && document.get("username").equals(currentUserUsername))) {
-                  availableItems.add((document.toObject(Item.class)));
+              if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                  // don't add item if is user's own item
+                  if ((document.get("email") != null && document.get("username") != null)
+                      && !(document.get("email").equals(currentUserEmail)
+                          && document.get("username").equals(currentUserUsername))) {
+                    availableItems.add((document.toObject(Item.class)));
+                  }
                 }
+                adapter.updateItems(availableItems);
+              } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
               }
-              adapter.updateItems(availableItems);
-            })
-        .addOnFailureListener(e -> Log.d(TAG, "Error getting documents: ", e));
+            });
   }
 
   // take position of clicked card in recyclerView to start and send correct data to

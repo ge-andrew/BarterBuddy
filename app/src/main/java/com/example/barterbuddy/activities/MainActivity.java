@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.fragments.OffersFragment;
 import com.example.barterbuddy.fragments.PublicItemsPageFragment;
@@ -21,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
   static final String TAG = "MainActivity";
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private Fragment offersFragment;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     Fragment publicItemsFragment = new PublicItemsPageFragment();
     Fragment userItemsPageFragment = new UserItemsPageFragment();
-    Fragment offersFragment = new OffersFragment();
+    offersFragment = new OffersFragment();
 
     setCurrentFragment(publicItemsFragment);
 
@@ -45,11 +44,12 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(publicItemsFragment);
           }
           if (item.getItemId() == R.id.menu_item_items) {
-              Log.d(TAG, "Menu item opened");
+            Log.d(TAG, "Menu item opened");
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
-              Log.d(TAG, "Menu item opened");
+            Log.d(TAG, "Menu item opened");
+            offersFragment = new OffersFragment();
             setCurrentFragment(offersFragment);
           }
           return true;
@@ -63,27 +63,34 @@ public class MainActivity extends AppCompatActivity {
         .commit();
   }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        return true;
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.profile_menu, menu);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      AUTHENTICATION_INSTANCE.signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    } else if (id == R.id.profile) {
+      Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
+      startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.logout) {
-            AUTHENTICATION_INSTANCE.signOut();
-            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-            startActivity(intent);
-            finish();
-        }
-        else if(id == R.id.profile) {
-            Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
-            startActivity(intent);
-        }
+    return true;
+  }
 
-        return true;
-    }
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+
+    finish();
+    startActivity(getIntent());
+  }
 }

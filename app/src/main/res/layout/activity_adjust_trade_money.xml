@@ -91,10 +91,10 @@
                         android:contentDescription="@string/item_you_are_trading"
                         android:scaleType="centerCrop"
                         android:src="@drawable/baseline_insert_photo_24"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
+                        app:shapeAppearanceOverlay="@style/roundedImageViewPersonalItems" />
 
                     <TextView
-                        android:id="@+id/personalItemTitle"
+                        android:id="@+id/posterItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="12dp"
@@ -186,10 +186,10 @@
                         android:contentDescription="@string/item_you_are_trading"
                         android:scaleType="centerCrop"
                         android:src="@drawable/baseline_insert_photo_24"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
+                        app:shapeAppearanceOverlay="@style/roundedImageViewPersonalItems" />
 
                     <TextView
-                        android:id="@+id/publicItemTitle"
+                        android:id="@+id/offeringItemTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="12dp"
