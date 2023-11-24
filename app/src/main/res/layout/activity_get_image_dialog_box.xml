@@ -31,15 +31,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="@string/take_photo"
-            android:theme="@style/largerTextButtonStyle" />
+            android:theme="@style/smallerTextButtonStyle" />
 
         <Button
             android:id="@+id/choose_photo_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/pick_from_your_photos"
-            android:theme="@style/largerTextButtonStyle" />
+            android:theme="@style/smallerTextButtonStyle" />
     </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>

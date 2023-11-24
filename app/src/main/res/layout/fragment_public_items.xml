@@ -5,26 +5,25 @@
     android:id="@+id/Offers"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/offWhite"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/offWhite">
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/searchBarParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/white"
-        android:paddingBottom="12dp"
-        android:id="@+id/searchBarParent">
+        android:orientation="horizontal"
+        android:paddingBottom="12dp">
 
         <androidx.appcompat.widget.SearchView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginEnd="40dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/search_bar"
             android:layout_marginTop="12dp"
-            android:hint="search for an item" />
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/search_bar" />
 
     </LinearLayout>
 

@@ -5,11 +5,11 @@
     <item
         android:id="@+id/menu_item_your_offers"
         android:title="@string/your_offers"
-        android:icon="@drawable/icon_home" />
+        android:icon="@drawable/baseline_outbox_24" />
 
     <item
         android:id="@+id/menu_item_incoming_offers"
         android:title="@string/incoming_offers"
-        android:icon="@drawable/icon_add_circle" />
+        android:icon="@drawable/baseline_move_to_inbox_24" />
 
 </menu>

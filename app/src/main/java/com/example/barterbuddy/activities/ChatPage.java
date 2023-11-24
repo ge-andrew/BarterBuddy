@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.example.barterbuddy.network.UpdateTradeDocument;
 import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -39,6 +41,7 @@ public class ChatPage extends AppCompatActivity {
   String currentUserId;
   String tradeId;
   Trade currentTrade;
+  String otherUserEmail;
   User otherUser;
   String offeringEmail;
   String posterEmail;
@@ -46,7 +49,7 @@ public class ChatPage extends AppCompatActivity {
 
   EditText messageInput;
   ImageButton sendMessageButton;
-  ImageButton backArrow;
+  ImageView backArrow;
   Button completeTradeButton;
   Button cancelTradeButton;
   RecyclerView chatRecyclerView;
@@ -57,11 +60,13 @@ public class ChatPage extends AppCompatActivity {
     setContentView(R.layout.activity_chat_page);
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
-    otherUser = (User) getIntent().getSerializableExtra("otherUser");
-    assert otherUser != null;
-    setOtherChatterName(otherUser.getUsername());
-    chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
-    tradeId = posterEmail + "_" + offeringEmail;    //FirebaseUtil.getTradeId(currentUserId, otherUser.getEmail());
+    otherUserEmail = getIntent().getStringExtra("otherUserEmail");
+    assert otherUserEmail != null;
+    chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUserEmail);
+    tradeId = FirebaseUtil.getTradeId(currentUserId, otherUserEmail);
+
+    setOtherChatterNameFromEmail(otherUserEmail);
+
 
     FirebaseUtil.getTradeReference(tradeId)
         .get()
@@ -101,9 +106,17 @@ public class ChatPage extends AppCompatActivity {
     setupChatRecyclerView();
   }
 
-  private void setOtherChatterName(String otherChatterName) {
+  private void setOtherChatterNameFromEmail(String otherChatterEmail) {
+    FirebaseUtil.getUserReference(otherChatterEmail)
+            .get()
+            .addOnSuccessListener(this::setNameFromUserSnapshot);
+  }
+
+  private void setNameFromUserSnapshot(DocumentSnapshot documentSnapshot) {
+    final User otherChatter = documentSnapshot.toObject(User.class);
+    assert otherChatter != null;
     TextView otherChatterNameView = findViewById(R.id.chat_username);
-    otherChatterNameView.setText(otherChatterName);
+    otherChatterNameView.setText(otherChatter.getUsername());
   }
 
   private void setupChatRecyclerView() {
@@ -154,7 +167,7 @@ public class ChatPage extends AppCompatActivity {
                 chatroomModel =
                     new ChatroomModel(
                         chatroomId,
-                        Arrays.asList(currentUserId, otherUser.getEmail()),
+                        Arrays.asList(currentUserId, otherUserEmail),
                         Timestamp.now(),
                         "");
                 // Add this chatroom to firebase

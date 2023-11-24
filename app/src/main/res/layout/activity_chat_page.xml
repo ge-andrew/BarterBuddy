@@ -2,72 +2,66 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/offWhite"
+    android:paddingTop="16dp">
 
-    <!-- Back arrow -->
-    <ImageButton
-        android:id="@+id/back_arrow"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/back_arrow"
-        android:src="@drawable/baseline_keyboard_double_arrow_left_24"
-        />
-
-    <!-- Other person's profile picture -->
-    <ImageView
-        android:id="@+id/chat_profile_picture"
-        android:layout_width="70dp"
-        android:layout_height="66dp"
-        app:srcCompat="@drawable/default_profile_face"
-        android:contentDescription="@string/profile_picture"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_arrow" />
-
-    <!-- Other person's username -->
-    <TextView
-        android:id="@+id/chat_username"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chat_profile_picture" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/back_arrow"
+            android:src="@drawable/baseline_keyboard_double_arrow_left_24" />
+
+        <TextView
+            android:id="@+id/chat_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/username"
+            android:theme="@style/titleTextStyle" />
+
+    </RelativeLayout>
+
+    <LinearLayout
         android:id="@+id/buttons_parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/chat_username"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <Button
             android:id="@+id/complete_trade_button"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
             android:text="@string/complete_trade"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cancel_trade_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/smallerTextButtonStyle"/>
+            android:theme="@style/smallerTextButtonStyle" />
 
         <Button
             android:id="@+id/cancel_trade_button"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
             android:text="@string/cancel_trade"
-            app:layout_constraintStart_toEndOf="@id/complete_trade_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:theme="@style/smallerTextButtonStyle"/>
+            android:theme="@style/smallerTextButtonStyle" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -87,42 +81,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/typing_parent_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <!-- Type messages -->
             <EditText
                 android:id="@+id/chat_edit_text"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_weight="1"
                 android:autofillHints="string"
                 android:hint="@string/write_message_here"
                 android:inputType="textMultiLine"
-                android:padding="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/send_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/editTextStyle" />
 
             <!-- Send messages -->
             <ImageButton
                 android:id="@+id/send_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginVertical="10dp"
+                android:backgroundTint="@android:color/transparent"
                 android:contentDescription="@string/send_message"
                 android:src="@drawable/baseline_send_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintStart_toEndOf="@+id/chat_edit_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/peach" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
