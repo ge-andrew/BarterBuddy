@@ -15,6 +15,7 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.fragments.OffersFragment;
 import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.example.barterbuddy.fragments.UserItemsPageFragment;
+import com.example.barterbuddy.utils.CreateDialogUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    // TODO: Show the rating dialog box if we came here from chat page
+    if (getIntent().getBooleanExtra("showDialogOnArrival", false)) {
+      String userEmailToRate = getIntent().getStringExtra("userEmailToRate");
+      if (userEmailToRate != null) {
+        CreateDialogUtil.createRateUserDialogBox(this, userEmailToRate);
+      }
+    }
 
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
@@ -63,27 +69,26 @@ public class MainActivity extends AppCompatActivity {
         .commit();
   }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        return true;
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.profile_menu, menu);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.logout) {
+      AUTHENTICATION_INSTANCE.signOut();
+      Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+      startActivity(intent);
+      finish();
+    } else if (id == R.id.profile) {
+      Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
+      startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.logout) {
-            AUTHENTICATION_INSTANCE.signOut();
-            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-            startActivity(intent);
-            finish();
-        }
-        else if(id == R.id.profile) {
-            Intent intent = new Intent(getApplicationContext(), ProfilePage.class);
-            startActivity(intent);
-        }
-
-        return true;
-    }
+    return true;
+  }
 }

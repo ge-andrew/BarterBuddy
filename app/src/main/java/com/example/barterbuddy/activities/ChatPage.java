@@ -1,6 +1,7 @@
 package com.example.barterbuddy.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -72,7 +73,8 @@ public class ChatPage extends AppCompatActivity {
                   hideButtons();
                 }
               }
-            });
+            })
+        .addOnFailureListener(e -> Log.e(TAG, "Error getting trade from Cloud Firestore ", e));
 
     completeTradeButton = findViewById(R.id.complete_trade_button);
     cancelTradeButton = findViewById(R.id.cancel_trade_button);
@@ -194,6 +196,7 @@ public class ChatPage extends AppCompatActivity {
           UpdateTradeDocument.setTradeState(currentTrade, newState);
           sendMessageToUser(confirmationMessage);
           hideButtons();
+          backArrow.setOnClickListener(l -> goToPublicMarketWithRating(otherUser.getEmail()));
           dialog.dismiss();
         });
 
@@ -206,5 +209,13 @@ public class ChatPage extends AppCompatActivity {
     completeTradeButton.setVisibility(View.GONE);
     messageInput.setVisibility(View.GONE);
     sendMessageButton.setVisibility(View.GONE);
+  }
+
+  private void goToPublicMarketWithRating(String otherUserEmail) {
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    intent.putExtra("showDialogOnArrival", true);
+    intent.putExtra("userEmailToRate", otherUserEmail);
+    startActivity(intent);
+    finish();
   }
 }
