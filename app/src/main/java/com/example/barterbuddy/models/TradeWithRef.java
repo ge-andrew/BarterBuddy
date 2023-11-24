@@ -1,11 +1,18 @@
 package com.example.barterbuddy.models;
 
 import com.google.firebase.firestore.DocumentReference;
-
 import java.io.Serializable;
 
 public class TradeWithRef implements Serializable {
     private String posterEmail;
+    private DocumentReference posterItem;
+    private String offeringEmail;
+    private DocumentReference offeringItem;
+    private double money;
+    private String stateOfCompletion;
+
+    public TradeWithRef() {
+    }
 
     public String getPosterEmail() {
         return posterEmail;
@@ -39,6 +46,14 @@ public class TradeWithRef implements Serializable {
         this.offeringItem = offeringItem;
     }
 
+    public String getStateOfCompletion() {
+        return stateOfCompletion;
+    }
+
+    public void setStateOfCompletion(String stateOfCompletion) {
+        this.stateOfCompletion = stateOfCompletion;
+    }
+
     public double getMoney() {
         return money;
     }
@@ -46,9 +61,4 @@ public class TradeWithRef implements Serializable {
     public void setMoney(double money) {
         this.money = money;
     }
-
-    private DocumentReference posterItem;
-    private String offeringEmail;
-    private DocumentReference offeringItem;
-    private double money;
 }

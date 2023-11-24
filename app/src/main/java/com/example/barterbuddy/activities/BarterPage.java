@@ -1,14 +1,11 @@
 package com.example.barterbuddy.activities;
 
-import static android.app.PendingIntent.getActivity;
-
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanceled;
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToChatting;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,13 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
-import com.example.barterbuddy.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,7 +30,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.text.DecimalFormat;
 
 public class BarterPage extends AppCompatActivity {
@@ -47,7 +41,6 @@ public class BarterPage extends AppCompatActivity {
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
   private String username;
   private String email;
-  private StorageReference imageReference;
   private FirebaseUser currentUser;
   private boolean isPoster;
   private Trade trade;
@@ -62,7 +55,7 @@ public class BarterPage extends AppCompatActivity {
   private TextView offeringItemTitle;
   private TextInputEditText posterMoneyField;
   private TextInputEditText offeringMoneyField;
-  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
+  private final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("0.00");
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -97,95 +90,94 @@ public class BarterPage extends AppCompatActivity {
         .whereEqualTo(fieldName, email)
         .whereEqualTo("stateOfCompletion", "BARTERING")
         .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-              @Override
-              public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                  for (QueryDocumentSnapshot document : task.getResult()) {
-                    Log.d(TAG,"Document info is: " + document.getData());
-                    trade = document.toObject(Trade.class);
+        .addOnCompleteListener(
+                task -> {
+                  if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                      Log.d(TAG, "Document info is: " + document.getData());
+                      trade = document.toObject(Trade.class);
 
-                    getPosterItemData();
+                      getPosterItemData();
+                    }
+                  } else {
+                    Log.d(TAG, "Error getting trade info ", task.getException());
                   }
-                } else {
-                  Log.d(TAG, "Error getting trade info ", task.getException());
-                }
-              }
-            });
+                });
   }
 
   private void getPosterItemData() {
     DocumentReference posterItemDocRef = trade.getPosterItem();
 
-    posterItemDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          posterItem = task.getResult().toObject(Item.class);
+    posterItemDocRef
+        .get()
+        .addOnCompleteListener(
+                task -> {
+                  if (task.isSuccessful()) {
+                    posterItem = task.getResult().toObject(Item.class);
 
-          getOfferingItemData();
+                    getOfferingItemData();
 
-        } else {
-          Log.d(TAG, "Error getting poster item ", task.getException());
-        }
-      }
-    });
+                  } else {
+                    Log.d(TAG, "Error getting poster item ", task.getException());
+                  }
+                });
   }
 
   private void getOfferingItemData() {
     DocumentReference offeringItemDocRef = trade.getOfferingItem();
 
-    offeringItemDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          offeringItem = task.getResult().toObject(Item.class);
+    offeringItemDocRef
+        .get()
+        .addOnCompleteListener(
+                task -> {
+                  if (task.isSuccessful()) {
+                    offeringItem = task.getResult().toObject(Item.class);
 
-          getPosterImage();
+                    getPosterImage();
 
-        } else {
-          Log.d(TAG, "Error getting offering item ", task.getException());
-        }
-      }
-    });
+                  } else {
+                    Log.d(TAG, "Error getting offering item ", task.getException());
+                  }
+                });
   }
 
   private void getPosterImage() {
     String imageUrl = "users/" + posterItem.getEmail() + "/" + posterItem.getImageId() + ".jpg";
     StorageReference posterImageRef = IMAGE_STORAGE.getReference().child(imageUrl);
 
-    posterImageRef.getBytes(FIVE_MEGABYTES).addOnSuccessListener(
+    posterImageRef
+        .getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
               posterImageView.setImageBitmap(itemImage);
 
               getOfferingImage();
-            }
-    );
+            });
   }
 
   private void getOfferingImage() {
     String imageUrl = "users/" + offeringItem.getEmail() + "/" + offeringItem.getImageId() + ".jpg";
     StorageReference offeringImageRef = IMAGE_STORAGE.getReference().child(imageUrl);
 
-    offeringImageRef.getBytes(FIVE_MEGABYTES).addOnSuccessListener(
+    offeringImageRef
+        .getBytes(FIVE_MEGABYTES)
+        .addOnSuccessListener(
             bytes -> {
               Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
               offeringImageView.setImageBitmap(itemImage);
 
               insertAssets();
-            }
-    );
+            });
   }
 
   private void insertAssets() {
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
-    if(trade.getMoney() > 0) {
-      offeringMoneyField.setText("$" + currencyFormat.format(trade.getMoney()));
-    }
-    else if(trade.getMoney() < 0) {
-      posterMoneyField.setText("$" + currencyFormat.format(trade.getMoney() * -1));
+    if (trade.getMoney() > 0) {
+      offeringMoneyField.setText("$" + CURRENCY_FORMAT.format(trade.getMoney()));
+    } else if (trade.getMoney() < 0) {
+      posterMoneyField.setText("$" + CURRENCY_FORMAT.format(trade.getMoney() * -1));
     }
 
     configurePageToUser();
@@ -193,13 +185,12 @@ public class BarterPage extends AppCompatActivity {
 
   private void configurePageToUser() {
     withdraw_button.setOnClickListener(
-            v -> {
-              setStateToCanceled(trade);
-              Toast.makeText(this, "Withdrew from trade", Toast.LENGTH_SHORT).show();
-              finish();
-            }
-    );
-    if(true) {                    // TODO: true when user's turn to counteroffer
+        v -> {
+          setStateToCanceled(trade);
+          Toast.makeText(this, "Withdrew from trade", Toast.LENGTH_SHORT).show();
+          finish();
+        });
+    if (true) { // TODO: true when user's turn to counteroffer
       allowCounterOffers();
     }
   }
@@ -238,16 +229,14 @@ public class BarterPage extends AppCompatActivity {
     lock_in_button.setOnClickListener(
         v -> {
           Intent intent = new Intent(BarterPage.this, ChatPage.class);
-          User otherUser = new User();
+          String otherUserEmail;
           if (isPoster) {
-            otherUser.setEmail(offeringItem.getEmail());
+            otherUserEmail = offeringItem.getEmail();
           } else {
-            otherUser.setEmail(posterItem.getEmail());
+            otherUserEmail = posterItem.getEmail();
           }
-
-          otherUser.setUsername("DUMMY USERNAME");      // TODO: find way to get name from firebase
-
-          intent.putExtra("otherUser", otherUser);
+          intent.putExtra("isPoster", isPoster);
+          intent.putExtra("otherUserEmail", otherUserEmail);
           setStateToChatting(trade);
           startActivity(intent);
           finish();

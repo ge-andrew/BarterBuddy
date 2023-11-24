@@ -25,7 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+
+                android:baselineAligned="false">       <!--  recommended by code analysis before commit-->
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -58,7 +60,7 @@
                         android:contentDescription="@string/item_you_are_trading"
                         android:scaleType="centerCrop"
                         android:src="@drawable/baseline_insert_photo_24"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
+                        app:shapeAppearanceOverlay="@style/roundedImageViewPersonalItems" />
 
                 </LinearLayout>
 
@@ -113,7 +115,7 @@
                         android:contentDescription="@string/item_you_are_trading"
                         android:scaleType="centerCrop"
                         android:src="@drawable/baseline_insert_photo_24"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
+                        app:shapeAppearanceOverlay="@style/roundedImageViewPersonalItems" />
 
                 </LinearLayout>
 
