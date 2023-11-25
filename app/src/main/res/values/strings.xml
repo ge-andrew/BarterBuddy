@@ -81,4 +81,5 @@
     <string name="their_item">Their Item</string>
     <string name="notReviewedYet">The poster has not yet reviewed this offer.</string>
     <string name="cancel_offer">Cancel Offer</string>
+    <string name="send_countoffer">Send Countoffer</string>
 </resources>

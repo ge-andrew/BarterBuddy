@@ -186,7 +186,7 @@ public class ChatPage extends AppCompatActivity {
 
   private void getCancellationConfirmation() {
     getConfirmation(
-        "Are you sure you want to cancel this trade?", "~ Trade has been cancelled ~", "CANCELED");
+        "Are you sure you want to cancel this trade?", "~ Trade has been canceled ~", "CANCELED");
   }
 
   private void getConfirmation(String warningMessage, String confirmationMessage, String newState) {

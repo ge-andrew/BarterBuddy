@@ -108,6 +108,7 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
                       + "-"
                       + posterItem.getTitle()));
           tradeData.put("stateOfCompletion", "IN_PROGRESS");
+          tradeData.put("numberCounteroffersLeft", 6);
 
           DB.collection("trades")
               .document(posterItem.getEmail() + "_" + offeringItem.getEmail())

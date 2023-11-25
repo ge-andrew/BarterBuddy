@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,11 +53,14 @@ public class BarterPage extends AppCompatActivity {
   private ImageView offeringImageView;
   private Button lock_in_button;
   private Button withdraw_button;
+  private Button counteroffer_button;
   private TextView posterItemTitle;
   private TextView offeringItemTitle;
   private TextInputEditText posterMoneyField;
   private TextInputEditText offeringMoneyField;
   private final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("0.00");
+  private String offeringItemMoney;
+  private String posterItemMoney;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,105 @@ public class BarterPage extends AppCompatActivity {
     getCurrentUserInfo();
 
     getXmlElements();
+
+      offeringMoneyField.addTextChangedListener(
+              new TextWatcher() {
+                  @Override
+                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                  @Override
+                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                  @Override
+                  public void afterTextChanged(Editable s) {
+                      String tempString = "";
+                      offeringItemMoney = String.valueOf(offeringMoneyField.getText());
+                      int positionOfDecimal = offeringItemMoney.indexOf('.');
+                      int lengthOfValue = offeringItemMoney.length();
+                      boolean isLeadingZero;
+
+                      if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
+                          isLeadingZero = true;
+                          for (int index = 0; index < offeringItemMoney.length(); index++) {
+                              if (offeringItemMoney.charAt(index) != '0'
+                                      && offeringItemMoney.charAt(index) != '.') {
+                                  tempString = tempString + offeringItemMoney.charAt(index);
+                                  isLeadingZero = false;
+                              } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                                  tempString = tempString + offeringItemMoney.charAt(index);
+                              }
+                          }
+
+                          int lengthOfTempString = tempString.length();
+                          if (lengthOfTempString < 3) {
+                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                                  tempString = '0' + tempString;
+                              }
+
+                              String firstHalf = tempString.substring(0, 1);
+                              String secondHalf = tempString.substring(1, 3);
+                              tempString = firstHalf + '.' + secondHalf;
+                          } else {
+                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                              String secondHalf =
+                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                              tempString = firstHalf + '.' + secondHalf;
+                          }
+                          lengthOfTempString = tempString.length();
+                          offeringMoneyField.setText(tempString);
+                          offeringMoneyField.setSelection(lengthOfTempString);
+                      }
+                  }
+              });
+      // set up listener for poster money text input formatting
+      posterMoneyField.addTextChangedListener(
+              new TextWatcher() {
+                  @Override
+                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                  @Override
+                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                  @Override
+                  public void afterTextChanged(Editable s) {
+                      String tempString = "";
+                      posterItemMoney = String.valueOf(posterMoneyField.getText());
+                      int positionOfDecimal = posterItemMoney.indexOf('.');
+                      int lengthOfValue = posterItemMoney.length();
+                      boolean isLeadingZero;
+
+                      if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
+                          isLeadingZero = true;
+                          for (int index = 0; index < posterItemMoney.length(); index++) {
+                              if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
+                                  tempString = tempString + posterItemMoney.charAt(index);
+                                  isLeadingZero = false;
+                              } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                                  tempString = tempString + posterItemMoney.charAt(index);
+                              }
+                          }
+
+                          int lengthOfTempString = tempString.length();
+                          if (lengthOfTempString < 3) {
+                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                                  tempString = '0' + tempString;
+                              }
+
+                              String firstHalf = tempString.substring(0, 1);
+                              String secondHalf = tempString.substring(1, 3);
+                              tempString = firstHalf + '.' + secondHalf;
+                          } else {
+                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                              String secondHalf =
+                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                              tempString = firstHalf + '.' + secondHalf;
+                          }
+                          lengthOfTempString = tempString.length();
+                          posterMoneyField.setText(tempString);
+                          posterMoneyField.setSelection(lengthOfTempString);
+                      }
+                  }
+              });
 
     loadPage();
   }
@@ -214,6 +318,7 @@ public class BarterPage extends AppCompatActivity {
     includedLayout = findViewById(R.id.included_layout);
     lock_in_button = includedLayout.findViewById(R.id.accept_button);
     withdraw_button = includedLayout.findViewById(R.id.decline_button);
+    counteroffer_button = includedLayout.findViewById(R.id.counteroffer_button);
     posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
     posterMoneyField = includedLayout.findViewById(R.id.poster_trade_money);
@@ -225,6 +330,12 @@ public class BarterPage extends AppCompatActivity {
   private void allowCounterOffers() {
     posterMoneyField.setFocusable(true);
     offeringMoneyField.setFocusable(true);
+
+    counteroffer_button.setOnClickListener(
+            v-> {
+                //double money = posterMoneyField.getText().toString();
+            }
+    );
 
     lock_in_button.setOnClickListener(
         v -> {

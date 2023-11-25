@@ -39,4 +39,32 @@ public class UpdateTradeDocument {
         .addOnSuccessListener(e -> Log.d(TAG, "State update succeeded"))
         .addOnFailureListener(e -> Log.w(TAG, "State update failed"));
   }
+
+  public static void decrementCounteroffer(@NonNull Trade trade) {
+    if(trade.getNumberCounteroffersLeft() <= 0) {
+      Log.d(TAG, "Cannot send counteroffer, no counteroffers left");
+      return;
+    }
+    else {
+      trade.setNumberCounteroffersLeft(trade.getNumberCounteroffersLeft() - 1);
+      final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+      final String TRADE_ID = trade.getPosterEmail() + "_" + trade.getOfferingEmail();
+      DocumentReference tradeDocRef = FIRESTORE_INSTANCE.collection("trades").document(TRADE_ID);
+      tradeDocRef
+              .update("numberCounteroffersLeft", trade.getNumberCounteroffersLeft())
+              .addOnSuccessListener(e -> Log.d(TAG, "numberCounteroffersLeft update succeeded"))
+              .addOnFailureListener(e -> Log.w(TAG, "numberCounteroffersLeft update failed"));
+    }
+  }
+
+  public static void setMoney(@NonNull Trade trade, double money) {
+    trade.setMoney(money);
+    final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
+    final String TRADE_ID = trade.getPosterEmail() + "_" + trade.getOfferingEmail();
+    DocumentReference tradeDocRef = FIRESTORE_INSTANCE.collection("trades").document(TRADE_ID);
+    tradeDocRef
+            .update("money", money)
+            .addOnSuccessListener(e -> Log.d(TAG, "Money update succeeded"))
+            .addOnFailureListener(e -> Log.w(TAG, "Money update failed"));
+  }
 }

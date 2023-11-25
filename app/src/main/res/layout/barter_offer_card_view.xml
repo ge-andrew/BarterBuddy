@@ -213,6 +213,13 @@
 
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/counteroffer_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_countoffer">
+        </Button>
+
     </LinearLayout>
 
     <LinearLayout
