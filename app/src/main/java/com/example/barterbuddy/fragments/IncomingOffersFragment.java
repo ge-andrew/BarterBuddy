@@ -134,6 +134,11 @@ public class IncomingOffersFragment extends Fragment {
                     Log.d(TAG, "Trade received: " + trade);
                   }
                 }
+                if(trades.size() == 0) {
+                  includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
+                  Toast.makeText(requireContext(), "No new trades", Toast.LENGTH_SHORT).show();
+                  return;
+                }
                 getFirebasePosterItem();
               }
             })
