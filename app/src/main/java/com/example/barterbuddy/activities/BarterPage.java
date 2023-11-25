@@ -1,5 +1,6 @@
 package com.example.barterbuddy.activities;
 
+import static com.example.barterbuddy.network.UpdateTradeDocument.sendCounteroffer;
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanceled;
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToChatting;
 
@@ -52,6 +53,7 @@ public class BarterPage extends AppCompatActivity {
   private Button counteroffer_button;
   private TextView posterItemTitle;
   private TextView offeringItemTitle;
+  private TextView counteroffersLeft;
   private TextInputEditText posterMoneyField;
   private TextInputEditText offeringMoneyField;
   private String offeringItemMoney;
@@ -280,6 +282,8 @@ public class BarterPage extends AppCompatActivity {
       posterMoneyField.setText("$" + CURRENCY_FORMAT.format(trade.getMoney() * -1));
     }
 
+    counteroffersLeft.setText(String.valueOf(trade.getNumberCounteroffersLeft() / 2));
+
     configurePageToUser();
   }
 
@@ -292,13 +296,15 @@ public class BarterPage extends AppCompatActivity {
         });
     if (tradeIsLastChance() && isPoster) {
       Toast.makeText(this, "No counteroffers left! Last chance!", Toast.LENGTH_LONG).show();
+      allowCounterOffers(false);
       allowAcceptTrade(true);
     } else if ((tradeIsPosterTurn() && isPoster) || (!tradeIsPosterTurn() && !isPoster)) {
-        Toast.makeText(this, "Accept trade or counteroffer", Toast.LENGTH_LONG).show();
-        allowCounterOffers(true);
-        allowAcceptTrade(true);
+      Toast.makeText(this, "Accept trade or counteroffer", Toast.LENGTH_LONG).show();
+      allowCounterOffers(true);
+      allowAcceptTrade(true);
     } else {
-        Toast.makeText(this, "Your last offer is pending", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, "Your last offer is pending", Toast.LENGTH_LONG).show();
+      allowCounterOffers(false);
     }
   }
 
@@ -317,7 +323,12 @@ public class BarterPage extends AppCompatActivity {
 
       counteroffer_button.setOnClickListener(
           v -> {
-            // double money = posterMoneyField.getText().toString();
+            trade.setMoney(Double.parseDouble(posterMoneyField.getText().toString())
+                    - Double.parseDouble(offeringMoneyField.getText().toString()));
+            sendCounteroffer(trade);
+            Toast.makeText(this, "Counteroffer sent!", Toast.LENGTH_SHORT).show();
+            allowAcceptTrade(false);
+            allowCounterOffers(false);
           });
 
       lock_in_button.setOnClickListener(
@@ -339,11 +350,14 @@ public class BarterPage extends AppCompatActivity {
       posterMoneyField.setFocusable(false);
       offeringMoneyField.setFocusable(false);
       counteroffer_button.setFocusable(false);
+
+      counteroffer_button.setBackgroundColor(getResources().getColor(R.color.light_gray, getTheme()));
+      lock_in_button.setBackgroundColor(getResources().getColor(R.color.light_gray, getTheme()));
     }
   }
 
   private void allowAcceptTrade(boolean isAllowed) {
-      lock_in_button.setFocusable(isAllowed);
+    lock_in_button.setFocusable(isAllowed);
   }
 
   private void getCurrentUser() {
@@ -368,9 +382,10 @@ public class BarterPage extends AppCompatActivity {
     counteroffer_button = includedLayout.findViewById(R.id.counteroffer_button);
     posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
-    posterMoneyField = includedLayout.findViewById(R.id.poster_trade_money);
+    posterMoneyField = includedLayout.findViewById(R.id.poster_trade_money_barter);
     offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     offeringItemTitle = includedLayout.findViewById(R.id.offeringItemTitle);
-    offeringMoneyField = includedLayout.findViewById(R.id.offering_trade_money);
+    offeringMoneyField = includedLayout.findViewById(R.id.offering_trade_money_barter);
+    counteroffersLeft = includedLayout.findViewById(R.id.counteroffers_left);
   }
 }

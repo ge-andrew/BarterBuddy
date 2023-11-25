@@ -36,9 +36,10 @@
                     android:theme="@style/defaultBoldedTextStyle"/>
 
                 <TextView
+                    android:id="@+id/counteroffers_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="23"
+                    android:text=""
                     android:theme="@style/defaultTextStyle"/>
             </LinearLayout>
 
@@ -99,10 +100,10 @@
                         android:gravity="end">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/poster_trade_money"
+                            android:id="@+id/poster_trade_money_barter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
+                            android:focusable="true"
                             android:hint="@string/_0_00"
                             android:inputType="numberDecimal"
                             android:maxWidth="100dp"
@@ -196,10 +197,10 @@
                         android:gravity="right">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/offering_trade_money"
+                            android:id="@+id/offering_trade_money_barter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
+                            android:focusable="true"
                             android:hint="$0.00"
                             android:inputType="numberDecimal"
                             android:maxWidth="100dp"
