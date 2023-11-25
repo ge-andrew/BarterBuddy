@@ -5,6 +5,7 @@ import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanc
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -21,6 +22,7 @@ public class TradeUnreadPage extends AppCompatActivity {
   private String email;
   private Button cancel_button;
   private Trade trade;
+  private ImageView backArrow;
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class TradeUnreadPage extends AppCompatActivity {
           Toast.makeText(getApplicationContext(), "Trade canceled", Toast.LENGTH_SHORT).show();
           finish();
         });
+    backArrow.setOnClickListener(view -> finish());
   }
 
   private void getCurrentUser() {
@@ -66,6 +69,7 @@ public class TradeUnreadPage extends AppCompatActivity {
   }
 
   private void getXmlElements() {
+    backArrow = findViewById(R.id.back_arrow);
     cancel_button = findViewById(R.id.cancel_button);
   }
 }

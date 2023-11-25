@@ -16,6 +16,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_gravity="left"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/back_arrow"
+            app:srcCompat="@drawable/baseline_keyboard_double_arrow_left_24" />
+
+        <ImageView
             android:id="@+id/clockImage"
             android:layout_width="159dp"
             android:layout_height="116dp"
