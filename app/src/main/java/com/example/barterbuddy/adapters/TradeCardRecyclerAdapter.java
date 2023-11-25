@@ -15,17 +15,15 @@ import com.example.barterbuddy.models.TradeWithRef;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
-
-  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   Context context;
   ArrayList<TradeWithRef> userTrades;
+  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
 
   public TradeCardRecyclerAdapter(
           Context context,
@@ -54,21 +52,21 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
       if(money == 0)
       {
-        holder.tradeMoneyWanted.setText("");
+        holder.posterMoneyTextView.setText("");
       }
       else
       {
-        holder.tradeMoneyWanted.setText("$" + currencyFormat.format(money));
+        holder.posterMoneyTextView.setText("$" + currencyFormat.format(money));
       }
     } else {
 
       if(money == 0)
       {
-        holder.tradeMoneyOffered.setText("");
+        holder.offeringMoneyTextView.setText("");
       }
       else
       {
-        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
+        holder.offeringMoneyTextView.setText("$" + currencyFormat.format(money));
       }
 
     }
@@ -107,15 +105,15 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     ShapeableImageView yourItemImageView, wantedItemImageView;
-    TextView tradeMoneyWanted,tradeMoneyOffered;
+    TextView posterMoneyTextView, offeringMoneyTextView;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
 
       yourItemImageView = itemView.findViewById(R.id.your_item_image);
       wantedItemImageView = itemView.findViewById(R.id.wanted_item_image);
-      tradeMoneyWanted = itemView.findViewById(R.id.money_wanted);
-      tradeMoneyOffered = itemView.findViewById(R.id.money_offer);
+      posterMoneyTextView = itemView.findViewById(R.id.poster_money);
+      offeringMoneyTextView = itemView.findViewById(R.id.offering_money);
 
       itemView.setOnClickListener(view -> {
         if (recyclerViewInterface != null) {

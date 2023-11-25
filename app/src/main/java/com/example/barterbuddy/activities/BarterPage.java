@@ -36,6 +36,7 @@ public class BarterPage extends AppCompatActivity {
   private final FirebaseFirestore DB = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
+  private final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("0.00");
   private String username;
   private String email;
   private FirebaseUser currentUser;
@@ -53,7 +54,6 @@ public class BarterPage extends AppCompatActivity {
   private TextView offeringItemTitle;
   private TextInputEditText posterMoneyField;
   private TextInputEditText offeringMoneyField;
-  private final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("0.00");
   private String offeringItemMoney;
   private String posterItemMoney;
 
@@ -72,104 +72,104 @@ public class BarterPage extends AppCompatActivity {
 
     getXmlElements();
 
-      offeringMoneyField.addTextChangedListener(
-              new TextWatcher() {
-                  @Override
-                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    offeringMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                  @Override
-                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                  @Override
-                  public void afterTextChanged(Editable s) {
-                      String tempString = "";
-                      offeringItemMoney = String.valueOf(offeringMoneyField.getText());
-                      int positionOfDecimal = offeringItemMoney.indexOf('.');
-                      int lengthOfValue = offeringItemMoney.length();
-                      boolean isLeadingZero;
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            offeringItemMoney = String.valueOf(offeringMoneyField.getText());
+            int positionOfDecimal = offeringItemMoney.indexOf('.');
+            int lengthOfValue = offeringItemMoney.length();
+            boolean isLeadingZero;
 
-                      if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
-                          isLeadingZero = true;
-                          for (int index = 0; index < offeringItemMoney.length(); index++) {
-                              if (offeringItemMoney.charAt(index) != '0'
-                                      && offeringItemMoney.charAt(index) != '.') {
-                                  tempString = tempString + offeringItemMoney.charAt(index);
-                                  isLeadingZero = false;
-                              } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
-                                  tempString = tempString + offeringItemMoney.charAt(index);
-                              }
-                          }
+            if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < offeringItemMoney.length(); index++) {
+                if (offeringItemMoney.charAt(index) != '0'
+                    && offeringItemMoney.charAt(index) != '.') {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                }
+              }
 
-                          int lengthOfTempString = tempString.length();
-                          if (lengthOfTempString < 3) {
-                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
-                                  tempString = '0' + tempString;
-                              }
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
 
-                              String firstHalf = tempString.substring(0, 1);
-                              String secondHalf = tempString.substring(1, 3);
-                              tempString = firstHalf + '.' + secondHalf;
-                          } else {
-                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
-                              String secondHalf =
-                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
-                              tempString = firstHalf + '.' + secondHalf;
-                          }
-                          lengthOfTempString = tempString.length();
-                          offeringMoneyField.setText(tempString);
-                          offeringMoneyField.setSelection(lengthOfTempString);
-                      }
-                  }
-              });
-      // set up listener for poster money text input formatting
-      posterMoneyField.addTextChangedListener(
-              new TextWatcher() {
-                  @Override
-                  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              offeringMoneyField.setText(tempString);
+              offeringMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
+    // set up listener for poster money text input formatting
+    posterMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                  @Override
-                  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                  @Override
-                  public void afterTextChanged(Editable s) {
-                      String tempString = "";
-                      posterItemMoney = String.valueOf(posterMoneyField.getText());
-                      int positionOfDecimal = posterItemMoney.indexOf('.');
-                      int lengthOfValue = posterItemMoney.length();
-                      boolean isLeadingZero;
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            posterItemMoney = String.valueOf(posterMoneyField.getText());
+            int positionOfDecimal = posterItemMoney.indexOf('.');
+            int lengthOfValue = posterItemMoney.length();
+            boolean isLeadingZero;
 
-                      if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
-                          isLeadingZero = true;
-                          for (int index = 0; index < posterItemMoney.length(); index++) {
-                              if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
-                                  tempString = tempString + posterItemMoney.charAt(index);
-                                  isLeadingZero = false;
-                              } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
-                                  tempString = tempString + posterItemMoney.charAt(index);
-                              }
-                          }
+            if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < posterItemMoney.length(); index++) {
+                if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                }
+              }
 
-                          int lengthOfTempString = tempString.length();
-                          if (lengthOfTempString < 3) {
-                              for (int index = 0; index < 3 - lengthOfTempString; index++) {
-                                  tempString = '0' + tempString;
-                              }
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
 
-                              String firstHalf = tempString.substring(0, 1);
-                              String secondHalf = tempString.substring(1, 3);
-                              tempString = firstHalf + '.' + secondHalf;
-                          } else {
-                              String firstHalf = tempString.substring(0, lengthOfTempString - 2);
-                              String secondHalf =
-                                      tempString.substring(lengthOfTempString - 2, lengthOfTempString);
-                              tempString = firstHalf + '.' + secondHalf;
-                          }
-                          lengthOfTempString = tempString.length();
-                          posterMoneyField.setText(tempString);
-                          posterMoneyField.setSelection(lengthOfTempString);
-                      }
-                  }
-              });
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              posterMoneyField.setText(tempString);
+              posterMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
 
     loadPage();
   }
@@ -190,21 +190,19 @@ public class BarterPage extends AppCompatActivity {
         .whereEqualTo("stateOfCompletion", "BARTERING")
         .get()
         .addOnCompleteListener(
-                task -> {
-                  if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                      Log.d(TAG, "Document info is: " + document.getData());
-                      trade = document.toObject(Trade.class);
+            task -> {
+              if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                  Log.d(TAG, "Document info is: " + document.getData());
+                  trade = document.toObject(Trade.class);
 
-                      getPosterItemData();
-                    }
-                  } else {
-                    Log.d(TAG, "Error getting trade info ", task.getException());
-                  }
-                })
-            .addOnFailureListener(
-                    task -> Log.d(TAG, "Error getting trade info")
-            );
+                  getPosterItemData();
+                }
+              } else {
+                Log.d(TAG, "Error getting trade info ", task.getException());
+              }
+            })
+        .addOnFailureListener(task -> Log.d(TAG, "Error getting trade info"));
   }
 
   private void getPosterItemData() {
@@ -213,16 +211,16 @@ public class BarterPage extends AppCompatActivity {
     posterItemDocRef
         .get()
         .addOnCompleteListener(
-                task -> {
-                  if (task.isSuccessful()) {
-                    posterItem = task.getResult().toObject(Item.class);
+            task -> {
+              if (task.isSuccessful()) {
+                posterItem = task.getResult().toObject(Item.class);
 
-                    getOfferingItemData();
+                getOfferingItemData();
 
-                  } else {
-                    Log.d(TAG, "Error getting poster item ", task.getException());
-                  }
-                });
+              } else {
+                Log.d(TAG, "Error getting poster item ", task.getException());
+              }
+            });
   }
 
   private void getOfferingItemData() {
@@ -231,16 +229,16 @@ public class BarterPage extends AppCompatActivity {
     offeringItemDocRef
         .get()
         .addOnCompleteListener(
-                task -> {
-                  if (task.isSuccessful()) {
-                    offeringItem = task.getResult().toObject(Item.class);
+            task -> {
+              if (task.isSuccessful()) {
+                offeringItem = task.getResult().toObject(Item.class);
 
-                    getPosterImage();
+                getPosterImage();
 
-                  } else {
-                    Log.d(TAG, "Error getting offering item ", task.getException());
-                  }
-                });
+              } else {
+                Log.d(TAG, "Error getting offering item ", task.getException());
+              }
+            });
   }
 
   private void getPosterImage() {
@@ -292,9 +290,60 @@ public class BarterPage extends AppCompatActivity {
           Toast.makeText(this, "Withdrew from Trade", Toast.LENGTH_SHORT).show();
           finish();
         });
-    if (true) { // TODO: true when user's turn to counteroffer
-      allowCounterOffers();
+    if (tradeIsLastChance() && isPoster) {
+      Toast.makeText(this, "No counteroffers left! Last chance!", Toast.LENGTH_LONG).show();
+      allowAcceptTrade(true);
+    } else if ((tradeIsPosterTurn() && isPoster) || (!tradeIsPosterTurn() && !isPoster)) {
+        Toast.makeText(this, "Accept trade or counteroffer", Toast.LENGTH_LONG).show();
+        allowCounterOffers(true);
+        allowAcceptTrade(true);
+    } else {
+        Toast.makeText(this, "Your last offer is pending", Toast.LENGTH_LONG).show();
     }
+  }
+
+  public boolean tradeIsPosterTurn() {
+    return trade.getNumberCounteroffersLeft() % 2 == 0;
+  }
+
+  private boolean tradeIsLastChance() {
+    return trade.getNumberCounteroffersLeft() == 0;
+  }
+
+  private void allowCounterOffers(boolean isAllowed) {
+    if (isAllowed) {
+      posterMoneyField.setFocusable(true);
+      offeringMoneyField.setFocusable(true);
+
+      counteroffer_button.setOnClickListener(
+          v -> {
+            // double money = posterMoneyField.getText().toString();
+          });
+
+      lock_in_button.setOnClickListener(
+          v -> {
+            Intent intent = new Intent(BarterPage.this, ChatPage.class);
+            String otherUserEmail;
+            if (isPoster) {
+              otherUserEmail = offeringItem.getEmail();
+            } else {
+              otherUserEmail = posterItem.getEmail();
+            }
+            intent.putExtra("isPoster", isPoster);
+            intent.putExtra("otherUserEmail", otherUserEmail);
+            setStateToChatting(trade);
+            startActivity(intent);
+            finish();
+          });
+    } else {
+      posterMoneyField.setFocusable(false);
+      offeringMoneyField.setFocusable(false);
+      counteroffer_button.setFocusable(false);
+    }
+  }
+
+  private void allowAcceptTrade(boolean isAllowed) {
+      lock_in_button.setFocusable(isAllowed);
   }
 
   private void getCurrentUser() {
@@ -323,32 +372,5 @@ public class BarterPage extends AppCompatActivity {
     offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
     offeringItemTitle = includedLayout.findViewById(R.id.offeringItemTitle);
     offeringMoneyField = includedLayout.findViewById(R.id.offering_trade_money);
-  }
-
-  private void allowCounterOffers() {
-    posterMoneyField.setFocusable(true);
-    offeringMoneyField.setFocusable(true);
-
-    counteroffer_button.setOnClickListener(
-            v-> {
-                //double money = posterMoneyField.getText().toString();
-            }
-    );
-
-    lock_in_button.setOnClickListener(
-        v -> {
-          Intent intent = new Intent(BarterPage.this, ChatPage.class);
-          String otherUserEmail;
-          if (isPoster) {
-            otherUserEmail = offeringItem.getEmail();
-          } else {
-            otherUserEmail = posterItem.getEmail();
-          }
-          intent.putExtra("isPoster", isPoster);
-          intent.putExtra("otherUserEmail", otherUserEmail);
-          setStateToChatting(trade);
-          startActivity(intent);
-          finish();
-        });
   }
 }

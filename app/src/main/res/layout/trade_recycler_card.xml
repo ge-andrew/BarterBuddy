@@ -45,7 +45,7 @@
                         android:theme="@style/defaultBoldedTextStyle" />
 
                         <TextView
-                            android:id="@+id/money_wanted"
+                            android:id="@+id/offering_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:theme="@style/defaultTextStyle"
@@ -101,7 +101,7 @@
 
 
                         <TextView
-                            android:id="@+id/money_offer"
+                            android:id="@+id/poster_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:theme="@style/defaultTextStyle"
