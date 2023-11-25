@@ -102,7 +102,12 @@ public class BarterPage extends AppCompatActivity {
                   } else {
                     Log.d(TAG, "Error getting trade info ", task.getException());
                   }
-                });
+                })
+            .addOnFailureListener(
+                    task -> {
+                        Log.d(TAG, "Error getting trade info");
+                    }
+            );
   }
 
   private void getPosterItemData() {

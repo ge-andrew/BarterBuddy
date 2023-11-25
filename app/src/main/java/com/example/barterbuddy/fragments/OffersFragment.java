@@ -84,21 +84,6 @@ public class OffersFragment extends Fragment {
     allTrades
             .whereEqualTo("posterEmail", currentUserEmail)
             .get()
-//            .addOnCompleteListener(
-//                    task -> {
-//                      if (task.isSuccessful()) {
-//                        if (task.getResult().size() == 1) {
-//                          setCurrentFragment(backToBarterFragment);
-//                        } else if (task.getResult().size() > 1) {
-//                          Log.d(TAG, "ERROR: more than one actively bartering trade exists");
-//                          setCurrentFragment(backToBarterFragment);
-//                        } else {
-//                          setCurrentFragment(incomingOffersFragment);
-//                        }
-//                      } else {
-//                        Log.d(TAG, "Error getting documents: ", task.getException());
-//                      }
-//                    });
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
               @Override
               public void onComplete(@NonNull Task<QuerySnapshot> task) {
