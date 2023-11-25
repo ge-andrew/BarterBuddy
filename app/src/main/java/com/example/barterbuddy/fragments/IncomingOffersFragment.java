@@ -55,7 +55,7 @@ public class IncomingOffersFragment extends Fragment {
   private StorageReference ItemImageReference;
   private ArrayList<Item> offeringItems = new ArrayList<>();
   private Item posterItem;
-  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
+  private final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("0.00");
   private View includedLayout;
 
   IncomingOffersFragment() {
@@ -249,10 +249,10 @@ public class IncomingOffersFragment extends Fragment {
 
     if (trades.get(currentTrade).getMoney() < 0) {
       money *= -1;
-      posterMoneyTextView.setText("$" + currencyFormat.format(money));
+      posterMoneyTextView.setText("$" + CURRENCY_FORMAT.format(money));
       offeringMoneyTextView.setText("$0.00");
     } else {
-      offeringMoneyTextView.setText("$" + currencyFormat.format(money));
+      offeringMoneyTextView.setText("$" + CURRENCY_FORMAT.format(money));
       posterMoneyTextView.setText("$0.00");
     }
 
