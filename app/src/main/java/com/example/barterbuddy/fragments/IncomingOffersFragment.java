@@ -1,7 +1,9 @@
 package com.example.barterbuddy.fragments;
 
+import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToBartering;
+import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanceled;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.activities.BarterPage;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
@@ -50,12 +54,9 @@ public class IncomingOffersFragment extends Fragment {
   private FirebaseUser currentUser;
   private String currentEmail;
   private ArrayList<Trade> trades = new ArrayList<>();
-  private ArrayList<Item> offeringItems = new ArrayList<>();
   private Item posterItem;
-  private Bitmap posterItemImage;
   private int currentTrade = 0;
   private View includedLayout;
-  private ArrayList<Integer> offeringItemOrder; // testing
 
   IncomingOffersFragment() {
     super(R.layout.incoming_offers_page);
@@ -81,35 +82,33 @@ public class IncomingOffersFragment extends Fragment {
     getCurrentUserInfo();
 
     // Decline Button
-    //    decline_button.setOnClickListener(
-    //        v -> {
-    //          setStateToCanceled(trades.get(currentTrade));
-    //          if (currentTrade < trades.size()) {
-    //            Toast.makeText(requireContext(), "Trade Declined", Toast.LENGTH_SHORT).show();
-    //            currentTrade++;
-    //            if (!displayNextTrade()) {
-    //              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
-    //              Toast.makeText(requireContext(), "No more trades!", Toast.LENGTH_SHORT).show();
-    //            }
-    //          }
-    //        });
-    //
-    //    // accept button
-    //    accept_button.setOnClickListener(
-    //        v -> {
-    //          if (currentTrade < trades.size()) {
-    //
-    //            Log.d(TAG, "accept button tapped");
-    //
-    //            Toast.makeText(requireContext(), "Trade Accepted! Bartering begins!",
-    // Toast.LENGTH_LONG)
-    //                .show();
-    //            setStateToBartering(trades.get(currentTrade));
-    //            Intent intent = new Intent(requireContext(), BarterPage.class);
-    //            intent.putExtra("isPoster", true);
-    //            startActivity(intent);
-    //          }
-    //        });
+    decline_button.setOnClickListener(
+        v -> {
+          setStateToCanceled(trades.get(currentTrade));
+          if (currentTrade < trades.size()) {
+            offeringImageView.setImageDrawable(
+                getResources().getDrawable(R.drawable.baseline_hourglass_bottom_24));
+            Toast.makeText(requireContext(), "Trade Declined", Toast.LENGTH_SHORT).show();
+            currentTrade++;
+            if (!displayNextTrade()) {
+              includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
+              Toast.makeText(requireContext(), "No more trades!", Toast.LENGTH_SHORT).show();
+            }
+          }
+        });
+
+    // accept button
+    accept_button.setOnClickListener(
+        v -> {
+          if (currentTrade < trades.size()) {
+            Toast.makeText(requireContext(), "Trade Accepted! Bartering begins!", Toast.LENGTH_LONG)
+                .show();
+            setStateToBartering(trades.get(currentTrade));
+            Intent intent = new Intent(requireContext(), BarterPage.class);
+            intent.putExtra("isPoster", true);
+            startActivity(intent);
+          }
+        });
 
     setUpCard();
 
@@ -129,8 +128,8 @@ public class IncomingOffersFragment extends Fragment {
               if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot tradeDoc : task.getResult()) {
                   Trade trade = tradeDoc.toObject(Trade.class);
-                  if(trade.getPosterEmail().equals(currentEmail)
-                  && trade.getStateOfCompletion().equals("IN_PROGRESS")){
+                  if (trade.getPosterEmail().equals(currentEmail)
+                      && trade.getStateOfCompletion().equals("IN_PROGRESS")) {
                     trades.add(trade);
                     Log.d(TAG, "Trade received: " + trade);
                   }
@@ -139,9 +138,7 @@ public class IncomingOffersFragment extends Fragment {
               }
             })
         .addOnFailureListener(
-            v -> {
-              Log.d(TAG, "Error getting trades");
-            });
+            v -> Log.d(TAG, "Error getting trades"));
   }
 
   private void getFirebasePosterItem() {
@@ -156,33 +153,11 @@ public class IncomingOffersFragment extends Fragment {
                 Log.d(TAG, "Poster item entered: " + posterItem);
 
                 getAndSetPosterImage(posterItem.getEmail(), posterItem.getImageId());
-                getFirebaseOfferingItems();
+                loadFragment();
               }
             })
         .addOnFailureListener(
-            v -> {
-              Log.d(TAG, "Error getting poster item image");
-            });
-  }
-
-  private void getFirebaseOfferingItems() {
-    for (Trade t : trades) {
-      t.getOfferingItem()
-          .get()
-          .addOnCompleteListener(
-              v -> {
-                if (v.isSuccessful()) {
-                  Item item = v.getResult().toObject(Item.class);
-                  offeringItems.add(item);
-                  Log.d(TAG, "Offering item entered: " + item);
-                  loadFragment(currentTrade);
-                }
-              })
-          .addOnFailureListener(
-              v -> {
-                Log.d(TAG, "Error getting offering items ");
-              });
-    }
+            v -> Log.d(TAG, "Error getting poster item image"));
   }
 
   private void getAndSetPosterImage(String email, String imageId) {
@@ -191,28 +166,12 @@ public class IncomingOffersFragment extends Fragment {
     reference
         .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
-            bytes -> {
-              posterImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-            })
+            bytes -> posterImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
         .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image", e));
   }
 
-  private void getAndSetOfferingImage(String email, String imageId) {
-    Log.d(TAG, "getAndSetOfferingImage email: " + email + " imageId: " + imageId);
-    String imageUrl = "users/" + email + "/" + imageId + ".jpg";
-    StorageReference reference = IMAGE_STORAGE.getReference().child(imageUrl);
-    reference
-        .getBytes(FIVE_MEGABYTES)
-        .addOnSuccessListener(
-            bytes -> {
-              offeringImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-            })
-        .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image", e));
-  }
-
-  private void loadFragment(int currentTrade) {
+  private void loadFragment() {
     posterTitleTextView.setText(posterItem.getTitle());
-    offeringTitleTextView.setText(offeringItems.get(currentTrade).getTitle());
     double money = trades.get(currentTrade).getMoney();
     if (money < 0) {
       money *= -1;
@@ -223,11 +182,45 @@ public class IncomingOffersFragment extends Fragment {
       posterMoneyTextView.setText("$0.00");
     }
 
-    getAndSetOfferingImage(
-        trades.get(currentTrade).getOfferingEmail(), offeringItems.get(currentTrade).getImageId());
+    getAndSetOfferingImage(trades.get(currentTrade).getOfferingEmail());
   }
 
-  private void displayNextTrade() {}
+  private void getAndSetOfferingImage(String email) {
+    trades
+        .get(currentTrade)
+        .getOfferingItem()
+        .get()
+        .addOnCompleteListener(
+            v -> {
+              if (v.isSuccessful()) {
+                Item item = v.getResult().toObject(Item.class);
+                Log.d(TAG, "Offering item entered: " + item);
+                offeringTitleTextView.setText(item.getTitle());
+
+                Log.d(
+                    TAG,
+                    "getAndSetOfferingImage email: " + email + " imageId: " + item.getImageId());
+                String imageUrl = "users/" + email + "/" + item.getImageId() + ".jpg";
+                StorageReference reference = IMAGE_STORAGE.getReference().child(imageUrl);
+                reference
+                    .getBytes(FIVE_MEGABYTES)
+                    .addOnSuccessListener(
+                        bytes -> offeringImageView.setImageBitmap(
+                            BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
+                    .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image", e));
+              }
+            })
+        .addOnFailureListener(
+            v -> Log.d(TAG, "Error getting offering item "));
+  }
+
+  private boolean displayNextTrade() {
+    if (trades.size() <= currentTrade) {
+      return false;
+    }
+    loadFragment();
+    return true;
+  }
 
   private void getXmlElements() {
     your_offers_button = getActivity().findViewById(R.id.your_offers_button);
