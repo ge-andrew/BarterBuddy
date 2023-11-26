@@ -19,28 +19,28 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
+            android:layout_marginBottom="52dp"
             android:elevation="2dp"
-            android:layout_marginBottom="52dp">
+            app:cardCornerRadius="20dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Counter Offers Left: "
-                    android:theme="@style/defaultBoldedTextStyle"/>
+                    android:theme="@style/defaultBoldedTextStyle" />
 
                 <TextView
                     android:id="@+id/counteroffers_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:theme="@style/defaultTextStyle"/>
+                    android:theme="@style/defaultTextStyle" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -218,38 +218,74 @@
             android:id="@+id/counteroffer_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/send_countoffer">
-        </Button>
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/send_countoffer"
+            android:theme="@style/largerTextButtonStyle" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="409dp"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <androidx.cardview.widget.CardView
             android:id="@+id/accept_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green"
-            android:text="✔ Lock In!"
-            android:textColorLink="#00FB0A" />
+            android:backgroundTint="@color/peach">
 
-        <Button
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="✔ Lock In!"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!--        <Button-->
+        <!--            android:id="@+id/accept_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:backgroundTint="@color/green"-->
+        <!--            android:text=""-->
+        <!--            android:textColorLink="#00FB0A" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/decline_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:background="@color/red"-->
+        <!--            android:text="✘ Withdraw"-->
+        <!--            android:textColorLink="#B1003C" />-->
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/decline_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/red"
-            android:text="✘ Withdraw"
-            android:textColorLink="#B1003C" />
+            android:backgroundTint="@color/peach">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="✘ Withdraw"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
 </LinearLayout>
