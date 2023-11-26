@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.fragments.OffersFragment;
 import com.example.barterbuddy.fragments.PublicItemsPageFragment;
@@ -53,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(publicItemsFragment);
           }
           if (item.getItemId() == R.id.menu_item_items) {
+            Log.d(TAG, "Menu item opened");
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
@@ -90,5 +89,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     return true;
+  }
+
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+
+    finish();
+    startActivity(getIntent());
   }
 }

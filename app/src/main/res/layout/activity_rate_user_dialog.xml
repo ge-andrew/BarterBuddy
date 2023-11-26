@@ -8,7 +8,6 @@
     app:cardElevation="4dp"
     tools:context=".utils.RateUserDialogBox">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,34 +21,19 @@
             android:layout_marginBottom="1dp"
             android:gravity="center"
             android:text="@string/rating_prompt_part1"
-            android:textSize="18sp" />
+            android:theme="@style/titleTextStyle"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-                android:gravity="center"
-                android:text="@string/rating_prompt_part2"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:gravity="center"
-                android:maxWidth="200dp"
-                android:text="@string/username"
-                android:textColor="@color/peach"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:maxWidth="200dp"
+            android:text="@string/username"
+            android:textColor="@color/peach"
+            android:theme="@style/usernameTextStyle"
+            android:textSize="26sp"/>
 
         <RatingBar
             android:id="@+id/rating_bar"
@@ -69,14 +53,16 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
-                android:text="@string/submit" />
+                android:text="@string/submit"
+                android:theme="@style/smallerTextButtonStyle"/>
 
             <Button
                 android:id="@+id/skip_button"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
-                android:text="@string/skip" />
+                android:text="@string/skip"
+                android:theme="@style/smallerTextButtonStyle"/>
 
         </LinearLayout>
 

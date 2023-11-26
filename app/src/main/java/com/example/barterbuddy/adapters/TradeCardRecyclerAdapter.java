@@ -6,22 +6,24 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
-import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.TradeWithRef;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
+
+  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   Context context;
   ArrayList<TradeWithRef> userTrades;
 
@@ -46,32 +48,56 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   @Override
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
     TradeWithRef trade = userTrades.get(position);
-    if (trade.getMoney() < 0){
-      double money = trade.getMoney();
+    double money = trade.getMoney();
+    if (money < 0){
       money = -1 * money;
-      holder.tradeMoneyOffered.setText(String.valueOf(money));
 
+      if(money == 0)
+      {
+        holder.tradeMoneyWanted.setText("");
+      }
+      else
+      {
+        holder.tradeMoneyWanted.setText("$" + currencyFormat.format(money));
+      }
     } else {
-      double money = trade.getMoney();
 
-      holder.tradeMoneyWanted.setText(String.valueOf(money));
+      if(money == 0)
+      {
+        holder.tradeMoneyOffered.setText("");
+      }
+      else
+      {
+        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
+      }
+
     }
+
+    String posterItemId = userTrades.get(position).getPosterItem().getId();
+    String offeringItemId = userTrades.get(position).getOfferingItem().getId();
+
     StorageReference imageReferencePoster = IMAGE_STORAGE_INSTANCE.getReference()
             .child("users/" + userTrades.get(position).getPosterEmail()
-                    + "/" + userTrades.get(position).getPosterItem() + ".jpg");
+                    + "/" + posterItemId + ".jpg");
     StorageReference imageReferenceOfferer = IMAGE_STORAGE_INSTANCE.getReference()
             .child("users/" + userTrades.get(position).getOfferingEmail()
-                    + "/" + userTrades.get(position).getOfferingItem() + ".jpg");
+                    + "/" + offeringItemId + ".jpg");
 
     long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReferencePoster.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-      holder.yourItemImageView.setImageBitmap(itemImage);
+      holder.wantedItemImageView.setImageBitmap(itemImage);
     });
     imageReferenceOfferer.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-      holder.wantedItemImageView.setImageBitmap(itemImage);
+      holder.yourItemImageView.setImageBitmap(itemImage);
     });
+  }
+
+  public void updateTrades(ArrayList<TradeWithRef> updatedTrades) {
+    this.userTrades.clear();
+    this.userTrades.addAll(updatedTrades);
+    notifyDataSetChanged();
   }
 
   @Override
@@ -80,7 +106,7 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   }
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
-    ImageView yourItemImageView, wantedItemImageView;
+    ShapeableImageView yourItemImageView, wantedItemImageView;
     TextView tradeMoneyWanted,tradeMoneyOffered;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
