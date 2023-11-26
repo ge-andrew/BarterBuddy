@@ -277,12 +277,18 @@ public class BarterPage extends AppCompatActivity {
     posterItemTitle.setText(posterItem.getTitle());
     offeringItemTitle.setText(offeringItem.getTitle());
     if (trade.getMoney() > 0) {
-      offeringMoneyField.setText("$" + CURRENCY_FORMAT.format(trade.getMoney()));
+      offeringMoneyField.setText(CURRENCY_FORMAT.format(trade.getMoney()));
     } else if (trade.getMoney() < 0) {
-      posterMoneyField.setText("$" + CURRENCY_FORMAT.format(trade.getMoney() * -1));
+      posterMoneyField.setText(CURRENCY_FORMAT.format(trade.getMoney() * -1));
     }
 
-    counteroffersLeft.setText(String.valueOf(trade.getNumberCounteroffersLeft() / 2));
+    if (isPoster) {
+      counteroffersLeft.setText(String.valueOf(trade.getNumberCounteroffersLeft() / 2));
+    } else {
+      counteroffersLeft.setText(
+          String.valueOf(
+              trade.getNumberCounteroffersLeft() / 2 + trade.getNumberCounteroffersLeft() % 2));
+    }
 
     configurePageToUser();
   }
@@ -323,9 +329,26 @@ public class BarterPage extends AppCompatActivity {
 
       counteroffer_button.setOnClickListener(
           v -> {
-            trade.setMoney(Double.parseDouble(posterMoneyField.getText().toString())
-                    - Double.parseDouble(offeringMoneyField.getText().toString()));
+              trade.setMoney(0);
+            if (!posterMoneyField.getText().toString().equals("")) {
+              trade.setMoney(-Double.parseDouble(posterMoneyField.getText().toString()));
+            }
+            if (!offeringMoneyField.getText().toString().equals("")) {
+              trade.setMoney(
+                  trade.getMoney() + Double.parseDouble(offeringMoneyField.getText().toString()));
+            }
             sendCounteroffer(trade);
+
+            if (isPoster) {
+              counteroffersLeft.setText(String.valueOf(trade.getNumberCounteroffersLeft() / 2 - 1));
+            } else {
+              counteroffersLeft.setText(
+                  String.valueOf(
+                      trade.getNumberCounteroffersLeft() / 2
+                          + trade.getNumberCounteroffersLeft() % 2
+                          - 1));
+            }
+
             Toast.makeText(this, "Counteroffer sent!", Toast.LENGTH_SHORT).show();
             allowAcceptTrade(false);
             allowCounterOffers(false);
@@ -342,7 +365,19 @@ public class BarterPage extends AppCompatActivity {
             }
             intent.putExtra("isPoster", isPoster);
             intent.putExtra("otherUserEmail", otherUserEmail);
+
+            trade.setMoney(0);
+
+            if (!posterMoneyField.getText().toString().equals("")) {
+              trade.setMoney(-Double.parseDouble(posterMoneyField.getText().toString()));
+            }
+            if (!posterMoneyField.getText().toString().equals("")) {
+              trade.setMoney(
+                  trade.getMoney() + Double.parseDouble(posterMoneyField.getText().toString()));
+            }
+            sendCounteroffer(trade);
             setStateToChatting(trade);
+
             startActivity(intent);
             finish();
           });
@@ -351,7 +386,8 @@ public class BarterPage extends AppCompatActivity {
       offeringMoneyField.setFocusable(false);
       counteroffer_button.setFocusable(false);
 
-      counteroffer_button.setBackgroundColor(getResources().getColor(R.color.light_gray, getTheme()));
+      counteroffer_button.setBackgroundColor(
+          getResources().getColor(R.color.light_gray, getTheme()));
       lock_in_button.setBackgroundColor(getResources().getColor(R.color.light_gray, getTheme()));
     }
   }
