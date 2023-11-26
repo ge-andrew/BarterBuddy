@@ -79,4 +79,6 @@
     <string name="there_offer">There Offer</string>
     <string name="your_item">Your Item</string>
     <string name="their_item">Their Item</string>
+    <string name="notReviewedYet">The poster has not yet reviewed this offer.</string>
+    <string name="cancel_offer">Cancel Offer</string>
 </resources>

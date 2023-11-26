@@ -67,12 +67,13 @@
             android:name=".activities.TestChatPageClass"
             android:exported="true" />
 
-        <activity
-            android:name=".activities.IncomingOffersPage"
-            android:exported="true" />
 
         <activity
             android:name=".activities.BarterPage"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.TradeUnreadPage"
             android:exported="true" />
 
     </application>

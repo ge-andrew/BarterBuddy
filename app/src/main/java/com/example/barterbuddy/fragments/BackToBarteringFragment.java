@@ -37,11 +37,12 @@ public class BackToBarteringFragment extends Fragment {
     back_to_bartering.setOnClickListener(
         v -> {
           Intent intent = new Intent(requireContext(), BarterPage.class);
+          intent.putExtra("isPoster", true);
           startActivity(intent);
         });
   }
 
   private void getXmlElements() {
-    back_to_bartering = getActivity().findViewById(R.id.back_to_bartering);
+    back_to_bartering = getActivity().findViewById(R.id.back_to_chatting);
   }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.LoginPage;
+import com.example.barterbuddy.models.Trade;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,15 +20,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class OffersFragment extends Fragment {
   static final String TAG = "OffersFragmentHolder";
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-  Fragment yourOffersFragment;
-  Fragment incomingOffersFragment;
-  Fragment backToBarterFragment;
+  private Fragment yourOffersFragment;
+  private Fragment incomingOffersFragment;
+  private Fragment backToBarterFragment;
+  private Fragment backToChattingFragment;
   private FirebaseUser currentUser;
   private String currentUserUsername;
   private String currentUserEmail;
@@ -57,6 +60,7 @@ public class OffersFragment extends Fragment {
     yourOffersFragment = new YourOffersFragment();
     incomingOffersFragment = new IncomingOffersFragment();
     backToBarterFragment = new BackToBarteringFragment();
+    backToChattingFragment = new BackToChattingFragment();
     setCurrentFragment(yourOffersFragment);
 
     BottomNavigationView bottomNavigationView = rootActivity.findViewById(R.id.top_navigation_view);
@@ -79,23 +83,29 @@ public class OffersFragment extends Fragment {
 
     allTrades
             .whereEqualTo("posterEmail", currentUserEmail)
-            .whereEqualTo("stateOfCompletion", "BARTERING")
             .get()
-            .addOnCompleteListener(
-                    task -> {
-                      if (task.isSuccessful()) {
-                        if (task.getResult().size() == 1) {
-                          setCurrentFragment(backToBarterFragment);
-                        } else if (task.getResult().size() > 1) {
-                          Log.d(TAG, "ERROR: more than one actively bartering trade exists");
-                          setCurrentFragment(backToBarterFragment);
-                        } else {
-                          setCurrentFragment(incomingOffersFragment);
-                        }
-                      } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                      }
-                    });
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+              @Override
+              public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                  Log.d(TAG, task.getResult().toString());
+                  for (QueryDocumentSnapshot document : task.getResult()) {
+                    Trade trade = document.toObject(Trade.class);
+                    if(trade.getStateOfCompletion().equals("BARTERING")) {
+                      setCurrentFragment(backToBarterFragment);
+                      return;
+                    }
+                    else if(trade.getStateOfCompletion().equals("CHATTING")) {
+                      setCurrentFragment(backToChattingFragment);
+                      return;
+                    }
+                  }
+                  setCurrentFragment(incomingOffersFragment);
+                } else {
+                  Log.d(TAG, "Error getting trades", task.getException());
+                }
+              }
+            });
   }
 
   private void setCurrentFragment(Fragment fragment) {

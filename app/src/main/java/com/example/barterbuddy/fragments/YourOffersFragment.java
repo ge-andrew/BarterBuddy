@@ -1,22 +1,23 @@
 package com.example.barterbuddy.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.barterbuddy.R;
+import com.example.barterbuddy.activities.BarterPage;
+import com.example.barterbuddy.activities.ChatPage;
 import com.example.barterbuddy.activities.LoginPage;
+import com.example.barterbuddy.activities.TradeUnreadPage;
 import com.example.barterbuddy.adapters.TradeCardRecyclerAdapter;
 import com.example.barterbuddy.interfaces.RecyclerViewInterface;
 import com.example.barterbuddy.models.TradeWithRef;
@@ -24,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 
 public class YourOffersFragment extends Fragment implements RecyclerViewInterface {
@@ -75,6 +75,7 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
       // retrieve and insert firebase data into items
       DB.collection("trades")
           .whereEqualTo("offeringEmail", currentUser.getEmail())
+          .whereEqualTo("stateOfCompletion", "IN_PROGRESS")
           .get()
           .addOnSuccessListener(
               task -> {
@@ -115,5 +116,24 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
   }
 
   @Override
-  public void onItemClick(int position) {}
+  public void onItemClick(int position) {
+    Intent intent;
+    if (userTrades.get(position).getStateOfCompletion().equals("BARTERING")) {
+      intent = new Intent(getActivity(), BarterPage.class);
+      intent.putExtra("isPoster", false);
+    } else if (userTrades.get(position).getStateOfCompletion().equals("CHATTING")) {
+      intent = new Intent(getActivity(), ChatPage.class);
+      intent.putExtra("otherUserEmail", userTrades.get(position).getPosterEmail());
+      intent.putExtra("isPoster", false);
+    } else {
+      intent = new Intent(getActivity(), TradeUnreadPage.class);
+      intent.putExtra("posterEmail", userTrades.get(position).getPosterEmail());
+      intent.putExtra("posterItem", userTrades.get(position).getPosterItem().getPath());
+      intent.putExtra("offeringEmail", userTrades.get(position).getOfferingEmail());
+      intent.putExtra("offeringItem", userTrades.get(position).getOfferingItem().getPath());
+      intent.putExtra("money", userTrades.get(position).getMoney());
+      intent.putExtra("stateOfCompletion", userTrades.get(position).getStateOfCompletion());
+    }
+    startActivity(intent);
+  }
 }

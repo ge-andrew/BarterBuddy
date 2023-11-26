@@ -12,11 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
@@ -26,11 +24,10 @@ import com.example.barterbuddy.models.User;
 import com.example.barterbuddy.network.UpdateTradeDocument;
 import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -42,17 +39,14 @@ public class ChatPage extends AppCompatActivity {
   String tradeId;
   Trade currentTrade;
   String otherUserEmail;
-  User otherUser;
-  String offeringEmail;
-  String posterEmail;
   ChatroomModel chatroomModel;
-
   EditText messageInput;
   ImageButton sendMessageButton;
   ImageView backArrow;
   Button completeTradeButton;
   Button cancelTradeButton;
   RecyclerView chatRecyclerView;
+  private boolean userIsPoster;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +55,16 @@ public class ChatPage extends AppCompatActivity {
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUserEmail = getIntent().getStringExtra("otherUserEmail");
-    assert otherUserEmail != null;
-    chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUserEmail);
-    tradeId = FirebaseUtil.getTradeId(currentUserId, otherUserEmail);
+    userIsPoster = getIntent().getBooleanExtra("isPoster", false);
+    if (userIsPoster) {
+      chatroomId = currentUserId + "_" + otherUserEmail;
+      tradeId = currentUserId + "_" + otherUserEmail;
+    } else {
+      chatroomId = otherUserEmail + "_" + currentUserId;
+      tradeId = otherUserEmail + "_" + currentUserId;
+    }
 
     setOtherChatterNameFromEmail(otherUserEmail);
-
 
     FirebaseUtil.getTradeReference(tradeId)
         .get()
@@ -75,7 +73,8 @@ public class ChatPage extends AppCompatActivity {
               if (documentSnapshot.exists()) {
                 currentTrade = documentSnapshot.toObject(Trade.class);
                 assert currentTrade != null;
-                if (Objects.equals(currentTrade.getStateOfCompletion(), "COMPLETED") || Objects.equals(currentTrade.getStateOfCompletion(), "CANCELED")) {
+                if (Objects.equals(currentTrade.getStateOfCompletion(), "COMPLETED")
+                    || Objects.equals(currentTrade.getStateOfCompletion(), "CANCELED")) {
                   hideButtons();
                 }
               }
@@ -108,8 +107,8 @@ public class ChatPage extends AppCompatActivity {
 
   private void setOtherChatterNameFromEmail(String otherChatterEmail) {
     FirebaseUtil.getUserReference(otherChatterEmail)
-            .get()
-            .addOnSuccessListener(this::setNameFromUserSnapshot);
+        .get()
+        .addOnSuccessListener(this::setNameFromUserSnapshot);
   }
 
   private void setNameFromUserSnapshot(DocumentSnapshot documentSnapshot) {
@@ -187,7 +186,7 @@ public class ChatPage extends AppCompatActivity {
 
   private void getCancellationConfirmation() {
     getConfirmation(
-        "Are you sure you want to cancel this trade?", "~ Trade has been cancelled ~", "CANCELLED");
+        "Are you sure you want to cancel this trade?", "~ Trade has been cancelled ~", "CANCELED");
   }
 
   private void getConfirmation(String warningMessage, String confirmationMessage, String newState) {

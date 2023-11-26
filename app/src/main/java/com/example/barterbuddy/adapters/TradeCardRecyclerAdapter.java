@@ -54,21 +54,21 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
       if(money == 0)
       {
-        holder.tradeMoneyOffered.setText("");
-      }
-      else
-      {
-        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
-      }
-    } else {
-
-      if(money == 0)
-      {
         holder.tradeMoneyWanted.setText("");
       }
       else
       {
         holder.tradeMoneyWanted.setText("$" + currencyFormat.format(money));
+      }
+    } else {
+
+      if(money == 0)
+      {
+        holder.tradeMoneyOffered.setText("");
+      }
+      else
+      {
+        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
       }
 
     }
@@ -86,11 +86,11 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
     long FIVE_MEGABYTES = 1024 * 1024 * 5;
     imageReferencePoster.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-      holder.yourItemImageView.setImageBitmap(itemImage);
+      holder.wantedItemImageView.setImageBitmap(itemImage);
     });
     imageReferenceOfferer.getBytes(FIVE_MEGABYTES).addOnSuccessListener(bytes -> {
       Bitmap itemImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-      holder.wantedItemImageView.setImageBitmap(itemImage);
+      holder.yourItemImageView.setImageBitmap(itemImage);
     });
   }
 
