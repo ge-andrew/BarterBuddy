@@ -47,7 +47,6 @@ public class ChatPage extends AppCompatActivity {
   Button completeTradeButton;
   Button cancelTradeButton;
   RecyclerView chatRecyclerView;
-  private boolean userIsPoster;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class ChatPage extends AppCompatActivity {
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUserEmail = getIntent().getStringExtra("otherUserEmail");
-    userIsPoster = getIntent().getBooleanExtra("isPoster", false);
+    boolean userIsPoster = getIntent().getBooleanExtra("isPoster", false);
     if (userIsPoster) {
       chatroomId = currentUserId + "_" + otherUserEmail;
       tradeId = currentUserId + "_" + otherUserEmail;
@@ -195,7 +194,7 @@ public class ChatPage extends AppCompatActivity {
     Dialog dialog = new Dialog(this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
-    dialog.setContentView(R.layout.activity_confirmation_dialog_box);
+    dialog.setContentView(R.layout.dialog_confirmation);
     if (dialog.getWindow() != null) {
       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
@@ -210,7 +209,7 @@ public class ChatPage extends AppCompatActivity {
           UpdateTradeDocument.setTradeState(currentTrade, newState);
           sendMessageToUser(confirmationMessage);
           hideButtons();
-          backArrow.setOnClickListener(l -> goToPublicMarketWithRating(otherUser.getEmail()));
+          backArrow.setOnClickListener(l -> goToPublicMarketWithRating(otherUserEmail));
           dialog.dismiss();
         });
 

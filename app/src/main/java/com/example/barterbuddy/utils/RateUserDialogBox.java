@@ -8,6 +8,6 @@ public class RateUserDialogBox extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_rate_user_dialog);
+    setContentView(R.layout.dialog_rate_user);
   }
 }

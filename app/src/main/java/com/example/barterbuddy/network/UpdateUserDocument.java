@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.barterbuddy.models.User;
 import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UpdateUserDocument {
     private static final String TAG = "UpdateUserDocument";
@@ -14,9 +13,9 @@ public class UpdateUserDocument {
         ratedUserDoc.get().addOnSuccessListener(documentSnapshot -> {
             User ratedUser = documentSnapshot.toObject(User.class);
             if (ratedUser != null) {
-                int currentAverageRating = ratedUser.getCurrentAverageRating();
+                double currentAverageRating = ratedUser.getCurrentAverageRating();
                 int numOfRatings = ratedUser.getNumOfTimesRated();
-                int newAverageRating = (currentAverageRating + newRating / numOfRatings + 1);
+                double newAverageRating = ((currentAverageRating + newRating) / (numOfRatings + 1.0));
                 ratedUserDoc.update("currentAverageRating", newAverageRating)
                         .addOnSuccessListener(e -> Log.d(TAG, "Average rating update succeeded"))
                         .addOnFailureListener(e -> Log.w(TAG, "Average rating update failed"));

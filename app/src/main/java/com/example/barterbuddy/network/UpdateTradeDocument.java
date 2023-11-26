@@ -3,6 +3,7 @@ package com.example.barterbuddy.network;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.example.barterbuddy.models.Trade;
+import com.example.barterbuddy.utils.FirebaseUtil;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,7 +33,7 @@ public class UpdateTradeDocument {
   public static void setTradeState(@NonNull Trade trade, String newState) {
     trade.setStateOfCompletion(newState);
     final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
-    final String TRADE_ID = trade.getPosterEmail() + "_" + trade.getOfferingEmail();
+    final String TRADE_ID = FirebaseUtil.getTradeId(trade);
     DocumentReference tradeDocRef = FIRESTORE_INSTANCE.collection("trades").document(TRADE_ID);
     tradeDocRef
         .update("stateOfCompletion", newState)
