@@ -50,6 +50,7 @@ public class BarterPage extends AppCompatActivity {
   private View includedLayout;
   private ImageView posterImageView;
   private ImageView offeringImageView;
+  private ImageView backArrow;
   private CardView lock_in_button;
   private CardView withdraw_button;
   private Button counteroffer_button;
@@ -75,6 +76,8 @@ public class BarterPage extends AppCompatActivity {
     getCurrentUserInfo();
 
     getXmlElements();
+
+    backArrow.setOnClickListener(view -> finish());
 
     offeringMoneyField.addTextChangedListener(
         new TextWatcher() {
@@ -437,6 +440,7 @@ public class BarterPage extends AppCompatActivity {
     includedLayout = findViewById(R.id.included_layout);
     lock_in_button = (CardView) includedLayout.findViewById(R.id.accept_button);
     withdraw_button = (CardView) includedLayout.findViewById(R.id.decline_button);
+    backArrow = findViewById(R.id.back_arrow);
     counteroffer_button = includedLayout.findViewById(R.id.counteroffer_button);
     posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
