@@ -75,7 +75,6 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
       // retrieve and insert firebase data into items
       DB.collection("trades")
           .whereEqualTo("offeringEmail", currentUser.getEmail())
-          .whereEqualTo("stateOfCompletion", "IN_PROGRESS")
           .get()
           .addOnSuccessListener(
               task -> {
@@ -90,9 +89,22 @@ public class YourOffersFragment extends Fragment implements RecyclerViewInterfac
                   for (QueryDocumentSnapshot document : task) {
                     Log.d(TAG, "Inside loop");
 
-                    TradeWithRef trade = document.toObject(TradeWithRef.class);
-                    userTrades.add(trade);
-                    Log.d(TAG, "Trade added: " + trade);
+                    if (document
+                            .toObject(TradeWithRef.class)
+                            .getStateOfCompletion()
+                            .equals("IN_PROGRESS")
+                        || document
+                            .toObject(TradeWithRef.class)
+                            .getStateOfCompletion()
+                            .equals("BARTERING")
+                        || document
+                            .toObject(TradeWithRef.class)
+                            .getStateOfCompletion()
+                            .equals("CHATTING")) {
+                      TradeWithRef trade = document.toObject(TradeWithRef.class);
+                      userTrades.add(trade);
+                      Log.d(TAG, "Trade added: " + trade);
+                    }
                   }
                 }
                 tradeCardAdapter.updateTrades(userTrades);

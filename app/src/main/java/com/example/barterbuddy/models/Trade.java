@@ -13,6 +13,7 @@ public class Trade implements Serializable {
   // Negative money values indicates the offering user wants to be paid for the trade
   private double money;
   private String stateOfCompletion;
+  private int numberCounteroffersLeft;
 
   public Trade(
       String posterEmail,
@@ -27,6 +28,7 @@ public class Trade implements Serializable {
     this.offeringItem = offeringItem;
     this.money = money;
     this.stateOfCompletion = stateOfCompletion;
+    numberCounteroffersLeft = 6;
   }
 
   public Trade() {}
@@ -89,5 +91,13 @@ public class Trade implements Serializable {
     } else {
       return false;
     }
+  }
+
+  public int getNumberCounteroffersLeft() {
+    return numberCounteroffersLeft;
+  }
+
+  public void setNumberCounteroffersLeft(int numberCounteroffersLeft) {
+    this.numberCounteroffersLeft = numberCounteroffersLeft;
   }
 }
