@@ -15,7 +15,7 @@ public class UpdateUserDocument {
             if (ratedUser != null) {
                 double currentAverageRating = ratedUser.getCurrentAverageRating();
                 int numOfRatings = ratedUser.getNumOfTimesRated();
-                double newAverageRating = ((currentAverageRating + newRating) / (numOfRatings + 1.0));
+                double newAverageRating = calculateNewRating(currentAverageRating, numOfRatings, newRating);
                 ratedUserDoc.update("currentAverageRating", newAverageRating)
                         .addOnSuccessListener(e -> Log.d(TAG, "Average rating update succeeded"))
                         .addOnFailureListener(e -> Log.w(TAG, "Average rating update failed"));
@@ -24,5 +24,9 @@ public class UpdateUserDocument {
                         .addOnFailureListener(e -> Log.w(TAG, "Rating num update failed"));
             }
         }).addOnFailureListener(e -> Log.d(TAG, "Couldn't find user", e));
+    }
+
+    public static double calculateNewRating(double currentAverageRating, int numOfRatings, int newRating) {
+        return (currentAverageRating * numOfRatings + newRating) / (numOfRatings + 1.0);
     }
 }

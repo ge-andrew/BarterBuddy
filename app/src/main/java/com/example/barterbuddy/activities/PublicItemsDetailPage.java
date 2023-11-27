@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -36,12 +37,12 @@ public class PublicItemsDetailPage extends AppCompatActivity {
   private ImageView imageView;
   private Button offer_trade_button;
   private String itemId;
-  private String itemUsername;
   private String itemEmail;
   private String currentUserUsername;
   private String currentUserEmail;
   private Item posterItem;
   private ImageView backArrow;
+  private RatingBar ratingBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -122,11 +123,11 @@ public class PublicItemsDetailPage extends AppCompatActivity {
                               // set the username field
                               if (user != null) {
                                 usernameTextView.setText(user.getUsername());
+                                ratingBar.setRating(user.getCurrentAverageRating());
                               } else {
                                 Log.w(TAG, "User object is null");
                               }
-                            }
-                          })
+                            }})
                       .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
                 } else {
                   Log.w(TAG, "User is null");
@@ -180,11 +181,11 @@ public class PublicItemsDetailPage extends AppCompatActivity {
     imageView = findViewById(R.id.item_image_view);
     backArrow = findViewById(R.id.back_arrow);
     itemPerceivedValue = findViewById(R.id.perceivedValue);
+    ratingBar = findViewById(R.id.display_bar);
   }
 
   private void getItemDataFromIntent() {
     itemId = getIntent().getStringExtra("itemId");
-    itemUsername = getIntent().getStringExtra("username");
     itemEmail = getIntent().getStringExtra("email");
   }
 }

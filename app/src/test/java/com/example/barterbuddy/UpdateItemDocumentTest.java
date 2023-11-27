@@ -20,12 +20,14 @@ public class UpdateItemDocumentTest {
   public void setupItems() {
     testItem =
         new Item(
+                "test@google.com",
             "TestItem",
             "This item is just for use in Unit Tests",
             "test@google.com",
             true,
             "TestUser",
-            "test@google.com");
+            "test@google.com",
+                "1.30");
   }
 
   @Test
