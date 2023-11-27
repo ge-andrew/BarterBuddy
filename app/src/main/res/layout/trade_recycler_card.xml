@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -21,14 +22,41 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/notifcation_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_notification_overlay"
-                android:visibility="gone"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                />
+                <ImageView
+                    android:id="@+id/alert_notification"
+                    android:layout_width="19dp"
+                    android:layout_height="16dp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/notification_icon"
+
+                    app:layout_constraintTop_toTopOf="@+id/notification_icon"
+                    app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+                <ImageView
+                    android:id="@+id/chat_notification"
+                    android:layout_width="19dp"
+                    android:layout_height="16dp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/notification_icon"
+
+                    app:layout_constraintTop_toTopOf="@+id/notification_icon"
+                    app:srcCompat="@android:drawable/stat_notify_chat" />
+
+                <ImageView
+                    android:id="@+id/notification_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@android:drawable/ic_notification_overlay" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

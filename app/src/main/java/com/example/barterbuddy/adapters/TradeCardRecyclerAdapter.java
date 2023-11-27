@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
@@ -70,6 +72,19 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       {
         holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
       }
+      String status = trade.getStateOfCompletion();
+      if (Objects.equals(status, "CHATTING")){
+        holder.chatNotifyIcon.setVisibility(View.VISIBLE);
+      } else if (Objects.equals(status, "CANCELED")){
+        holder.alertNotifyIcon.setVisibility(View.VISIBLE);
+      } else if (Objects.equals(status, "IN_PROGRESS")){
+        holder.notViewedNotifyIcon.setVisibility(View.VISIBLE);
+      }
+      else {
+        holder.alertNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.notViewedNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.chatNotifyIcon.setVisibility(View.INVISIBLE);
+      }
 
     }
 
@@ -108,6 +123,8 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     ShapeableImageView yourItemImageView, wantedItemImageView;
     TextView tradeMoneyWanted,tradeMoneyOffered;
+    ImageView notViewedNotifyIcon,chatNotifyIcon,alertNotifyIcon;
+
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
@@ -116,6 +133,9 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       wantedItemImageView = itemView.findViewById(R.id.wanted_item_image);
       tradeMoneyWanted = itemView.findViewById(R.id.money_wanted);
       tradeMoneyOffered = itemView.findViewById(R.id.money_offer);
+      notViewedNotifyIcon = itemView.findViewById(R.id.notification_icon);
+      chatNotifyIcon = itemView.findViewById(R.id.chat_notification);
+      alertNotifyIcon = itemView.findViewById(R.id.alert_notification);
 
       itemView.setOnClickListener(view -> {
         if (recyclerViewInterface != null) {
