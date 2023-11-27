@@ -14,6 +14,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/back_arrow"
+            app:srcCompat="@drawable/baseline_keyboard_double_arrow_left_24" />
+
         <include
             android:id="@+id/included_layout"
             layout="@layout/barter_offer_card_view"

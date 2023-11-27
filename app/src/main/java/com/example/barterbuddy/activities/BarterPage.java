@@ -5,6 +5,7 @@ import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToCanc
 import static com.example.barterbuddy.network.UpdateTradeDocument.setStateToChatting;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.models.Item;
 import com.example.barterbuddy.models.Trade;
@@ -48,8 +50,8 @@ public class BarterPage extends AppCompatActivity {
   private View includedLayout;
   private ImageView posterImageView;
   private ImageView offeringImageView;
-  private Button lock_in_button;
-  private Button withdraw_button;
+  private CardView lock_in_button;
+  private CardView withdraw_button;
   private Button counteroffer_button;
   private TextView posterItemTitle;
   private TextView offeringItemTitle;
@@ -311,6 +313,7 @@ public class BarterPage extends AppCompatActivity {
     } else {
       Toast.makeText(this, "Your last offer is pending", Toast.LENGTH_LONG).show();
       allowCounterOffers(false);
+      allowCounterOffers(false);
     }
   }
 
@@ -329,7 +332,7 @@ public class BarterPage extends AppCompatActivity {
 
       counteroffer_button.setOnClickListener(
           v -> {
-              trade.setMoney(0);
+            trade.setMoney(0);
             if (!posterMoneyField.getText().toString().equals("")) {
               trade.setMoney(-Double.parseDouble(posterMoneyField.getText().toString()));
             }
@@ -366,15 +369,10 @@ public class BarterPage extends AppCompatActivity {
             intent.putExtra("isPoster", isPoster);
             intent.putExtra("otherUserEmail", otherUserEmail);
 
-            trade.setMoney(0);
+            trade.setMoney(
+                Double.parseDouble(posterMoneyField.getText().toString())
+                    - Double.parseDouble(posterMoneyField.getText().toString()));
 
-            if (!posterMoneyField.getText().toString().equals("")) {
-              trade.setMoney(-Double.parseDouble(posterMoneyField.getText().toString()));
-            }
-            if (!posterMoneyField.getText().toString().equals("")) {
-              trade.setMoney(
-                  trade.getMoney() + Double.parseDouble(posterMoneyField.getText().toString()));
-            }
             sendCounteroffer(trade);
             setStateToChatting(trade);
 
@@ -384,7 +382,7 @@ public class BarterPage extends AppCompatActivity {
     } else {
       posterMoneyField.setFocusable(false);
       offeringMoneyField.setFocusable(false);
-      counteroffer_button.setFocusable(false);
+      counteroffer_button.setEnabled(false);
 
       counteroffer_button.setBackgroundColor(
           getResources().getColor(R.color.light_gray, getTheme()));
@@ -394,6 +392,31 @@ public class BarterPage extends AppCompatActivity {
 
   private void allowAcceptTrade(boolean isAllowed) {
     lock_in_button.setFocusable(isAllowed);
+    lock_in_button.setEnabled(isAllowed);
+
+    if (isAllowed) {
+      lock_in_button.setOnClickListener(
+          v -> {
+            Intent intent = new Intent(BarterPage.this, ChatPage.class);
+            String otherUserEmail;
+            if (isPoster) {
+              otherUserEmail = offeringItem.getEmail();
+            } else {
+              otherUserEmail = posterItem.getEmail();
+            }
+            intent.putExtra("isPoster", isPoster);
+            intent.putExtra("otherUserEmail", otherUserEmail);
+
+            sendCounteroffer(trade);
+            setStateToChatting(trade);
+
+            startActivity(intent);
+            finish();
+          });
+    } else {
+      int disabledColor = getResources().getColor(R.color.light_gray, getTheme());
+      lock_in_button.setCardBackgroundColor(disabledColor);
+    }
   }
 
   private void getCurrentUser() {
@@ -413,8 +436,8 @@ public class BarterPage extends AppCompatActivity {
 
   private void getXmlElements() {
     includedLayout = findViewById(R.id.included_layout);
-    lock_in_button = includedLayout.findViewById(R.id.accept_button);
-    withdraw_button = includedLayout.findViewById(R.id.decline_button);
+    lock_in_button = (CardView) includedLayout.findViewById(R.id.accept_button);
+    withdraw_button = (CardView) includedLayout.findViewById(R.id.decline_button);
     counteroffer_button = includedLayout.findViewById(R.id.counteroffer_button);
     posterImageView = includedLayout.findViewById(R.id.poster_item_image);
     posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
