@@ -82,30 +82,27 @@ public class OffersFragment extends Fragment {
     CollectionReference allTrades = FIRESTORE_INSTANCE.collection("trades");
 
     allTrades
-            .whereEqualTo("posterEmail", currentUserEmail)
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-              @Override
-              public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                  Log.d(TAG, task.getResult().toString());
-                  for (QueryDocumentSnapshot document : task.getResult()) {
-                    Trade trade = document.toObject(Trade.class);
-                    if(trade.getStateOfCompletion().equals("BARTERING")) {
-                      setCurrentFragment(backToBarterFragment);
-                      return;
+        .whereEqualTo("posterEmail", currentUserEmail)
+        .get()
+        .addOnCompleteListener(
+                task -> {
+                  if (task.isSuccessful()) {
+                    Log.d(TAG, task.getResult().toString());
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                      Trade trade = document.toObject(Trade.class);
+                      if (trade.getStateOfCompletion().equals("BARTERING")) {
+                        setCurrentFragment(backToBarterFragment);
+                        return;
+                      } else if (trade.getStateOfCompletion().equals("CHATTING")) {
+                        setCurrentFragment(backToChattingFragment);
+                        return;
+                      }
                     }
-                    else if(trade.getStateOfCompletion().equals("CHATTING")) {
-                      setCurrentFragment(backToChattingFragment);
-                      return;
-                    }
+                    setCurrentFragment(incomingOffersFragment);
+                  } else {
+                    Log.d(TAG, "Error getting trades", task.getException());
                   }
-                  setCurrentFragment(incomingOffersFragment);
-                } else {
-                  Log.d(TAG, "Error getting trades", task.getException());
-                }
-              }
-            });
+                });
   }
 
   private void setCurrentFragment(Fragment fragment) {

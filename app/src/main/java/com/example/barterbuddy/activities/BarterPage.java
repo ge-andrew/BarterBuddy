@@ -313,7 +313,7 @@ public class BarterPage extends AppCompatActivity {
     } else {
       Toast.makeText(this, "Your last offer is pending", Toast.LENGTH_LONG).show();
       allowCounterOffers(false);
-      allowCounterOffers(false);
+      allowAcceptTrade(false);
     }
   }
 
@@ -386,7 +386,6 @@ public class BarterPage extends AppCompatActivity {
 
       counteroffer_button.setBackgroundColor(
           getResources().getColor(R.color.light_gray, getTheme()));
-      lock_in_button.setBackgroundColor(getResources().getColor(R.color.light_gray, getTheme()));
     }
   }
 
@@ -415,7 +414,7 @@ public class BarterPage extends AppCompatActivity {
           });
     } else {
       int disabledColor = getResources().getColor(R.color.light_gray, getTheme());
-      lock_in_button.setCardBackgroundColor(disabledColor);
+      lock_in_button.setBackgroundTintList(ColorStateList.valueOf(disabledColor));
     }
   }
 

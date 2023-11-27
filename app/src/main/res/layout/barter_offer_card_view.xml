@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Counter Offers Left: "
+                    android:text="@string/counter_offers_left"
                     android:theme="@style/defaultBoldedTextStyle" />
 
                 <TextView
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="They want: "
+                    android:text="@string/they_want"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="They have offered:"
+                    android:text="@string/they_have_offered"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -202,7 +202,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:focusable="true"
-                            android:hint="$0.00"
+                            android:hint="@string/zero_dollar_hint"
                             android:inputType="numberDecimal"
                             android:maxWidth="100dp"
                             android:minWidth="85dp"
@@ -243,10 +243,12 @@
             android:backgroundTint="@color/peach">
 
             <TextView
+                android:id="@+id/lock_in_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="✔ Lock In!"
+                android:text="@string/lock_in"
+
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -281,7 +283,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="✘ Withdraw"
+                android:text="@string/withdraw"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
