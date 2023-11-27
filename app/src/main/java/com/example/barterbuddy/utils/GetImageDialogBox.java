@@ -9,6 +9,6 @@ public class GetImageDialogBox extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_get_image_dialog_box);
+    setContentView(R.layout.dialog_get_image);
   }
 }

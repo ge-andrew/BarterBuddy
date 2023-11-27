@@ -1,6 +1,7 @@
 package com.example.barterbuddy.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -46,7 +47,6 @@ public class ChatPage extends AppCompatActivity {
   Button completeTradeButton;
   Button cancelTradeButton;
   RecyclerView chatRecyclerView;
-  private boolean userIsPoster;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ChatPage extends AppCompatActivity {
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUserEmail = getIntent().getStringExtra("otherUserEmail");
-    userIsPoster = getIntent().getBooleanExtra("isPoster", false);
+    boolean userIsPoster = getIntent().getBooleanExtra("isPoster", false);
     if (userIsPoster) {
       chatroomId = currentUserId + "_" + otherUserEmail;
       tradeId = currentUserId + "_" + otherUserEmail;
@@ -78,7 +78,8 @@ public class ChatPage extends AppCompatActivity {
                   hideButtons();
                 }
               }
-            });
+            })
+        .addOnFailureListener(e -> Log.e(TAG, "Error getting trade from Cloud Firestore ", e));
 
     completeTradeButton = findViewById(R.id.complete_trade_button);
     cancelTradeButton = findViewById(R.id.cancel_trade_button);
@@ -193,9 +194,10 @@ public class ChatPage extends AppCompatActivity {
     Dialog dialog = new Dialog(this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
-    dialog.setContentView(R.layout.activity_confirmation_dialog_box);
-    if (dialog.getWindow() != null)
+    dialog.setContentView(R.layout.dialog_confirmation);
+    if (dialog.getWindow() != null) {
       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
 
     TextView message = dialog.findViewById(R.id.warning_message);
     message.setText(warningMessage);
@@ -207,6 +209,7 @@ public class ChatPage extends AppCompatActivity {
           UpdateTradeDocument.setTradeState(currentTrade, newState);
           sendMessageToUser(confirmationMessage);
           hideButtons();
+          backArrow.setOnClickListener(l -> goToPublicMarketWithRating(otherUserEmail));
           dialog.dismiss();
         });
 
@@ -219,5 +222,13 @@ public class ChatPage extends AppCompatActivity {
     completeTradeButton.setVisibility(View.GONE);
     messageInput.setVisibility(View.GONE);
     sendMessageButton.setVisibility(View.GONE);
+  }
+
+  private void goToPublicMarketWithRating(String otherUserEmail) {
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    intent.putExtra("showDialogOnArrival", true);
+    intent.putExtra("userEmailToRate", otherUserEmail);
+    startActivity(intent);
+    finish();
   }
 }
