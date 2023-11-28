@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Clickable menu items -->
+    <item
+        android:id="@+id/menu_item_market"
+        android:title="@string/market"
+        android:icon="@drawable/baseline_shopping_bag_24"/>
+
+    <item
+        android:id="@+id/menu_item_items"
+        android:title="@string/my_items"
+        android:icon="@drawable/baseline_inventory_24" />
+
+    <item
+        android:id="@+id/menu_item_offers"
+        android:title="@string/offers"
+        android:icon="@drawable/baseline_handshake_24" />
+
+</menu>

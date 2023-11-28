@@ -28,10 +28,10 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:background="@color/light_gray"
+                android:background="@color/light_grey"
                 android:scaleType="centerCrop"
                 android:src="@drawable/baseline_insert_photo_24"
-                app:shapeAppearanceOverlay="@style/roundedImageViewPerosnalItems" />
+                app:shapeAppearanceOverlay="@style/roundedImageViewPersonalItems" />
 
             <TextView
                 android:id="@+id/item_title"
@@ -40,8 +40,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/title"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:theme="@style/defaultBoldedTextStyle" />
 
         </LinearLayout>
 

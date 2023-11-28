@@ -28,7 +28,7 @@
                 android:layout_height="340dp"
                 android:layout_marginBottom="16dp"
                 android:adjustViewBounds="true"
-                android:background="@color/light_gray"
+                android:background="@color/light_grey"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundimageview" />
 
@@ -44,25 +44,34 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/title"
-                    android:textStyle="bold" />
+                    android:theme="@style/titleTextStyle"/>
 
                 <TextView
                     android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/username"
-                    android:textColor="@color/peach"
-                    android:textStyle="bold" />
+                    android:theme="@style/usernameTextStyle" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/perceivedValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/estimated_value"
+                android:layout_marginBottom="4dp"
+                android:theme="@style/defaultBoldedTextStyle"/>
 
             <TextView
                 android:id="@+id/private_item_recycler_card_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:text="@string/description" />
+                android:maxLines="1"
+                android:text="@string/description"
+                android:theme="@style/defaultTextStyle"
+                android:layout_marginBottom="12dp"/>
 
         </LinearLayout>
 

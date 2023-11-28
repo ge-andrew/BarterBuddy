@@ -3,9 +3,6 @@ package com.example.barterbuddy.models;
 import com.google.firebase.Timestamp;
 
 public class ChatMessageModel {
-    /*
-        Citation: This model is adapted from one by EasyTuto on YouTube: https://www.youtube.com/watch?v=Ia6BBS-Jvkw
-    */
     private String message;
     private String senderId;
     private Timestamp timestamp; // the time this message was sent

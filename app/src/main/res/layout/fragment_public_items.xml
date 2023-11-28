@@ -2,21 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Recycler"
+    android:id="@+id/Offers"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/offWhite"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingVertical="16dp">
+    android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/searchBarParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:gravity="center"
-        android:text="@string/public_offers"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp">
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/search_bar" />
+
+    </LinearLayout>
 
     <SearchView
         android:id="@+id/search_bar"
@@ -29,24 +38,15 @@
         android:id="@+id/public_items_swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="12dp"
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/PublicItemsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/searchBarParent"
             tools:layout_editor_absoluteX="1dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <Button
-        android:id="@+id/User_Items_Button"
-        android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="@string/my_items"
-        android:textSize="20sp" />
 
 </LinearLayout>

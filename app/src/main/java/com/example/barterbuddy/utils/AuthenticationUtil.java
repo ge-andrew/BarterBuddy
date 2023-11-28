@@ -10,10 +10,10 @@ public class AuthenticationUtil {
     }
 
     public static String getCurrentUserEmail() {
-        return getCurrentUser().getDisplayName();
+        return getCurrentUser().getEmail();
     }
 
-    private static FirebaseUser getCurrentUser() {
+    public static FirebaseUser getCurrentUser() {
         final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
         FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
         if (currentUser == null)

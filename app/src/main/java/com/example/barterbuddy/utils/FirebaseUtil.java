@@ -2,16 +2,13 @@ package com.example.barterbuddy.utils;
 
 import android.util.Log;
 
+import com.example.barterbuddy.models.Trade;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.example.barterbuddy.models.User;
 
 /** Utilities class with many helpful features for simplifying common Firebase functions */
 public class FirebaseUtil {
-  /*
-     Citation: The idea for this class comes from Easy Tuto on YouTube: https://youtu.be/fx_WtPtT6gY?feature=shared
-  */
 
   private static final String TAG = "Firebase Util";
 
@@ -42,8 +39,33 @@ public class FirebaseUtil {
     }
   }
 
+  public static String getTradeId(String posterEmail, String offeringEmail) {
+    return posterEmail + "_" + offeringEmail;
+  }
+
+  public static String getTradeId(Trade trade) {
+    return getTradeId(trade.getPosterEmail(), trade.getOfferingEmail());
+  }
+
+  public static DocumentReference getTradeReference(String tradeId) {
+    return FirebaseFirestore.getInstance().collection("trades").document(tradeId);
+  }
+
+  public static void deleteChatroom(String chatroomId) {
+    FirebaseFirestore.getInstance()
+        .collection("chatrooms")
+        .document(chatroomId)
+        .delete()
+        .addOnSuccessListener(v -> Log.d(TAG, "Chatroom successfully deleted."))
+        .addOnFailureListener(e -> Log.w(TAG, "Chatroom could not be deleted.", e));
+  }
+
   public static DocumentReference getUserReference(String userId) {
     final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
     return FIRESTORE_INSTANCE.collection("users").document(userId);
+  }
+
+  public static CollectionReference getUserItemsCollection(String userId) {
+    return getUserReference(userId).collection("items");
   }
 }

@@ -1,43 +1,51 @@
 package com.example.barterbuddy.activities;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.barterbuddy.R;
 import com.example.barterbuddy.adapters.ChatRecyclerViewAdapter;
 import com.example.barterbuddy.models.ChatMessageModel;
 import com.example.barterbuddy.models.ChatroomModel;
+import com.example.barterbuddy.models.Trade;
 import com.example.barterbuddy.models.User;
+import com.example.barterbuddy.network.UpdateTradeDocument;
 import com.example.barterbuddy.utils.AuthenticationUtil;
 import com.example.barterbuddy.utils.FirebaseUtil;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.Query;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ChatPage extends AppCompatActivity {
-  /*
-      Citation: This activity is modeled after one from EasyTuto on YouTube: https://youtu.be/E7s542TJDE4?feature=shared
-  */
-
   private static final String TAG = "ChatPage";
 
   String chatroomId;
   String currentUserId;
-  User otherUser;
+  String tradeId;
+  Trade currentTrade;
+  String otherUserEmail;
   ChatroomModel chatroomModel;
-
   EditText messageInput;
   ImageButton sendMessageButton;
-  ImageButton backArrow;
+  ImageView backArrow;
+  Button completeTradeButton;
+  Button cancelTradeButton;
   RecyclerView chatRecyclerView;
 
   @Override
@@ -46,9 +54,35 @@ public class ChatPage extends AppCompatActivity {
     setContentView(R.layout.activity_chat_page);
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
-    otherUser = (User) getIntent().getSerializableExtra("otherUser");
-    setOtherChatterName(otherUser.getUsername());
-    chatroomId = FirebaseUtil.getChatroomId(currentUserId, otherUser.getEmail());
+    otherUserEmail = getIntent().getStringExtra("otherUserEmail");
+    boolean userIsPoster = getIntent().getBooleanExtra("isPoster", false);
+    if (userIsPoster) {
+      chatroomId = currentUserId + "_" + otherUserEmail;
+      tradeId = currentUserId + "_" + otherUserEmail;
+    } else {
+      chatroomId = otherUserEmail + "_" + currentUserId;
+      tradeId = otherUserEmail + "_" + currentUserId;
+    }
+
+    setOtherChatterNameFromEmail(otherUserEmail);
+
+    FirebaseUtil.getTradeReference(tradeId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              if (documentSnapshot.exists()) {
+                currentTrade = documentSnapshot.toObject(Trade.class);
+                assert currentTrade != null;
+                if (Objects.equals(currentTrade.getStateOfCompletion(), "COMPLETED")
+                    || Objects.equals(currentTrade.getStateOfCompletion(), "CANCELED")) {
+                  hideButtons();
+                }
+              }
+            })
+        .addOnFailureListener(e -> Log.e(TAG, "Error getting trade from Cloud Firestore ", e));
+
+    completeTradeButton = findViewById(R.id.complete_trade_button);
+    cancelTradeButton = findViewById(R.id.cancel_trade_button);
 
     messageInput = findViewById(R.id.chat_edit_text);
     sendMessageButton = findViewById(R.id.send_button);
@@ -56,6 +90,10 @@ public class ChatPage extends AppCompatActivity {
     backArrow = findViewById(R.id.back_arrow);
 
     backArrow.setOnClickListener(view -> finish());
+
+    completeTradeButton.setOnClickListener(v -> getCompletionConfirmation());
+
+    cancelTradeButton.setOnClickListener(v -> getCancellationConfirmation());
 
     sendMessageButton.setOnClickListener(
         v -> {
@@ -68,9 +106,17 @@ public class ChatPage extends AppCompatActivity {
     setupChatRecyclerView();
   }
 
-  private void setOtherChatterName(String otherChatterName) {
+  private void setOtherChatterNameFromEmail(String otherChatterEmail) {
+    FirebaseUtil.getUserReference(otherChatterEmail)
+        .get()
+        .addOnSuccessListener(this::setNameFromUserSnapshot);
+  }
+
+  private void setNameFromUserSnapshot(DocumentSnapshot documentSnapshot) {
+    final User otherChatter = documentSnapshot.toObject(User.class);
+    assert otherChatter != null;
     TextView otherChatterNameView = findViewById(R.id.chat_username);
-    otherChatterNameView.setText(otherChatterName);
+    otherChatterNameView.setText(otherChatter.getUsername());
   }
 
   private void setupChatRecyclerView() {
@@ -121,7 +167,7 @@ public class ChatPage extends AppCompatActivity {
                 chatroomModel =
                     new ChatroomModel(
                         chatroomId,
-                        Arrays.asList(currentUserId, otherUser.getEmail()),
+                        Arrays.asList(currentUserId, otherUserEmail),
                         Timestamp.now(),
                         "");
                 // Add this chatroom to firebase
@@ -132,5 +178,57 @@ public class ChatPage extends AppCompatActivity {
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Chatroom access failed"));
+  }
+
+  private void getCompletionConfirmation() {
+    getConfirmation(
+        "Are you sure you want to close this trade?", "~ Trade has been completed ~", "COMPLETED");
+  }
+
+  private void getCancellationConfirmation() {
+    getConfirmation(
+        "Are you sure you want to cancel this trade?", "~ Trade has been canceled ~", "CANCELED");
+  }
+
+  private void getConfirmation(String warningMessage, String confirmationMessage, String newState) {
+    Dialog dialog = new Dialog(this);
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    dialog.setCancelable(true);
+    dialog.setContentView(R.layout.dialog_confirmation);
+    if (dialog.getWindow() != null) {
+      dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    TextView message = dialog.findViewById(R.id.warning_message);
+    message.setText(warningMessage);
+    Button confirm = dialog.findViewById(R.id.confirm_button);
+    Button deny = dialog.findViewById(R.id.deny_button);
+
+    confirm.setOnClickListener(
+        v -> {
+          UpdateTradeDocument.setTradeState(currentTrade, newState);
+          sendMessageToUser(confirmationMessage);
+          hideButtons();
+          backArrow.setOnClickListener(l -> goToPublicMarketWithRating(otherUserEmail));
+          dialog.dismiss();
+        });
+
+    deny.setOnClickListener(v -> dialog.dismiss());
+    dialog.show();
+  }
+
+  private void hideButtons() {
+    cancelTradeButton.setVisibility(View.GONE);
+    completeTradeButton.setVisibility(View.GONE);
+    messageInput.setVisibility(View.GONE);
+    sendMessageButton.setVisibility(View.GONE);
+  }
+
+  private void goToPublicMarketWithRating(String otherUserEmail) {
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    intent.putExtra("showDialogOnArrival", true);
+    intent.putExtra("userEmailToRate", otherUserEmail);
+    startActivity(intent);
+    finish();
   }
 }

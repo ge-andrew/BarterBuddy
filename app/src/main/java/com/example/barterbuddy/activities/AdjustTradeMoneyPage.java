@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +22,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdjustTradeMoneyPage extends AppCompatActivity {
 
@@ -38,7 +42,9 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
   private TextView posterUsername;
   private ImageView backArrow;
   private TextInputEditText offeringItemMoneyField;
+  private String offeringItemMoney;
   private TextInputEditText posterItemMoneyField;
+  private String posterItemMoney;
   private Button submit_trade_button;
   private DocumentReference posterItemDocReference;
   private DocumentReference offeringItemDocReference;
@@ -60,12 +66,172 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
     posterItem = (Item) getIntent().getSerializableExtra("posterItem");
     offeringItem = (Item) getIntent().getSerializableExtra("offeringItem");
 
-    // assign xml variables to elements
     getXmlElements();
 
     backArrow.setOnClickListener(view -> finish());
 
-    // establish directories in Firebase
+    establishFirebaseReferences();
+
+    posterItemTitle.setText(posterItem.getTitle());
+    offeringItemTitle.setText(offeringItem.getTitle());
+    posterUsername.setText(posterItem.getUsername());
+    offeringItemMoneyField.setText("0.00");
+    posterItemMoneyField.setText("0.00");
+
+    // set up listener for button
+    submit_trade_button.setOnClickListener(
+        v -> {
+          Map<String, Object> tradeData = new HashMap<>();
+
+          tradeData.put(
+              "money",
+              Double.parseDouble(posterItemMoneyField.getText().toString())
+                  - Double.parseDouble(offeringItemMoneyField.getText().toString()));
+          tradeData.put("offeringEmail", offeringItem.getEmail());
+          tradeData.put("posterEmail", posterItem.getEmail());
+          tradeData.put(
+              "offeringItem",
+              DB.document(
+                  "users/"
+                      + offeringItem.getEmail()
+                      + "/items/"
+                      + offeringItem.getEmail()
+                      + "-"
+                      + offeringItem.getTitle()));
+          tradeData.put(
+              "posterItem",
+              DB.document(
+                  "/users/"
+                      + posterItem.getEmail()
+                      + "/items/"
+                      + posterItem.getEmail()
+                      + "-"
+                      + posterItem.getTitle()));
+          tradeData.put("stateOfCompletion", "IN_PROGRESS");
+          tradeData.put("numberCounteroffersLeft", 6);
+
+          DB.collection("trades")
+              .document(posterItem.getEmail() + "_" + offeringItem.getEmail())
+              .set(tradeData)
+              .addOnSuccessListener(
+                  u -> {
+                    Toast toast = Toast.makeText(this, "Trade submitted!", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    Intent intent = new Intent(AdjustTradeMoneyPage.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                  })
+              .addOnFailureListener(
+                  w -> {
+                    Toast toast =
+                        Toast.makeText(this, "Error submitting trade.", Toast.LENGTH_LONG);
+                    toast.show();
+                  });
+        });
+
+    // set up listener for offering money text input formatting
+    offeringItemMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            offeringItemMoney = String.valueOf(offeringItemMoneyField.getText());
+            int positionOfDecimal = offeringItemMoney.indexOf('.');
+            int lengthOfValue = offeringItemMoney.length();
+            boolean isLeadingZero;
+
+            if ((lengthOfValue < 3) || (positionOfDecimal != offeringItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < offeringItemMoney.length(); index++) {
+                if (offeringItemMoney.charAt(index) != '0'
+                    && offeringItemMoney.charAt(index) != '.') {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (offeringItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + offeringItemMoney.charAt(index);
+                }
+              }
+
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
+
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              offeringItemMoneyField.setText(tempString);
+              offeringItemMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
+    // set up listener for poster money text input formatting
+    posterItemMoneyField.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+          @Override
+          public void afterTextChanged(Editable s) {
+            String tempString = "";
+            posterItemMoney = String.valueOf(posterItemMoneyField.getText());
+            int positionOfDecimal = posterItemMoney.indexOf('.');
+            int lengthOfValue = posterItemMoney.length();
+            boolean isLeadingZero;
+
+            if ((lengthOfValue < 3) || (positionOfDecimal != posterItemMoney.length() - 3)) {
+              isLeadingZero = true;
+              for (int index = 0; index < posterItemMoney.length(); index++) {
+                if (posterItemMoney.charAt(index) != '0' && posterItemMoney.charAt(index) != '.') {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                  isLeadingZero = false;
+                } else if (posterItemMoney.charAt(index) == '0' && !isLeadingZero) {
+                  tempString = tempString + posterItemMoney.charAt(index);
+                }
+              }
+
+              int lengthOfTempString = tempString.length();
+              if (lengthOfTempString < 3) {
+                for (int index = 0; index < 3 - lengthOfTempString; index++) {
+                  tempString = '0' + tempString;
+                }
+
+                String firstHalf = tempString.substring(0, 1);
+                String secondHalf = tempString.substring(1, 3);
+                tempString = firstHalf + '.' + secondHalf;
+              } else {
+                String firstHalf = tempString.substring(0, lengthOfTempString - 2);
+                String secondHalf =
+                    tempString.substring(lengthOfTempString - 2, lengthOfTempString);
+                tempString = firstHalf + '.' + secondHalf;
+              }
+              lengthOfTempString = tempString.length();
+              posterItemMoneyField.setText(tempString);
+              posterItemMoneyField.setSelection(lengthOfTempString);
+            }
+          }
+        });
+  }
+
+  private void establishFirebaseReferences() {
     posterItemDocReference =
         DB.collection("users")
             .document(posterItem.getEmail())
@@ -116,26 +282,13 @@ public class AdjustTradeMoneyPage extends AppCompatActivity {
               offeringItemImageView.setImageBitmap(itemImage);
             })
         .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image.", e));
-    posterItemTitle.setText(posterItem.getTitle());
-    offeringItemTitle.setText(offeringItem.getTitle());
-    //    posterItemMoneyField.setText("0.00");
-    //    offeringItemMoneyField.setText("0.00");
-    posterUsername.setText(posterItem.getUsername());
-
-    // set up listener for button
-    // if fields empty, error
-    submit_trade_button.setOnClickListener(
-        v -> {
-          Toast toast = Toast.makeText(this, "Mock Success Message!", Toast.LENGTH_LONG);
-          toast.show();
-        });
   }
 
   private void getXmlElements() {
     offeringItemImageView = findViewById(R.id.personalItemImage);
     posterItemImageView = findViewById(R.id.publicItemImage);
-    offeringItemTitle = findViewById(R.id.personalItemTitle);
-    posterItemTitle = findViewById(R.id.publicItemTitle);
+    offeringItemTitle = findViewById(R.id.posterItemTitle);
+    posterItemTitle = findViewById(R.id.offeringItemTitle);
     offeringItemMoneyField = findViewById(R.id.personalMoneyField);
     posterItemMoneyField = findViewById(R.id.publicMoneyField);
     submit_trade_button = findViewById(R.id.submit_trade_button);
