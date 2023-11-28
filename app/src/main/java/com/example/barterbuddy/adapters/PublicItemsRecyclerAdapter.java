@@ -47,6 +47,9 @@ public class PublicItemsRecyclerAdapter
     return new PublicItemsRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
+
+
+
   @Override
   public void onBindViewHolder(
       @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
@@ -90,6 +93,7 @@ public class PublicItemsRecyclerAdapter
   public int getItemCount() {
     return userItems.size();
   }
+
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     // this method very very roughly equates to onCreate() from recyclerView
