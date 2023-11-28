@@ -30,13 +30,6 @@
 
     </LinearLayout>
 
-<!--    <SearchView-->
-<!--        android:id="@+id/search_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="24dp"-->
-<!--        app:showAsAction = "ifRoom|collapseActionView"-->
-<!--        app:queryHint = "Search items"/>-->
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/public_items_swipeRefresh"
         android:layout_width="match_parent"
