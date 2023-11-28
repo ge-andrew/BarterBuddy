@@ -34,17 +34,17 @@
                     app:layout_constraintStart_toStartOf="@+id/notification_icon"
 
                     app:layout_constraintTop_toTopOf="@+id/notification_icon"
-                    app:srcCompat="@android:drawable/ic_popup_reminder" />
+                    android:src="@drawable/baseline_circle_24_red" />
 
                 <ImageView
                     android:id="@+id/chat_notification"
-                    android:layout_width="19dp"
-                    android:layout_height="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@+id/notification_icon"
 
                     app:layout_constraintTop_toTopOf="@+id/notification_icon"
-                    app:srcCompat="@android:drawable/stat_notify_chat" />
+                    android:src="@drawable/baseline_circle_24_green" />
 
                 <ImageView
                     android:id="@+id/notification_icon"
@@ -55,7 +55,19 @@
 
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@android:drawable/ic_notification_overlay" />
+                    android:src="@drawable/baseline_circle_24_yellow" />
+
+                <ImageView
+                    android:id="@+id/bartering_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/baseline_circle_24" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
