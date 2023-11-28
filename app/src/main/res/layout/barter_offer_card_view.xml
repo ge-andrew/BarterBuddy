@@ -254,24 +254,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!--        <Button-->
-        <!--            android:id="@+id/accept_button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:backgroundTint="@color/green"-->
-        <!--            android:text=""-->
-        <!--            android:textColorLink="#00FB0A" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/decline_button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:background="@color/red"-->
-        <!--            android:text="✘ Withdraw"-->
-        <!--            android:textColorLink="#B1003C" />-->
-
         <androidx.cardview.widget.CardView
             android:id="@+id/decline_button"
             android:layout_width="wrap_content"
