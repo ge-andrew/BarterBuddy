@@ -134,7 +134,7 @@ public class IncomingOffersFragment extends Fragment {
                     Log.d(TAG, "Trade received: " + trade);
                   }
                 }
-                if(trades.size() == 0) {
+                if (trades.size() == 0) {
                   includedLayout.findViewById(R.id.included_layout).setVisibility(View.GONE);
                   Toast.makeText(requireContext(), "No new trades", Toast.LENGTH_SHORT).show();
                   return;
@@ -142,8 +142,7 @@ public class IncomingOffersFragment extends Fragment {
                 getFirebasePosterItem();
               }
             })
-        .addOnFailureListener(
-            v -> Log.d(TAG, "Error getting trades"));
+        .addOnFailureListener(v -> Log.d(TAG, "Error getting trades"));
   }
 
   private void getFirebasePosterItem() {
@@ -161,8 +160,7 @@ public class IncomingOffersFragment extends Fragment {
                 loadFragment();
               }
             })
-        .addOnFailureListener(
-            v -> Log.d(TAG, "Error getting poster item image"));
+        .addOnFailureListener(v -> Log.d(TAG, "Error getting poster item image"));
   }
 
   private void getAndSetPosterImage(String email, String imageId) {
@@ -171,7 +169,9 @@ public class IncomingOffersFragment extends Fragment {
     reference
         .getBytes(FIVE_MEGABYTES)
         .addOnSuccessListener(
-            bytes -> posterImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
+            bytes ->
+                posterImageView.setImageBitmap(
+                    BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
         .addOnFailureListener(e -> Log.w(TAG, "Error getting poster item image", e));
   }
 
@@ -210,13 +210,13 @@ public class IncomingOffersFragment extends Fragment {
                 reference
                     .getBytes(FIVE_MEGABYTES)
                     .addOnSuccessListener(
-                        bytes -> offeringImageView.setImageBitmap(
-                            BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
+                        bytes ->
+                            offeringImageView.setImageBitmap(
+                                BitmapFactory.decodeByteArray(bytes, 0, bytes.length)))
                     .addOnFailureListener(e -> Log.w(TAG, "Error getting offering item image", e));
               }
             })
-        .addOnFailureListener(
-            v -> Log.d(TAG, "Error getting offering item "));
+        .addOnFailureListener(v -> Log.d(TAG, "Error getting offering item "));
   }
 
   private boolean displayNextTrade() {

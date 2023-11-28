@@ -13,18 +13,26 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.fragments.OffersFragment;
 import com.example.barterbuddy.fragments.PublicItemsPageFragment;
 import com.example.barterbuddy.fragments.UserItemsPageFragment;
+import com.example.barterbuddy.utils.CreateDialogUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
   static final String TAG = "MainActivity";
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
-  private Fragment offersFragment;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    if (getIntent().getBooleanExtra("showDialogOnArrival", false)) {
+      String userEmailToRate = getIntent().getStringExtra("userEmailToRate");
+      if (userEmailToRate != null) {
+        CreateDialogUtil.createRateUserDialogBox(this, userEmailToRate);
+        getIntent().removeExtra("showDialogOnArrival");
+      }
+    }
 
     Toolbar toolbar = findViewById(R.id.menu);
     setSupportActionBar(toolbar);
@@ -32,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     Fragment publicItemsFragment = new PublicItemsPageFragment();
     Fragment userItemsPageFragment = new UserItemsPageFragment();
-    offersFragment = new OffersFragment();
+    Fragment offersFragment = new OffersFragment();
 
     setCurrentFragment(publicItemsFragment);
 
@@ -48,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
             setCurrentFragment(userItemsPageFragment);
           }
           if (item.getItemId() == R.id.menu_item_offers) {
-            Log.d(TAG, "Menu item opened");
-            offersFragment = new OffersFragment();
             setCurrentFragment(offersFragment);
           }
           return true;

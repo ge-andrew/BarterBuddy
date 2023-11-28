@@ -2,6 +2,7 @@ package com.example.barterbuddy.utils;
 
 import android.util.Log;
 
+import com.example.barterbuddy.models.Trade;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,14 +39,12 @@ public class FirebaseUtil {
     }
   }
 
-  public static String getTradeId(String userId1, String userId2) {
-    // TODO: This might need to be changed after the trade document gets finalized,
-    //  for example if "A trades with B" must be distinct from "B trades with A"
-    if (userId1.hashCode() < userId2.hashCode()) {
-      return userId1 + "_" + userId2;
-    } else {
-      return userId2 + "_" + userId1;
-    }
+  public static String getTradeId(String posterEmail, String offeringEmail) {
+    return posterEmail + "_" + offeringEmail;
+  }
+
+  public static String getTradeId(Trade trade) {
+    return getTradeId(trade.getPosterEmail(), trade.getOfferingEmail());
   }
 
   public static DocumentReference getTradeReference(String tradeId) {

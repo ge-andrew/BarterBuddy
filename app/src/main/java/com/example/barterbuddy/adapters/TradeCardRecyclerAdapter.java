@@ -16,7 +16,6 @@ import com.example.barterbuddy.models.TradeWithRef;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -24,10 +23,9 @@ import java.util.Objects;
 public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecyclerAdapter.MyViewHolder> {
   private final RecyclerViewInterface recyclerViewInterface;
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
-
-  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
   Context context;
   ArrayList<TradeWithRef> userTrades;
+  private DecimalFormat currencyFormat = new DecimalFormat("0.00");
 
   public TradeCardRecyclerAdapter(
           Context context,
@@ -56,21 +54,21 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
       if(money == 0)
       {
-        holder.tradeMoneyWanted.setText("");
+        holder.posterMoneyTextView.setText("");
       }
       else
       {
-        holder.tradeMoneyWanted.setText("$" + currencyFormat.format(money));
+        holder.posterMoneyTextView.setText("$" + currencyFormat.format(money));
       }
     } else {
 
       if(money == 0)
       {
-        holder.tradeMoneyOffered.setText("");
+        holder.offeringMoneyTextView.setText("");
       }
       else
       {
-        holder.tradeMoneyOffered.setText("$" + currencyFormat.format(money));
+        holder.offeringMoneyTextView.setText("$" + currencyFormat.format(money));
       }
       String status = trade.getStateOfCompletion();
       if (Objects.equals(status, "CHATTING")){
@@ -124,7 +122,7 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
     ShapeableImageView yourItemImageView, wantedItemImageView;
     TextView tradeMoneyWanted,tradeMoneyOffered;
     ImageView notViewedNotifyIcon,chatNotifyIcon,alertNotifyIcon;
-
+    TextView posterMoneyTextView, offeringMoneyTextView;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
@@ -136,6 +134,8 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       notViewedNotifyIcon = itemView.findViewById(R.id.notification_icon);
       chatNotifyIcon = itemView.findViewById(R.id.chat_notification);
       alertNotifyIcon = itemView.findViewById(R.id.alert_notification);
+      posterMoneyTextView = itemView.findViewById(R.id.poster_money);
+      offeringMoneyTextView = itemView.findViewById(R.id.offering_money);
 
       itemView.setOnClickListener(view -> {
         if (recyclerViewInterface != null) {

@@ -1,13 +1,13 @@
-package com.example.barterbuddy.activities;
+package com.example.barterbuddy.utils;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
 
-public class RateUserPage extends AppCompatActivity {
+public class RateUserDialogBox extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_rate_user_dialog);
+    setContentView(R.layout.dialog_rate_user);
   }
 }

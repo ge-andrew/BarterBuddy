@@ -183,7 +183,7 @@ public class AddNewItemPage extends AppCompatActivity {
     Dialog dialog = new Dialog(AddNewItemPage.this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setCancelable(true);
-    dialog.setContentView(R.layout.activity_get_image_dialog_box);
+    dialog.setContentView(R.layout.dialog_get_image);
     if (dialog.getWindow() != null)
       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

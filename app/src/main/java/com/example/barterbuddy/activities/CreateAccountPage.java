@@ -80,7 +80,7 @@ public class CreateAccountPage extends AppCompatActivity {
 
           getUserInfo();
 
-          User newUser = new User(username, email, password);
+          User newUser = new User(username, email, password, 0, 0);
 
           if (missingUserInfo(newUser)) {
             return;

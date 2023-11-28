@@ -1,9 +1,13 @@
 package com.example.barterbuddy.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.widget.SearchView;
+import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +42,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   private String currentUserUsername;
   private String currentUserEmail;
   private PublicItemsRecyclerAdapter adapter;
+  private Activity parentActivity;
 
   @Nullable
   @Override
@@ -48,10 +53,33 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
     return inflater.inflate(R.layout.fragment_public_items, container, false);
   }
 
+
   @Override
   public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
+    parentActivity = requireActivity();
+    Context parentContext = requireContext();
+
+    //Search bar core functions
+    SearchView searchBar = parentActivity.findViewById(R.id.search_bar);
+    searchBar.clearFocus();
+    searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String searchFilter) {
+        filterList(searchFilter);
+        return false;
+      }
+    });
+
+
+
+    //Fire base Auth
     getCurrentUser();
     if (currentUser == null) {
       goToLoginPage();
@@ -60,9 +88,9 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
 
     getXmlElements();
 
-    adapter = new PublicItemsRecyclerAdapter(requireActivity(), availableItems, this, ITEM_IMAGES);
+    adapter = new PublicItemsRecyclerAdapter(parentActivity, availableItems, this, ITEM_IMAGES);
     publicItemsRecycler.setAdapter(adapter);
-    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+    publicItemsRecycler.setLayoutManager(new LinearLayoutManager(parentContext));
 
     // Set up recyclerView
     // RecyclerView setup inside this method to prevent late loading of Firebase data from
@@ -75,6 +103,25 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
           publicItemsSwipeRefreshLayout.setRefreshing(false);
         });
   }
+
+  //Search Bar Filtering
+  private void filterList(String searchFilter) {
+    ArrayList<Item> filteredList = new ArrayList<>();
+    for (Item item : availableItems) {
+      if (item.getTitle().toLowerCase().contains(searchFilter.toLowerCase())) {
+        filteredList.add(item);
+      }
+    }
+
+    // Update the adapter with the filtered list
+    adapter.updateItems(filteredList);
+
+    // If the filtered list is empty, show a Toast message
+    if (filteredList.isEmpty()) {
+      Toast.makeText(parentActivity, "No items match your search", Toast.LENGTH_SHORT).show();
+    }
+  }
+
 
   // Take arraylist of items to load recyclerView of user's items
   private void setUpItems() {
@@ -107,7 +154,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   // activity
   @Override
   public void onItemClick(int position) {
-    Intent intent = new Intent(getActivity(), PublicItemsDetailPage.class);
+    Intent intent = new Intent(parentActivity, PublicItemsDetailPage.class);
     intent.putExtra("itemId", availableItems.get(position).getImageId());
     intent.putExtra("username", availableItems.get(position).getUsername());
     intent.putExtra("email", availableItems.get(position).getEmail());
@@ -119,9 +166,9 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   }
 
   private void goToLoginPage() {
-    Intent intent = new Intent(getActivity().getApplicationContext(), LoginPage.class);
+    Intent intent = new Intent(parentActivity.getApplicationContext(), LoginPage.class);
     startActivity(intent);
-    getActivity().finish();
+    parentActivity.finish();
   }
 
   private void getCurrentUserInfo() {
@@ -130,7 +177,7 @@ public class PublicItemsPageFragment extends Fragment implements RecyclerViewInt
   }
 
   private void getXmlElements() {
-    publicItemsRecycler = getActivity().findViewById(R.id.PublicItemsRecyclerView);
-    publicItemsSwipeRefreshLayout = getActivity().findViewById(R.id.public_items_swipeRefresh);
+    publicItemsRecycler = parentActivity.findViewById(R.id.PublicItemsRecyclerView);
+    publicItemsSwipeRefreshLayout = parentActivity.findViewById(R.id.public_items_swipeRefresh);
   }
 }

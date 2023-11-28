@@ -13,13 +13,10 @@ import com.example.barterbuddy.R;
 import com.example.barterbuddy.activities.ChatPage;
 import com.example.barterbuddy.activities.LoginPage;
 import com.example.barterbuddy.models.Trade;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class BackToChattingFragment extends Fragment {
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
@@ -85,14 +82,14 @@ public class BackToChattingFragment extends Fragment {
         .whereEqualTo("stateOfCompletion", "CHATTING")
         .get()
         .addOnCompleteListener(
-                task -> {
-                  if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                      Trade trade = document.toObject(Trade.class);
-                      offeringEmail = trade.getOfferingEmail();
-                    }
-                  }
-                });
+            task -> {
+              if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                  Trade trade = document.toObject(Trade.class);
+                  offeringEmail = trade.getOfferingEmail();
+                }
+              }
+            });
   }
 
   private void getXmlElements() {
