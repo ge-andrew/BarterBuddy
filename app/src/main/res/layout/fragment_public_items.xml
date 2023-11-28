@@ -26,7 +26,9 @@
             android:layout_marginEnd="40dp"
             android:background="@drawable/search_bar"
             app:showAsAction = "ifRoom|collapseActionView"
-            app:queryHint="Search items"/>
+            app:queryHint="Search items"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"/>
 
     </LinearLayout>
 
