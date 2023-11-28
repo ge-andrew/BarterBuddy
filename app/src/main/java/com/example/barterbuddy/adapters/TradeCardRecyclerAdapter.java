@@ -72,16 +72,30 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
       }
       String status = trade.getStateOfCompletion();
       if (Objects.equals(status, "CHATTING")){
+        holder.alertNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.notViewedNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.barterNotifyIcon.setVisibility(View.INVISIBLE);
         holder.chatNotifyIcon.setVisibility(View.VISIBLE);
       } else if (Objects.equals(status, "CANCELED")){
+        holder.notViewedNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.chatNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.barterNotifyIcon.setVisibility(View.INVISIBLE);
         holder.alertNotifyIcon.setVisibility(View.VISIBLE);
       } else if (Objects.equals(status, "IN_PROGRESS")){
+        holder.alertNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.chatNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.barterNotifyIcon.setVisibility(View.INVISIBLE);
         holder.notViewedNotifyIcon.setVisibility(View.VISIBLE);
-      }
-      else {
+      } else if (Objects.equals(status, "BARTERING")) {
         holder.alertNotifyIcon.setVisibility(View.INVISIBLE);
         holder.notViewedNotifyIcon.setVisibility(View.INVISIBLE);
         holder.chatNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.barterNotifyIcon.setVisibility(View.VISIBLE);
+      } else {
+        holder.alertNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.notViewedNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.chatNotifyIcon.setVisibility(View.INVISIBLE);
+        holder.barterNotifyIcon.setVisibility(View.INVISIBLE);
       }
 
     }
@@ -121,7 +135,7 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     ShapeableImageView yourItemImageView, wantedItemImageView;
     TextView tradeMoneyWanted,tradeMoneyOffered;
-    ImageView notViewedNotifyIcon,chatNotifyIcon,alertNotifyIcon;
+    ImageView notViewedNotifyIcon,chatNotifyIcon,alertNotifyIcon, barterNotifyIcon;
     TextView posterMoneyTextView, offeringMoneyTextView;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
@@ -129,13 +143,14 @@ public class TradeCardRecyclerAdapter extends RecyclerView.Adapter<TradeCardRecy
 
       yourItemImageView = itemView.findViewById(R.id.your_item_image);
       wantedItemImageView = itemView.findViewById(R.id.wanted_item_image);
-      tradeMoneyWanted = itemView.findViewById(R.id.money_wanted);
-      tradeMoneyOffered = itemView.findViewById(R.id.money_offer);
+      tradeMoneyWanted = itemView.findViewById(R.id.poster_money);
+      tradeMoneyOffered = itemView.findViewById(R.id.offering_money);
       notViewedNotifyIcon = itemView.findViewById(R.id.notification_icon);
       chatNotifyIcon = itemView.findViewById(R.id.chat_notification);
       alertNotifyIcon = itemView.findViewById(R.id.alert_notification);
       posterMoneyTextView = itemView.findViewById(R.id.poster_money);
       offeringMoneyTextView = itemView.findViewById(R.id.offering_money);
+      barterNotifyIcon = itemView.findViewById(R.id.bartering_icon);
 
       itemView.setOnClickListener(view -> {
         if (recyclerViewInterface != null) {
