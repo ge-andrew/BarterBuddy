@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
       String userEmailToRate = getIntent().getStringExtra("userEmailToRate");
       if (userEmailToRate != null) {
         CreateDialogUtil.createRateUserDialogBox(this, userEmailToRate);
+        getIntent().removeExtra("showDialogOnArrival");
       }
     }
 

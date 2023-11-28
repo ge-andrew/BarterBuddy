@@ -27,7 +27,7 @@
             layout="@layout/barter_offer_card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="64dp"/>
 
     </androidx.cardview.widget.CardView>
 
