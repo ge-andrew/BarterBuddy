@@ -227,7 +227,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -240,7 +240,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/peach">
+            android:backgroundTint="@color/peach"
+            app:cardCornerRadius="0dp">
 
             <TextView
                 android:id="@+id/lock_in_text"
@@ -259,7 +260,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/peach">
+            android:backgroundTint="@color/peach"
+            app:cardCornerRadius="0dp">
 
             <TextView
                 android:layout_width="match_parent"
