@@ -20,7 +20,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="52dp"
+            android:layout_marginBottom="24dp"
             android:elevation="2dp"
             app:cardCornerRadius="20dp">
 
@@ -146,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="24dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp">
 
@@ -253,24 +253,6 @@
                 android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
-
-        <!--        <Button-->
-        <!--            android:id="@+id/accept_button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:backgroundTint="@color/green"-->
-        <!--            android:text=""-->
-        <!--            android:textColorLink="#00FB0A" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/decline_button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:background="@color/red"-->
-        <!--            android:text="✘ Withdraw"-->
-        <!--            android:textColorLink="#B1003C" />-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/decline_button"
