@@ -18,21 +18,24 @@
         android:paddingBottom="12dp">
 
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="40dp"
-            android:background="@drawable/search_bar" />
+            android:background="@drawable/search_bar"
+            app:showAsAction = "ifRoom|collapseActionView"
+            app:queryHint="Search items"/>
 
     </LinearLayout>
 
-    <SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        app:showAsAction = "ifRoom|collapseActionView"
-        app:queryHint = "Search items"/>
+<!--    <SearchView-->
+<!--        android:id="@+id/search_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="24dp"-->
+<!--        app:showAsAction = "ifRoom|collapseActionView"-->
+<!--        app:queryHint = "Search items"/>-->
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/public_items_swipeRefresh"
