@@ -3,6 +3,7 @@ package com.example.barterbuddy.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +47,20 @@ public class PublicItemsRecyclerAdapter
     return new PublicItemsRecyclerAdapter.MyViewHolder(view, recyclerViewInterface);
   }
 
+
+
+
   @Override
   public void onBindViewHolder(
       @NonNull PublicItemsRecyclerAdapter.MyViewHolder holder, int position) {
     holder.itemTitle.setText(userItems.get(position).getTitle());
     holder.itemPoster.setText(userItems.get(position).getUsername());
     holder.itemDescription.setText(userItems.get(position).getDescription());
+    String tempString = userItems.get(position).getPerceivedValue();
+    if (!TextUtils.isEmpty(tempString)) {
+      tempString = "$" + tempString;
+      holder.itemPerceivedValue.setText(tempString);
+    }
 
     StorageReference imageReference;
     imageReference =
@@ -74,17 +83,24 @@ public class PublicItemsRecyclerAdapter
             });
   }
 
+  public void updateItems(ArrayList<Item> updatedItems) {
+    this.userItems.clear();
+    this.userItems.addAll(updatedItems);
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getItemCount() {
     return userItems.size();
   }
+
 
   public static class MyViewHolder extends RecyclerView.ViewHolder {
     // this method very very roughly equates to onCreate() from recyclerView
     // sets up image and text views
 
     ShapeableImageView imageView;
-    TextView itemTitle, itemDescription, itemPoster;
+    TextView itemTitle, itemDescription, itemPoster, itemPerceivedValue;
 
     public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
       super(itemView);
@@ -93,6 +109,7 @@ public class PublicItemsRecyclerAdapter
       itemTitle = itemView.findViewById(R.id.ItemName);
       itemPoster = itemView.findViewById(R.id.user);
       itemDescription = itemView.findViewById(R.id.private_item_recycler_card_description);
+      itemPerceivedValue = itemView.findViewById(R.id.perceivedValue);
       itemView.setOnClickListener(
           view -> {
             if (recyclerViewInterface != null) {

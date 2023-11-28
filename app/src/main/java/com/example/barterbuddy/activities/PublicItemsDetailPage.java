@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.barterbuddy.R;
@@ -21,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class PublicItemsDetailPage extends AppCompatActivity {
 
-  private static final String TAG = "ItemDetailPage"; // for logging from this activity
+  private static final String TAG = "ItemDetailPage";
   private final FirebaseFirestore FIRESTORE_INSTANCE = FirebaseFirestore.getInstance();
   private final FirebaseStorage IMAGE_STORAGE_INSTANCE = FirebaseStorage.getInstance();
   private final FirebaseAuth AUTHENTICATION_INSTANCE = FirebaseAuth.getInstance();
@@ -31,15 +33,16 @@ public class PublicItemsDetailPage extends AppCompatActivity {
   private TextView itemTitle;
   private TextView usernameTextView;
   private TextView itemDescription;
+  private TextView itemPerceivedValue;
   private ImageView imageView;
   private Button offer_trade_button;
   private String itemId;
-  private String itemUsername;
   private String itemEmail;
   private String currentUserUsername;
   private String currentUserEmail;
   private Item posterItem;
   private ImageView backArrow;
+  private RatingBar ratingBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +77,15 @@ public class PublicItemsDetailPage extends AppCompatActivity {
 
                 // set the title and description based on information from the object
                 if (posterItem != null) {
+                  String tempString = posterItem.getPerceivedValue();
                   itemTitle.setText(posterItem.getTitle());
                   itemDescription.setText(posterItem.getDescription());
+                  if(!TextUtils.isEmpty(tempString))
+                  {
+                    tempString = "$" + tempString;
+                    itemPerceivedValue.setText(tempString);
+                  }
+
 
                   // get the image for this item from Firebase Cloud Storage
                   imageReference =
@@ -113,11 +123,11 @@ public class PublicItemsDetailPage extends AppCompatActivity {
                               // set the username field
                               if (user != null) {
                                 usernameTextView.setText(user.getUsername());
+                                ratingBar.setRating(user.getCurrentAverageRating());
                               } else {
                                 Log.w(TAG, "User object is null");
                               }
-                            }
-                          })
+                            }})
                       .addOnFailureListener(e -> Log.w(TAG, "Error getting user document.", e));
                 } else {
                   Log.w(TAG, "User is null");
@@ -170,11 +180,12 @@ public class PublicItemsDetailPage extends AppCompatActivity {
     offer_trade_button = findViewById(R.id.offer_trade_button);
     imageView = findViewById(R.id.item_image_view);
     backArrow = findViewById(R.id.back_arrow);
+    itemPerceivedValue = findViewById(R.id.perceivedValue);
+    ratingBar = findViewById(R.id.display_bar);
   }
 
   private void getItemDataFromIntent() {
     itemId = getIntent().getStringExtra("itemId");
-    itemUsername = getIntent().getStringExtra("username");
     itemEmail = getIntent().getStringExtra("email");
   }
 }

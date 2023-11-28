@@ -45,7 +45,7 @@ public class CreateAccountPage extends AppCompatActivity {
     super.onStart();
     FirebaseUser currentUser = AUTHENTICATION_INSTANCE.getCurrentUser();
     if (currentUser != null) {
-      Intent intent = new Intent(getApplicationContext(), PublicItemsPage.class);
+      Intent intent = new Intent(getApplicationContext(), MainActivity.class);
       startActivity(intent);
       finish();
     }
@@ -68,6 +68,8 @@ public class CreateAccountPage extends AppCompatActivity {
             // setting password to invisible
             passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
           }
+          String tempString = String.valueOf(passwordEditText.getText());
+          passwordEditText.setSelection(tempString.length());
         });
 
     // attempts to create account
@@ -78,7 +80,7 @@ public class CreateAccountPage extends AppCompatActivity {
 
           getUserInfo();
 
-          User newUser = new User(username, email, password);
+          User newUser = new User(username, email, password, 0, 0);
 
           if (missingUserInfo(newUser)) {
             return;

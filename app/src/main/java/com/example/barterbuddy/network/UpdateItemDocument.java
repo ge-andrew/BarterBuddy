@@ -57,7 +57,7 @@ public class UpdateItemDocument {
               }
             })
         .addOnFailureListener(e -> Log.w(TAG, "Query not resolved"));
-    setItemActiveField(userItems.document(item.getId()), true);
+    setItemActiveField(userItems.document(item.generateId()), true);
   }
 
   private static void setItemActiveField(DocumentReference itemRef, boolean active) {
@@ -77,7 +77,7 @@ public class UpdateItemDocument {
       // update status in the Item object
       item.setActive(false);
       // update status in Firestore
-      setItemActiveField(userItems.document(item.getId()), false);
+      setItemActiveField(userItems.document(item.generateId()), false);
     }
   }
 }

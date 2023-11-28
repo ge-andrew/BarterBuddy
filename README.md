@@ -1,5 +1,9 @@
 # BarterBuddy
+Android App
+Project for Software Engineering Class
+
+Developers:
 Matthew Gonzalez
 Daniel Peace
-Skyler A
+Skyler Atchison
 Andrew Ge
