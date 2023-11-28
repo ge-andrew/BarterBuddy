@@ -55,6 +55,7 @@ public class ChatPage extends AppCompatActivity {
 
     currentUserId = AuthenticationUtil.getCurrentUserEmail();
     otherUserEmail = getIntent().getStringExtra("otherUserEmail");
+
     boolean userIsPoster = getIntent().getBooleanExtra("isPoster", false);
     if (userIsPoster) {
       chatroomId = currentUserId + "_" + otherUserEmail;
