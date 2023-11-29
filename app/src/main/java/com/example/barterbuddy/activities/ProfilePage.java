@@ -25,6 +25,8 @@ public class ProfilePage extends AppCompatActivity {
     usernameTextView.setText(String.valueOf(AuthenticationUtil.getCurrentUserUsername()));
     emailTextView.setText(String.valueOf(AuthenticationUtil.getCurrentUserEmail()));
     backArrow.setOnClickListener(view -> finish());
+
+    // ratingbar.setRating(user.getCurrentAverageRating());
   }
 
   private void getXmlElements() {
