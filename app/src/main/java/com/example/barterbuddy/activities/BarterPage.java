@@ -442,12 +442,21 @@ public class BarterPage extends AppCompatActivity {
     withdraw_button = (CardView) includedLayout.findViewById(R.id.decline_button);
     backArrow = findViewById(R.id.back_arrow);
     counteroffer_button = includedLayout.findViewById(R.id.counteroffer_button);
-    posterImageView = includedLayout.findViewById(R.id.poster_item_image);
-    posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
-    posterMoneyField = includedLayout.findViewById(R.id.poster_trade_money_barter);
-    offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
-    offeringItemTitle = includedLayout.findViewById(R.id.offeringItemTitle);
-    offeringMoneyField = includedLayout.findViewById(R.id.offering_trade_money_barter);
     counteroffersLeft = includedLayout.findViewById(R.id.counteroffers_left);
+    if (isPoster) {
+      posterImageView = includedLayout.findViewById(R.id.poster_item_image);
+      posterItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
+      posterMoneyField = includedLayout.findViewById(R.id.poster_trade_money_barter);
+      offeringImageView = includedLayout.findViewById(R.id.offering_item_image);
+      offeringItemTitle = includedLayout.findViewById(R.id.offeringItemTitle);
+      offeringMoneyField = includedLayout.findViewById(R.id.offering_trade_money_barter);
+    } else {
+      offeringImageView = includedLayout.findViewById(R.id.poster_item_image);
+      offeringItemTitle = includedLayout.findViewById(R.id.posterItemTitle);
+      offeringMoneyField = includedLayout.findViewById(R.id.poster_trade_money_barter);
+      posterImageView = includedLayout.findViewById(R.id.offering_item_image);
+      posterItemTitle = includedLayout.findViewById(R.id.offeringItemTitle);
+      posterMoneyField = includedLayout.findViewById(R.id.offering_trade_money_barter);
+    }
   }
 }
